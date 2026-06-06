@@ -1,0 +1,66 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Complete Event — {{ event.title }}{% endblock %}
+
+{% block content %}
+<div style="max-width:600px;margin:0 auto;">
+    <a href="{% url 'sales_dashboard' %}" style="color:#7C3AED;font-size:.85rem;font-weight:600;text-decoration:none;display:inline-block;margin-bottom:1rem;">
+        <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+    </a>
+
+    <div style="text-align:center;padding:2.5rem 2rem;background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border-radius:24px;margin-bottom:1.5rem;">
+        <div style="font-size:3rem;margin-bottom:.75rem;">🏁</div>
+        <h1 style="font-size:1.4rem;font-weight:900;color:#111827;margin-bottom:.5rem;">Mark Event as Completed</h1>
+        <p style="color:#6B7280;font-size:.9rem;max-width:400px;margin:0 auto;">
+            This will mark "{{ event.title }}" as completed, export all attendee data, and schedule automatic deletion in 90 days.
+        </p>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:1.25rem;text-align:center;">
+            <div style="font-size:2rem;font-weight:900;color:#7C3AED;">{{ confirmed_count }}</div>
+            <div style="font-size:.82rem;color:#6B7280;margin-top:.2rem;">Confirmed Attendees</div>
+        </div>
+        <div style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:1.25rem;text-align:center;">
+            <div style="font-size:2rem;font-weight:900;color:#059669;">90</div>
+            <div style="font-size:.82rem;color:#6B7280;margin-top:.2rem;">Days Before Deletion</div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="card" style="padding:0;">
+        <div class="card-body" style="padding:2rem;">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">
+                        Send export to email <span style="color:#9CA3AF;font-weight:400;">(optional)</span>
+                    </label>
+                    <input type="email" name="send_to_email" class="form-control"
+                           placeholder="organiser@example.com"
+                           value="{% if event.organizer_user %}{{ event.organizer_user.email }}{% endif %}">
+                    <div style="font-size:.75rem;color:#9CA3AF;margin-top:.3rem;">
+                        A CSV of all confirmed attendees will be attached and sent to this email.
+                    </div>
+                </div>
+
+                <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:1rem;margin-bottom:1.5rem;">
+                    <p style="font-size:.83rem;color:#991B1B;margin:0;font-weight:600;">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        This action cannot be undone. The event status will be changed to "Completed".
+                    </p>
+                </div>
+
+                <div style="display:flex;gap:.75rem;">
+                    <button type="submit" class="btn btn-primary" style="flex:1;padding:.8rem;font-weight:700;border-radius:12px;"
+                            onclick="return confirm('Are you sure you want to mark this event as completed?')">
+                        <i class="fas fa-check me-1"></i> Complete Event & Export Data
+                    </button>
+                    <a href="{% url 'sales_dashboard' %}" class="btn btn-outline-primary" style="border-radius:12px;padding:.8rem 1.5rem;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

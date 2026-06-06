@@ -1,0 +1,118 @@
+{% extends 'events/base.html' %}
+
+{% block title %}{{ organizer.organization_name|default:organizer.user.get_full_name }} — EventHub{% endblock %}
+
+{% block content %}
+<!-- Organizer Header -->
+<div style="background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border-radius:24px;padding:2.5rem;margin-bottom:2rem;">
+    <div style="display:flex;align-items:flex-start;gap:1.5rem;flex-wrap:wrap;">
+        {% if organizer.profile_image %}
+        <img src="{{ organizer.profile_image }}" alt="{{ organizer.organization_name }}"
+             style="width:90px;height:90px;border-radius:20px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 20px rgba(124,58,237,.2);">
+        {% else %}
+        <div style="width:90px;height:90px;border-radius:20px;background:linear-gradient(135deg,#7C3AED,#4C1D95);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 20px rgba(124,58,237,.2);">
+            <i class="fas fa-building" style="color:#fff;font-size:2rem;"></i>
+        </div>
+        {% endif %}
+        <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:.4rem;">
+                <h1 style="font-size:1.6rem;font-weight:900;color:#111827;margin:0;">
+                    {{ organizer.organization_name|default:organizer.user.get_full_name|default:organizer.user.username }}
+                </h1>
+                {% if organizer.status == 'verified' %}
+                <span style="background:#D1FAE5;color:#065F46;padding:.3rem .9rem;border-radius:50px;font-size:.78rem;font-weight:700;">
+                    <i class="fas fa-check-circle me-1"></i> Verified Organiser
+                </span>
+                {% endif %}
+            </div>
+            <div style="color:#7C3AED;font-size:.9rem;font-weight:600;margin-bottom:.75rem;">@{{ organizer.user.username }}</div>
+            {% if organizer.description %}
+            <p style="color:#4B5563;font-size:.9rem;line-height:1.7;margin-bottom:1rem;max-width:600px;">{{ organizer.description }}</p>
+            {% endif %}
+            <div style="display:flex;gap:1.25rem;flex-wrap:wrap;">
+                {% if organizer.website %}
+                <a href="{{ organizer.website }}" target="_blank" rel="noopener" style="color:#7C3AED;font-size:.85rem;font-weight:600;text-decoration:none;">
+                    <i class="fas fa-globe me-1"></i> Website
+                </a>
+                {% endif %}
+                {% if organizer.email %}
+                <a href="mailto:{{ organizer.email }}" style="color:#7C3AED;font-size:.85rem;font-weight:600;text-decoration:none;">
+                    <i class="fas fa-envelope me-1"></i> Contact
+                </a>
+                {% endif %}
+                <span style="color:#6B7280;font-size:.85rem;">
+                    <i class="fas fa-calendar-plus me-1"></i> Member since {{ organizer.created_at|date:"M Y" }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Events -->
+{% if events %}
+<h2 style="font-size:1.4rem;font-weight:800;color:#111827;margin-bottom:1.25rem;">
+    <i class="fas fa-calendar-alt me-2" style="color:#7C3AED;"></i>Upcoming Events
+</h2>
+<div class="row g-4 mb-4">
+    {% for event in events %}
+    <div class="col-md-6 col-lg-4">
+        <a href="{% url 'event_detail' event.id %}" style="text-decoration:none;">
+            <div class="card h-100">
+                <img src="{{ event.image }}" class="card-img-top" alt="{{ event.title }}" style="height:180px;object-fit:cover;">
+                <div class="card-body" style="padding:1.25rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;">
+                        <span class="badge bg-primary">{{ event.get_category_display }}</span>
+                        {% if event.is_free %}
+                        <span class="badge bg-success">Free</span>
+                        {% else %}
+                        <span class="price-tag" style="font-size:.85rem;padding:.3rem .8rem;">₹{{ event.price }}</span>
+                        {% endif %}
+                    </div>
+                    <h6 style="font-weight:700;color:#111827;margin:.5rem 0;">{{ event.title }}</h6>
+                    <div class="event-meta">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>{{ event.date|date:"D, d M Y • h:i A" }}</span>
+                    </div>
+                    <div class="event-meta">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ event.venue }}</span>
+                    </div>
+                    <div style="margin-top:.75rem;">
+                        {% if event.available_seats > 0 %}
+                        <span style="font-size:.78rem;color:#059669;font-weight:600;">
+                            <i class="fas fa-check-circle me-1"></i> {{ event.available_seats }} seats available
+                        </span>
+                        {% else %}
+                        <span style="font-size:.78rem;color:#DC2626;font-weight:600;">Sold Out</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div style="background:#F9FAFB;border-radius:16px;padding:2.5rem;text-align:center;margin-bottom:2rem;">
+    <i class="fas fa-calendar-times" style="font-size:2rem;color:#D1D5DB;margin-bottom:.75rem;display:block;"></i>
+    <p style="color:#6B7280;margin:0;">No upcoming events from this organiser right now.</p>
+</div>
+{% endif %}
+
+<!-- Past Events -->
+{% if past_events %}
+<h2 style="font-size:1.2rem;font-weight:800;color:#374151;margin-bottom:1rem;">
+    <i class="fas fa-history me-2" style="color:#9CA3AF;"></i>Past Events
+</h2>
+<div class="row g-3">
+    {% for event in past_events %}
+    <div class="col-md-4 col-lg-3">
+        <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;padding:1rem;opacity:.8;">
+            <h6 style="font-size:.85rem;font-weight:700;color:#374151;margin-bottom:.3rem;">{{ event.title }}</h6>
+            <div style="font-size:.78rem;color:#9CA3AF;">{{ event.date|date:"d M Y" }} · {{ event.venue }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

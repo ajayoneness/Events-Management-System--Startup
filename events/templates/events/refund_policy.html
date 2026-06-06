@@ -1,0 +1,140 @@
+{% extends 'events/base.html' %}
+{% block title %}Refund & Cancellation Policy — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.legal-section { margin-bottom:2.5rem; }
+.legal-section h2 { font-size:1.1rem;font-weight:800;color:#111827;margin-bottom:.75rem; }
+.legal-section p, .legal-section li { font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:.5rem; }
+.legal-section ul { padding-left:1.25rem; }
+.policy-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0; }
+.policy-box { background:#F9FAFB;border:1px solid #E5E7EB;border-radius:14px;padding:1.25rem;text-align:center; }
+.policy-box .icon { font-size:1.5rem;margin-bottom:.5rem; }
+.policy-box .label { font-size:.78rem;color:#6B7280;font-weight:600; }
+.policy-box .value { font-size:.95rem;font-weight:800;color:#111827;margin-top:.25rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:800px;margin:0 auto;">
+
+    <div style="margin-bottom:2.5rem;">
+        <div style="display:inline-flex;align-items:center;gap:.5rem;background:#FEF3C7;border:1px solid #FDE68A;border-radius:50px;padding:.4rem 1rem;font-size:.8rem;font-weight:600;color:#92400E;margin-bottom:1rem;">
+            <i class="fas fa-undo"></i> Legal Document
+        </div>
+        <h1 style="font-size:2rem;font-weight:900;color:#111827;margin-bottom:.5rem;">Refund &amp; Cancellation Policy</h1>
+        <p style="color:#6B7280;font-size:.9rem;">Last updated: June 2025 &nbsp;|&nbsp; Effective from: January 2024</p>
+    </div>
+
+    <!-- Quick summary -->
+    <div class="policy-grid" style="margin-bottom:2rem;">
+        <div class="policy-box">
+            <div class="icon">⏱️</div>
+            <div class="label">Cancellation Window</div>
+            <div class="value">Up to 48 hrs before event</div>
+        </div>
+        <div class="policy-box">
+            <div class="icon">💰</div>
+            <div class="label">Refund Amount</div>
+            <div class="value">Up to 100% (case-by-case)</div>
+        </div>
+        <div class="policy-box">
+            <div class="icon">📅</div>
+            <div class="label">Refund Timeline</div>
+            <div class="value">7–10 business days</div>
+        </div>
+        <div class="policy-box">
+            <div class="icon">📧</div>
+            <div class="label">How to Request</div>
+            <div class="value">Email or contact page</div>
+        </div>
+    </div>
+
+    <div class="card" style="padding:0;">
+        <div class="card-body" style="padding:2.5rem;">
+
+            <p style="font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:2rem;">
+                This policy governs cancellations and refunds for ticket purchases made on <strong>EventHub</strong>. Please read this carefully before completing your purchase, as different events may have different refund terms set by their Organisers.
+            </p>
+
+            <div class="legal-section">
+                <h2>1. Cancellations by Attendees</h2>
+                <ul>
+                    <li><strong>More than 48 hours before the event:</strong> Eligible for a full refund (minus convenience fee, if applicable).</li>
+                    <li><strong>24–48 hours before the event:</strong> Eligible for up to 50% refund at the Organiser's discretion.</li>
+                    <li><strong>Less than 24 hours before the event:</strong> No refund unless the event is cancelled by the Organiser.</li>
+                    <li><strong>No-shows:</strong> Tickets are non-refundable if you do not attend without prior cancellation.</li>
+                </ul>
+                <p>To request a cancellation, contact us at <strong>support@eventhub.in</strong> with your Booking ID.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>2. Event Cancellations by Organiser</h2>
+                <ul>
+                    <li>If an event is cancelled by the Organiser, all attendees will receive a <strong>full refund</strong> of the ticket price.</li>
+                    <li>Refunds for cancelled events are processed within <strong>7–10 business days</strong>.</li>
+                    <li>Refunds are credited back to the original payment method (bank account, credit/debit card, or UPI).</li>
+                    <li>EventHub is not liable for consequential losses such as travel or accommodation costs.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>3. Event Postponements &amp; Rescheduling</h2>
+                <ul>
+                    <li>If an event is rescheduled, your ticket remains valid for the new date.</li>
+                    <li>If you cannot attend the new date, you may request a refund within <strong>72 hours</strong> of the rescheduling announcement.</li>
+                    <li>Rescheduling notifications will be sent via email to the address used at booking.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>4. Non-Refundable Items</h2>
+                <ul>
+                    <li>Platform convenience fees or service charges are non-refundable unless the event is cancelled.</li>
+                    <li>Tickets purchased under special promotional pricing or flash sales may have separate terms.</li>
+                    <li>Tickets that have already been used for entry (QR code scanned) are non-refundable.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>5. Refund Process</h2>
+                <ol style="padding-left:1.25rem;">
+                    <li style="font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:.5rem;">Submit a refund request at <a href="{% url 'contact' %}" style="color:#7C3AED;">our contact page</a> or email <strong>support@eventhub.in</strong>.</li>
+                    <li style="font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:.5rem;">Include your Booking ID, registered email, and reason for cancellation.</li>
+                    <li style="font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:.5rem;">Our team will review your request within 2 business days.</li>
+                    <li style="font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:.5rem;">Approved refunds are processed via Razorpay and credited within 7–10 business days.</li>
+                    <li style="font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:.5rem;">You will receive a refund confirmation email once processed.</li>
+                </ol>
+            </div>
+
+            <div class="legal-section">
+                <h2>6. Force Majeure</h2>
+                <p>In cases of events cancelled due to circumstances beyond the Organiser's control (natural disasters, government orders, pandemics, etc.), refunds will be processed as per the Organiser's policy and applicable laws. EventHub will facilitate communication between Organisers and Attendees in such cases.</p>
+            </div>
+
+            <div class="legal-section" style="margin-bottom:0;">
+                <h2>7. Contact for Refunds</h2>
+                <ul>
+                    <li><strong>Email:</strong> support@eventhub.in</li>
+                    <li><strong>Subject line:</strong> "Refund Request — [Your Booking ID]"</li>
+                    <li><strong>Response time:</strong> Within 2 business days.</li>
+                    <li><strong>Contact form:</strong> <a href="{% url 'contact' %}" style="color:#7C3AED;">eventhub.in/contact</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem;">
+        <a href="{% url 'terms' %}" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;font-size:.82rem;font-weight:600;color:#7C3AED;text-decoration:none;">
+            <i class="fas fa-file-contract"></i> Terms &amp; Conditions
+        </a>
+        <a href="{% url 'privacy' %}" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;font-size:.82rem;font-weight:600;color:#7C3AED;text-decoration:none;">
+            <i class="fas fa-shield-alt"></i> Privacy Policy
+        </a>
+        <a href="{% url 'contact' %}" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;font-size:.82rem;font-weight:600;color:#7C3AED;text-decoration:none;">
+            <i class="fas fa-envelope"></i> Contact Us
+        </a>
+    </div>
+</div>
+{% endblock %}

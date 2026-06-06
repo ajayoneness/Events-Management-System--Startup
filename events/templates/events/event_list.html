@@ -1,0 +1,589 @@
+{% extends 'events/base.html' %}
+
+{% block title %}EventHub — Discover & Book Amazing Events{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Remove default section-container padding — each section handles its own */
+.section-container { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.75); }
+}
+@keyframes float-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-animate { animation: float-up .7s ease both; }
+.hero-animate-2 { animation: float-up .7s .15s ease both; }
+.hero-animate-3 { animation: float-up .7s .3s ease both; }
+.hero-animate-4 { animation: float-up .7s .45s ease both; }
+
+.cat-card { transition: all .3s cubic-bezier(.34,1.56,.64,1); }
+.cat-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 16px 48px rgba(124,58,237,.18) !important; }
+
+.step-card { transition: transform .3s; }
+.step-card:hover { transform: translateY(-8px); }
+
+.feat-card { transition: transform .25s, box-shadow .25s; }
+.feat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(0,0,0,.1) !important; }
+
+.review-card { transition: transform .3s, box-shadow .3s; }
+.review-card:hover { transform: translateY(-6px); }
+</style>
+{% endblock %}
+
+
+{# ════════════════════════════════════════════════════════════════ #}
+{# FULLCONTENT BEFORE — Hero + Categories                          #}
+{# ════════════════════════════════════════════════════════════════ #}
+{% block fullcontent %}
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section style="background:linear-gradient(160deg,#F5F3FF 0%,#EDE9FE 45%,#FAFAFA 100%);padding:6rem 0 4.5rem;position:relative;overflow:hidden;">
+
+  <!-- Decorative blobs -->
+  <div style="position:absolute;top:-120px;right:-80px;width:650px;height:650px;background:radial-gradient(circle,rgba(124,58,237,.14) 0%,transparent 65%);border-radius:50%;pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-80px;left:-60px;width:420px;height:420px;background:radial-gradient(circle,rgba(76,29,149,.09) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+  <!-- Dot grid -->
+  <div style="position:absolute;top:50px;left:50px;width:140px;height:140px;opacity:.18;background-image:radial-gradient(circle,#7C3AED 1.5px,transparent 1.5px);background-size:18px 18px;pointer-events:none;"></div>
+  <div style="position:absolute;bottom:60px;right:80px;width:100px;height:100px;opacity:.12;background-image:radial-gradient(circle,#4C1D95 1.5px,transparent 1.5px);background-size:16px 16px;pointer-events:none;"></div>
+
+  <div class="container" style="position:relative;z-index:1;text-align:center;">
+
+    <!-- Live badge -->
+    <div class="hero-animate" style="display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:1.5px solid #DDD6FE;border-radius:50px;padding:.45rem 1.2rem;font-size:.82rem;font-weight:700;color:#6D28D9;margin-bottom:2rem;box-shadow:0 2px 16px rgba(124,58,237,.12);">
+      <span style="width:8px;height:8px;background:#7C3AED;border-radius:50%;display:inline-block;animation:pulse-dot 2s infinite;"></span>
+      100+ Live Events Available Right Now
+    </div>
+
+    <!-- Headline -->
+    <h1 class="hero-animate-2" style="font-size:clamp(2.8rem,7vw,5.2rem);font-weight:900;letter-spacing:-3px;color:#111827;line-height:1.0;margin-bottom:1.25rem;">
+      Discover &amp; Book<br>
+      <span style="background:linear-gradient(135deg,#7C3AED 20%,#4C1D95 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Unforgettable</span>
+      Events
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="hero-animate-3" style="font-size:1.15rem;color:#6B7280;max-width:520px;margin:0 auto 2.5rem;line-height:1.65;font-weight:400;">
+      From electrifying concerts to exclusive summits — find, book, and enjoy events that matter to you, all in one place.
+    </p>
+
+    <!-- Hero Search Bar -->
+    <div class="hero-animate-3">
+      <form method="get" action="{% url 'event_list' %}" style="max-width:600px;margin:0 auto 2rem;background:#fff;border-radius:70px;padding:.6rem .6rem .6rem 1.75rem;box-shadow:0 8px 48px rgba(124,58,237,.2);border:1.5px solid #DDD6FE;display:flex;align-items:center;gap:.75rem;">
+        <i class="fas fa-search" style="color:#A78BFA;flex-shrink:0;"></i>
+        <input type="text" name="search" placeholder="Search events, venues, artists…" value="{{ search_query }}"
+               style="flex:1;border:none;outline:none;font-size:.95rem;background:transparent;min-width:0;color:#111827;">
+        <button type="submit" class="btn btn-primary" style="border-radius:50px;padding:.7rem 2rem;font-size:.9rem;white-space:nowrap;flex-shrink:0;">
+          Search <i class="fas fa-arrow-right ms-1"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="hero-animate-3" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:4rem;">
+      <a href="#events" class="btn btn-primary" style="padding:.9rem 2.5rem;font-size:1rem;">
+        <i class="fas fa-compass me-2"></i>Browse Events
+      </a>
+      <a href="#how-it-works" style="display:inline-flex;align-items:center;gap:.5rem;border:2px solid #DDD6FE;border-radius:50px;padding:.9rem 2.5rem;color:#6D28D9;font-size:1rem;font-weight:600;text-decoration:none;background:#fff;transition:all .2s;" onmouseover="this.style.background='#7C3AED';this.style.color='#fff';this.style.borderColor='#7C3AED'" onmouseout="this.style.background='#fff';this.style.color='#6D28D9';this.style.borderColor='#DDD6FE'">
+        How It Works <i class="fas fa-chevron-down"></i>
+      </a>
+    </div>
+
+    <!-- Hero Stats Panel -->
+    <div class="hero-animate-4" style="display:inline-flex;gap:0;background:#fff;border-radius:22px;box-shadow:0 4px 32px rgba(0,0,0,.07);border:1px solid #EDE9FE;overflow:hidden;flex-wrap:wrap;justify-content:center;">
+      <div style="padding:1.25rem 2.5rem;text-align:center;min-width:130px;">
+        <div style="font-size:1.85rem;font-weight:900;color:#7C3AED;letter-spacing:-1px;">500+</div>
+        <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;">Events Hosted</div>
+      </div>
+      <div style="width:1px;background:#EDE9FE;"></div>
+      <div style="padding:1.25rem 2.5rem;text-align:center;min-width:130px;">
+        <div style="font-size:1.85rem;font-weight:900;color:#7C3AED;letter-spacing:-1px;">50K+</div>
+        <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;">Happy Attendees</div>
+      </div>
+      <div style="width:1px;background:#EDE9FE;"></div>
+      <div style="padding:1.25rem 2.5rem;text-align:center;min-width:130px;">
+        <div style="font-size:1.85rem;font-weight:900;color:#7C3AED;letter-spacing:-1px;">20+</div>
+        <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;">Cities Covered</div>
+      </div>
+      <div style="width:1px;background:#EDE9FE;"></div>
+      <div style="padding:1.25rem 2.5rem;text-align:center;min-width:130px;">
+        <div style="font-size:1.85rem;font-weight:900;color:#7C3AED;letter-spacing:-1px;">4.9★</div>
+        <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;">Avg. Rating</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════ CATEGORIES ══════════════════════ -->
+<section style="padding:5rem 0;background:#fff;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <span class="stat-chip mb-3" style="display:inline-flex;"><i class="fas fa-th me-1"></i> Explore by Category</span>
+      <h2 style="font-size:clamp(1.75rem,4vw,2.75rem);font-weight:900;letter-spacing:-1px;color:#111827;margin-top:.5rem;">
+        Find Events in Your <span style="background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Favourite</span> Category
+      </h2>
+      <p style="color:#6B7280;font-size:.95rem;margin-top:.5rem;">Browse across 7 categories and discover what excites you</p>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}?category=music" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#FEF2F2,#FFF);border:1.5px solid #FECACA;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#EF4444,#DC2626);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(239,68,68,.3);">
+            <i class="fas fa-music" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#111827;">Music</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Concerts & Festivals</div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}?category=tech" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#EFF6FF,#FFF);border:1.5px solid #BFDBFE;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(59,130,246,.3);">
+            <i class="fas fa-microchip" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#111827;">Technology</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Conferences & Hackathons</div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}?category=sports" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#F0FDF4,#FFF);border:1.5px solid #BBF7D0;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#22C55E,#15803D);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(34,197,94,.3);">
+            <i class="fas fa-futbol" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#111827;">Sports</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Games & Championships</div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}?category=food" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#FFF7ED,#FFF);border:1.5px solid #FED7AA;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#F97316,#EA580C);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(249,115,22,.3);">
+            <i class="fas fa-utensils" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#111827;">Food &amp; Drinks</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Tastings & Festivals</div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}?category=art" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#FDF4FF,#FFF);border:1.5px solid #E9D5FF;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#A855F7,#7C3AED);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(168,85,247,.3);">
+            <i class="fas fa-palette" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#111827;">Arts &amp; Culture</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Exhibitions & Shows</div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}?category=business" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#F0F9FF,#FFF);border:1.5px solid #BAE6FD;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#0EA5E9,#0369A1);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(14,165,233,.3);">
+            <i class="fas fa-briefcase" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#111827;">Business</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Summits & Networking</div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}?category=other" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#F9FAFB,#FFF);border:1.5px solid #E5E7EB;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#6B7280,#374151);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(107,114,128,.25);">
+            <i class="fas fa-star" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#111827;">Other Events</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Workshops & More</div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="{% url 'event_list' %}" class="cat-card d-block text-decoration-none"
+           style="background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border:1.5px solid #DDD6FE;border-radius:22px;padding:1.75rem 1.5rem;text-align:center;">
+          <div style="width:58px;height:58px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 6px 18px rgba(124,58,237,.35);">
+            <i class="fas fa-th" style="color:#fff;font-size:1.4rem;"></i>
+          </div>
+          <div style="font-weight:800;font-size:.95rem;color:#7C3AED;">View All</div>
+          <div style="font-size:.78rem;color:#6B7280;margin-top:.2rem;">Browse Everything →</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+
+{# ════════════════════════════════════════════════════════════════ #}
+{# CONTENT — Events Grid (inside section-container 1200px)         #}
+{# ════════════════════════════════════════════════════════════════ #}
+{% block content %}
+<div id="events" style="padding:4rem 0 2rem;">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:1.75rem;">
+    <div>
+      <span class="stat-chip mb-2" style="display:inline-flex;"><i class="fas fa-calendar-alt me-1"></i> Available Now</span>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;letter-spacing:-1px;color:#111827;margin:0;">
+        Upcoming <span style="background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Events</span>
+      </h2>
+    </div>
+    <!-- Inline search -->
+    <form method="get" style="display:flex;align-items:center;background:#fff;border:1.5px solid #E5E7EB;border-radius:50px;padding:.4rem .4rem .4rem 1rem;gap:.5rem;min-width:260px;">
+      <i class="fas fa-search" style="color:#9CA3AF;font-size:.85rem;"></i>
+      <input type="text" name="search" placeholder="Search events…" value="{{ search_query }}"
+             style="border:none;outline:none;font-size:.85rem;background:transparent;flex:1;min-width:0;color:#111827;">
+      {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+      <button type="submit" class="btn btn-primary" style="border-radius:50px;padding:.4rem 1rem;font-size:.8rem;">Go</button>
+    </form>
+  </div>
+
+  <!-- Category Filter Pills -->
+  <div class="category-filter">
+    <a href="{% url 'event_list' %}{% if search_query %}?search={{ search_query }}{% endif %}#events"
+       class="category-btn {% if not selected_category %}active{% endif %}">
+      <i class="fas fa-th me-1"></i> All
+    </a>
+    {% for code, name in categories %}
+    <a href="?category={{ code }}{% if search_query %}&search={{ search_query }}{% endif %}#events"
+       class="category-btn {% if selected_category == code %}active{% endif %}">
+      {{ name }}
+    </a>
+    {% endfor %}
+  </div>
+
+  <!-- Result Count -->
+  {% if events %}
+  <p style="color:#6B7280;font-size:.85rem;margin-bottom:1.5rem;">
+    Showing <strong style="color:#111827;">{{ events|length }}</strong> event{{ events|length|pluralize }}
+    {% if search_query %} for "<strong style="color:#7C3AED;">{{ search_query }}</strong>"{% endif %}
+    {% if selected_category %} in <strong style="color:#7C3AED;">{{ selected_category }}</strong>{% endif %}
+  </p>
+  {% endif %}
+
+  <!-- Events Grid -->
+  <div class="row g-4">
+    {% for event in events %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="card h-100" style="position:relative;">
+        <!-- Image -->
+        <div style="position:relative;overflow:hidden;height:220px;">
+          <img src="{{ event.image }}" class="card-img-top" alt="{{ event.title }}"
+               style="height:100%;object-fit:cover;transition:transform .4s;"
+               onmouseover="this.style.transform='scale(1.06)'"
+               onmouseout="this.style.transform='scale(1)'">
+          {% if event.is_free %}
+          <div style="position:absolute;top:12px;right:12px;background:#059669;color:#fff;padding:.25rem .8rem;border-radius:50px;font-size:.7rem;font-weight:700;letter-spacing:.5px;">FREE</div>
+          {% endif %}
+          <div style="position:absolute;bottom:12px;left:12px;">
+            <span class="badge bg-primary">{{ event.get_category_display }}</span>
+          </div>
+        </div>
+        <!-- Body -->
+        <div class="card-body d-flex flex-column" style="padding:1.25rem;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            {% if event.is_sold_out %}
+            <span class="badge bg-danger">Sold Out</span>
+            {% elif event.available_seats <= 10 %}
+            <span class="badge bg-warning"><i class="fas fa-fire me-1"></i>{{ event.available_seats }} left</span>
+            {% else %}
+            <span class="badge bg-success"><i class="fas fa-check me-1"></i>Available</span>
+            {% endif %}
+            <span style="font-size:.75rem;color:#9CA3AF;">{{ event.available_seats }} seats</span>
+          </div>
+          <h5 style="font-weight:800;font-size:1rem;letter-spacing:-.3px;color:#111827;line-height:1.3;margin-bottom:.75rem;">{{ event.title }}</h5>
+          <div class="event-meta"><i class="fas fa-calendar-alt"></i><span>{{ event.date|date:"D, M d, Y" }}</span></div>
+          <div class="event-meta"><i class="fas fa-clock"></i><span>{{ event.date|date:"h:i A" }}</span></div>
+          <div class="event-meta"><i class="fas fa-map-marker-alt"></i><span>{{ event.venue }}</span></div>
+          <div class="d-flex justify-content-between align-items-center mt-auto pt-3" style="border-top:1px solid #F3F4F6;">
+            {% if event.is_free %}
+            <div class="price-tag" style="background:#D1FAE5;color:#065F46;border-color:#A7F3D0;">Free</div>
+            {% else %}
+            <div class="price-tag">₹{{ event.price }}</div>
+            {% endif %}
+            <a href="{% url 'event_detail' event.id %}" class="btn btn-primary" style="padding:.55rem 1.2rem;font-size:.82rem;">
+              Book Now <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% empty %}
+    <div class="col-12">
+      <div class="card text-center py-5" style="border:2px dashed #E5E7EB;background:#FAFAFA;box-shadow:none;">
+        <div class="card-body">
+          <div style="width:80px;height:80px;background:#F5F3FF;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+            <i class="fas fa-search" style="font-size:2rem;color:#A78BFA;"></i>
+          </div>
+          <h4 style="font-weight:700;color:#374151;">No events found</h4>
+          <p style="color:#6B7280;margin-top:.5rem;">Try adjusting your search or browse a different category.</p>
+          <a href="{% url 'event_list' %}" class="btn btn-primary mt-2">Browse All Events</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
+
+
+{# ════════════════════════════════════════════════════════════════ #}
+{# FULLCONTENT AFTER — How it Works, About, Testimonials, CTA      #}
+{# ════════════════════════════════════════════════════════════════ #}
+{% block fullcontent_after %}
+
+<!-- ══════════════════════ HOW IT WORKS ══════════════════════ -->
+<section id="how-it-works" style="padding:5.5rem 0;background:#F9FAFB;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem;">
+      <span class="stat-chip mb-3" style="display:inline-flex;"><i class="fas fa-magic me-1"></i> Simple & Fast</span>
+      <h2 style="font-size:clamp(1.75rem,4vw,2.9rem);font-weight:900;letter-spacing:-1.5px;color:#111827;margin-top:.5rem;">
+        Book in <span style="background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">3 Easy Steps</span>
+      </h2>
+      <p style="color:#6B7280;margin-top:.5rem;font-size:.95rem;">From discovery to your seat in under 2 minutes</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <!-- Step 1 -->
+      <div class="col-md-4">
+        <div class="step-card" style="background:#fff;border-radius:28px;padding:2.75rem 2rem 2.25rem;text-align:center;box-shadow:0 4px 28px rgba(0,0,0,.06);border:1px solid #F0EBFF;position:relative;">
+          <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:48px;height:48px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.15rem;box-shadow:0 6px 18px rgba(124,58,237,.45);">1</div>
+          <div style="width:76px;height:76px;background:#F5F3FF;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:1rem auto 1.25rem;">
+            <i class="fas fa-search" style="font-size:1.9rem;color:#7C3AED;"></i>
+          </div>
+          <h4 style="font-weight:800;color:#111827;margin-bottom:.5rem;">Discover Events</h4>
+          <p style="color:#6B7280;font-size:.9rem;line-height:1.65;margin:0;">Browse hundreds of events by category, city, or date. Find exactly what excites you.</p>
+        </div>
+      </div>
+      <!-- Step 2 (highlighted) -->
+      <div class="col-md-4">
+        <div class="step-card" style="background:linear-gradient(145deg,#7C3AED,#4C1D95);border-radius:28px;padding:2.75rem 2rem 2.25rem;text-align:center;box-shadow:0 12px 40px rgba(124,58,237,.38);position:relative;">
+          <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:48px;height:48px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#7C3AED;font-weight:900;font-size:1.15rem;box-shadow:0 4px 16px rgba(0,0,0,.12);">2</div>
+          <div style="width:76px;height:76px;background:rgba(255,255,255,.15);border-radius:22px;display:flex;align-items:center;justify-content:center;margin:1rem auto 1.25rem;">
+            <i class="fas fa-ticket-alt" style="font-size:1.9rem;color:#fff;"></i>
+          </div>
+          <h4 style="font-weight:800;color:#fff;margin-bottom:.5rem;">Pick Your Tickets</h4>
+          <p style="color:rgba(255,255,255,.8);font-size:.9rem;line-height:1.65;margin:0;">Choose General, Premium, or VIP. Apply coupon codes for extra savings at checkout.</p>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="col-md-4">
+        <div class="step-card" style="background:#fff;border-radius:28px;padding:2.75rem 2rem 2.25rem;text-align:center;box-shadow:0 4px 28px rgba(0,0,0,.06);border:1px solid #F0EBFF;position:relative;">
+          <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:48px;height:48px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.15rem;box-shadow:0 6px 18px rgba(124,58,237,.45);">3</div>
+          <div style="width:76px;height:76px;background:#F5F3FF;border-radius:22px;display:flex;align-items:center;justify-content:center;margin:1rem auto 1.25rem;">
+            <i class="fas fa-qrcode" style="font-size:1.9rem;color:#7C3AED;"></i>
+          </div>
+          <h4 style="font-weight:800;color:#111827;margin-bottom:.5rem;">Attend &amp; Enjoy</h4>
+          <p style="color:#6B7280;font-size:.9rem;line-height:1.65;margin:0;">Pay securely via Razorpay. Get your QR ticket by email instantly, then show up and enjoy!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ WHY EVENTHUB (ABOUT) ══════════════════════ -->
+<section style="padding:5.5rem 0;background:#fff;">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <!-- Left: Text -->
+      <div class="col-lg-5">
+        <span class="stat-chip mb-3" style="display:inline-flex;"><i class="fas fa-shield-alt me-1"></i> Why Choose Us</span>
+        <h2 style="font-size:clamp(1.75rem,4vw,3.1rem);font-weight:900;letter-spacing:-1.5px;color:#111827;line-height:1.1;margin-top:.75rem;margin-bottom:1.25rem;">
+          The Smartest Way to<br>
+          <span style="background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Experience Events</span>
+        </h2>
+        <p style="color:#6B7280;font-size:.95rem;line-height:1.75;margin-bottom:2rem;">
+          EventHub brings together the best local and national events with a beautifully simple booking experience. We handle everything so you can focus on what matters — having an unforgettable time.
+        </p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="#events" class="btn btn-primary" style="padding:.85rem 2.25rem;font-size:.95rem;">
+            Start Exploring <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+          {% if not user.is_authenticated %}
+          <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary" style="padding:.85rem 2.25rem;font-size:.95rem;">
+            Create Account
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      <!-- Right: Feature Cards -->
+      <div class="col-lg-7">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="feat-card" style="background:#F5F3FF;border-radius:22px;padding:1.6rem;border:1.5px solid #EDE9FE;height:100%;">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                <i class="fas fa-lock" style="color:#fff;font-size:1rem;"></i>
+              </div>
+              <h5 style="font-weight:800;color:#111827;font-size:.95rem;margin-bottom:.4rem;">Secure Payments</h5>
+              <p style="color:#6B7280;font-size:.82rem;line-height:1.55;margin:0;">256-bit SSL encryption + Razorpay. Your money and card data are always protected.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card" style="background:#F0FDF4;border-radius:22px;padding:1.6rem;border:1.5px solid #BBF7D0;height:100%;">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,#22C55E,#15803D);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                <i class="fas fa-bolt" style="color:#fff;font-size:1rem;"></i>
+              </div>
+              <h5 style="font-weight:800;color:#111827;font-size:.95rem;margin-bottom:.4rem;">Instant QR Tickets</h5>
+              <p style="color:#6B7280;font-size:.82rem;line-height:1.55;margin:0;">QR code tickets delivered to your email the moment payment is confirmed.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card" style="background:#FFF7ED;border-radius:22px;padding:1.6rem;border:1.5px solid #FED7AA;height:100%;">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,#F97316,#EA580C);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                <i class="fas fa-tag" style="color:#fff;font-size:1rem;"></i>
+              </div>
+              <h5 style="font-weight:800;color:#111827;font-size:.95rem;margin-bottom:.4rem;">Coupon Discounts</h5>
+              <p style="color:#6B7280;font-size:.82rem;line-height:1.55;margin:0;">Apply promo codes at checkout to save up to 50% on your favourite events.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="feat-card" style="background:#EFF6FF;border-radius:22px;padding:1.6rem;border:1.5px solid #BFDBFE;height:100%;">
+              <div style="width:48px;height:48px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+                <i class="fas fa-bell" style="color:#fff;font-size:1rem;"></i>
+              </div>
+              <h5 style="font-weight:800;color:#111827;font-size:.95rem;margin-bottom:.4rem;">Smart Notifications</h5>
+              <p style="color:#6B7280;font-size:.82rem;line-height:1.55;margin:0;">Email & WhatsApp reminders so you never miss an event you've booked.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ TESTIMONIALS ══════════════════════ -->
+<section style="padding:5.5rem 0;background:linear-gradient(160deg,#F5F3FF 0%,#EDE9FE 50%,#F9FAFB 100%);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem;">
+      <span class="stat-chip mb-3" style="display:inline-flex;"><i class="fas fa-heart me-1"></i> Loved by Thousands</span>
+      <h2 style="font-size:clamp(1.75rem,4vw,2.9rem);font-weight:900;letter-spacing:-1px;color:#111827;margin-top:.5rem;">
+        What Our <span style="background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Attendees</span> Say
+      </h2>
+      <p style="color:#6B7280;margin-top:.5rem;font-size:.95rem;">Real reviews from real people who've booked through EventHub</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Review 1 -->
+      <div class="col-md-4">
+        <div class="review-card" style="background:#fff;border-radius:26px;padding:2rem;box-shadow:0 4px 28px rgba(0,0,0,.06);border:1px solid #F0EBFF;height:100%;display:flex;flex-direction:column;">
+          <div style="display:flex;gap:.3rem;margin-bottom:1rem;">
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+          </div>
+          <p style="color:#374151;font-size:.92rem;line-height:1.75;margin-bottom:1.5rem;flex:1;font-style:italic;">
+            "Booked tickets for the Tech Summit last month — incredibly smooth experience. Got my QR ticket in seconds and the event was phenomenal. Will definitely use EventHub again!"
+          </p>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="width:46px;height:46px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;flex-shrink:0;">R</div>
+            <div>
+              <div style="font-weight:700;color:#111827;font-size:.9rem;">Rahul Sharma</div>
+              <div style="color:#9CA3AF;font-size:.78rem;">Software Engineer, Mumbai</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Review 2 (purple highlight) -->
+      <div class="col-md-4">
+        <div class="review-card" style="background:linear-gradient(145deg,#7C3AED,#4C1D95);border-radius:26px;padding:2rem;box-shadow:0 12px 40px rgba(124,58,237,.32);height:100%;display:flex;flex-direction:column;">
+          <div style="display:flex;gap:.3rem;margin-bottom:1rem;">
+            <i class="fas fa-star" style="color:#FDE68A;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#FDE68A;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#FDE68A;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#FDE68A;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#FDE68A;font-size:.9rem;"></i>
+          </div>
+          <p style="color:rgba(255,255,255,.9);font-size:.92rem;line-height:1.75;margin-bottom:1.5rem;flex:1;font-style:italic;">
+            "Attended the Bollywood Night concert — absolutely magical! The seat selection and payment took under 2 minutes. EventHub is the best event platform in India, hands down."
+          </p>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="width:46px;height:46px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;flex-shrink:0;">P</div>
+            <div>
+              <div style="font-weight:700;color:#fff;font-size:.9rem;">Priya Patel</div>
+              <div style="color:rgba(255,255,255,.6);font-size:.78rem;">Content Creator, Ahmedabad</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Review 3 -->
+      <div class="col-md-4">
+        <div class="review-card" style="background:#fff;border-radius:26px;padding:2rem;box-shadow:0 4px 28px rgba(0,0,0,.06);border:1px solid #F0EBFF;height:100%;display:flex;flex-direction:column;">
+          <div style="display:flex;gap:.3rem;margin-bottom:1rem;">
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+            <i class="fas fa-star" style="color:#F59E0B;font-size:.9rem;"></i>
+          </div>
+          <p style="color:#374151;font-size:.92rem;line-height:1.75;margin-bottom:1.5rem;flex:1;font-style:italic;">
+            "Used a coupon code and saved ₹500 on VIP tickets for the Food Festival! The WhatsApp reminder was super helpful. Can't wait to book my next event here."
+          </p>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="width:46px;height:46px;background:linear-gradient(135deg,#F97316,#EA580C);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;flex-shrink:0;">A</div>
+            <div>
+              <div style="font-weight:700;color:#111827;font-size:.9rem;">Arjun Mehta</div>
+              <div style="color:#9CA3AF;font-size:.78rem;">Product Manager, Bangalore</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════ BOTTOM CTA ══════════════════════ -->
+<section style="padding:6rem 0;background:linear-gradient(140deg,#0F0A1E 0%,#1F1035 60%,#111827 100%);position:relative;overflow:hidden;">
+  <!-- Decorative -->
+  <div style="position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(124,58,237,.2) 0%,transparent 65%);border-radius:50%;pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-80px;left:-60px;width:350px;height:350px;background:radial-gradient(circle,rgba(76,29,149,.15) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+
+  <div class="container" style="text-align:center;position:relative;z-index:1;">
+    <span style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(124,58,237,.25);border:1px solid rgba(167,139,250,.35);border-radius:50px;padding:.4rem 1.1rem;font-size:.8rem;font-weight:600;color:#A78BFA;margin-bottom:1.75rem;">
+      <i class="fas fa-rocket"></i> Get Started Today
+    </span>
+    <h2 style="font-size:clamp(2rem,5.5vw,3.75rem);font-weight:900;letter-spacing:-2px;color:#fff;line-height:1.05;margin-bottom:1.25rem;">
+      Ready for Your Next<br>
+      <span style="background:linear-gradient(135deg,#A78BFA 20%,#7C3AED 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Unforgettable Experience?</span>
+    </h2>
+    <p style="color:rgba(255,255,255,.55);font-size:1.05rem;max-width:480px;margin:0 auto 2.75rem;line-height:1.65;">
+      Join 50,000+ attendees who have discovered and booked amazing events through EventHub.
+    </p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="#events" class="btn btn-primary" style="padding:.95rem 2.75rem;font-size:1.05rem;">
+        <i class="fas fa-compass me-2"></i>Browse Events
+      </a>
+      {% if not user.is_authenticated %}
+      <a href="{% url 'accounts:register' %}"
+         style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.18);border-radius:50px;padding:.95rem 2.75rem;color:#fff;font-size:1.05rem;font-weight:600;text-decoration:none;transition:background .2s;"
+         onmouseover="this.style.background='rgba(255,255,255,.18)'"
+         onmouseout="this.style.background='rgba(255,255,255,.09)'">
+        Create Free Account <i class="fas fa-arrow-right"></i>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // If page has a search/filter, smooth scroll to #events on load
+  {% if search_query or selected_category %}
+  window.addEventListener('load', function() {
+    var el = document.getElementById('events');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  {% endif %}
+</script>
+{% endblock %}

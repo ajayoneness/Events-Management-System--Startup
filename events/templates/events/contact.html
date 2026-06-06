@@ -1,0 +1,196 @@
+{% extends 'events/base.html' %}
+{% block title %}Contact Us — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.contact-card { background:#fff;border-radius:20px;border:1px solid #F0EBFF;padding:1.5rem;display:flex;align-items:flex-start;gap:1rem; }
+.contact-icon { width:44px;height:44px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;flex-shrink:0; }
+.faq-item { border-bottom:1px solid #F3F4F6;padding:1rem 0; }
+.faq-item:last-child { border-bottom:none; }
+.faq-q { font-weight:700;color:#111827;font-size:.92rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center; }
+.faq-a { color:#6B7280;font-size:.88rem;line-height:1.7;margin-top:.5rem;display:none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:900px;margin:0 auto;">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:3rem;">
+        <div style="width:60px;height:60px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 4px 15px rgba(124,58,237,.3);">
+            <i class="fas fa-headset" style="color:#fff;font-size:1.4rem;"></i>
+        </div>
+        <h1 style="font-size:2rem;font-weight:900;color:#111827;margin-bottom:.5rem;">Get in Touch</h1>
+        <p style="color:#6B7280;font-size:.95rem;max-width:480px;margin:0 auto;">We're here to help. Reach out to us for booking support, event queries, or partnership enquiries.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Contact Info -->
+        <div class="col-lg-5">
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.9rem;margin-bottom:.2rem;">Email Support</div>
+                        <a href="mailto:support@eventhub.in" style="color:#7C3AED;font-size:.88rem;text-decoration:none;">support@eventhub.in</a>
+                        <div style="color:#9CA3AF;font-size:.78rem;margin-top:.2rem;">Response within 24 hours</div>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon" style="background:linear-gradient(135deg,#25D366,#128C7E);"><i class="fab fa-whatsapp"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.9rem;margin-bottom:.2rem;">WhatsApp</div>
+                        <a href="https://wa.me/919876543210" target="_blank" rel="noopener" style="color:#059669;font-size:.88rem;text-decoration:none;">+91 98765 43210</a>
+                        <div style="color:#9CA3AF;font-size:.78rem;margin-top:.2rem;">Mon–Sat, 10 AM–7 PM IST</div>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.9rem;margin-bottom:.2rem;">Office Address</div>
+                        <div style="color:#6B7280;font-size:.88rem;line-height:1.6;">CodeAj Marketplace<br>Bengaluru, Karnataka — 560001<br>India</div>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.9rem;margin-bottom:.2rem;">Support Hours</div>
+                        <div style="color:#6B7280;font-size:.88rem;line-height:1.6;">Monday – Saturday<br>10:00 AM – 7:00 PM IST</div>
+                    </div>
+                </div>
+
+                <!-- Legal links -->
+                <div style="background:#F9FAFB;border-radius:14px;padding:1rem 1.25rem;">
+                    <div style="font-size:.78rem;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.75rem;">Legal &amp; Policies</div>
+                    <div style="display:flex;flex-direction:column;gap:.5rem;">
+                        <a href="{% url 'terms' %}" style="color:#374151;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:.5rem;"><i class="fas fa-file-contract" style="color:#7C3AED;width:14px;"></i> Terms &amp; Conditions</a>
+                        <a href="{% url 'privacy' %}" style="color:#374151;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:.5rem;"><i class="fas fa-shield-alt" style="color:#7C3AED;width:14px;"></i> Privacy Policy</a>
+                        <a href="{% url 'refund_policy' %}" style="color:#374151;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:.5rem;"><i class="fas fa-undo" style="color:#7C3AED;width:14px;"></i> Refund &amp; Cancellation Policy</a>
+                        <a href="{% url 'shipping_policy' %}" style="color:#374151;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:.5rem;"><i class="fas fa-paper-plane" style="color:#7C3AED;width:14px;"></i> Ticket Delivery Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form + FAQ -->
+        <div class="col-lg-7">
+            <!-- Contact Form -->
+            <div class="card" style="padding:0;margin-bottom:1.5rem;">
+                <div class="card-body" style="padding:2rem;">
+                    <h5 style="font-weight:800;color:#111827;margin-bottom:1.25rem;">Send us a Message</h5>
+                    <form id="contact-form" onsubmit="submitForm(event)">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Full Name *</label>
+                                <input type="text" id="cf-name" class="form-control" placeholder="Your full name" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Email *</label>
+                                <input type="email" id="cf-email" class="form-control" placeholder="your@email.com" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Subject *</label>
+                                <select id="cf-subject" class="form-control" required>
+                                    <option value="">Select a topic</option>
+                                    <option value="booking">Booking / Ticket Issue</option>
+                                    <option value="refund">Refund Request</option>
+                                    <option value="payment">Payment Problem</option>
+                                    <option value="event">Event Query</option>
+                                    <option value="organiser">Become an Organiser</option>
+                                    <option value="technical">Technical Issue</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Booking ID (if applicable)</label>
+                                <input type="text" id="cf-booking" class="form-control" placeholder="e.g. EBB1106C">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Message *</label>
+                                <textarea id="cf-message" rows="4" class="form-control" placeholder="Describe your issue or query in detail..." required style="resize:none;"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100" style="font-size:.9rem;">
+                                    <i class="fas fa-paper-plane me-2"></i> Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="form-success" style="display:none;background:#D1FAE5;border-radius:12px;padding:1rem;text-align:center;color:#065F46;font-weight:600;margin-top:1rem;">
+                        <i class="fas fa-check-circle me-2"></i> Your message has been sent! We'll get back to you within 24 hours.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="card" style="padding:0;">
+                <div class="card-body" style="padding:2rem;">
+                    <h5 style="font-weight:800;color:#111827;margin-bottom:1.25rem;">Frequently Asked Questions</h5>
+                    <div id="faq">
+                        <div class="faq-item">
+                            <div class="faq-q" onclick="toggleFaq(this)">
+                                I didn't receive my ticket email. What should I do?
+                                <i class="fas fa-chevron-down" style="font-size:.75rem;color:#7C3AED;transition:transform .2s;"></i>
+                            </div>
+                            <div class="faq-a">Check your spam/junk folder first. If it's not there, log in to EventHub and go to <strong>My Tickets</strong> to download your ticket directly. You can also use <strong>Find My Booking</strong> with your email address.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-q" onclick="toggleFaq(this)">
+                                How do I get a refund for my booking?
+                                <i class="fas fa-chevron-down" style="font-size:.75rem;color:#7C3AED;transition:transform .2s;"></i>
+                            </div>
+                            <div class="faq-a">Email us at support@eventhub.in with your Booking ID and reason. Refunds are processed within 7–10 business days for eligible bookings. See our <a href="{% url 'refund_policy' %}" style="color:#7C3AED;">Refund Policy</a> for details.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-q" onclick="toggleFaq(this)">
+                                My payment was deducted but booking shows pending. Help?
+                                <i class="fas fa-chevron-down" style="font-size:.75rem;color:#7C3AED;transition:transform .2s;"></i>
+                            </div>
+                            <div class="faq-a">This usually resolves automatically within 30 minutes. If your booking still shows "pending" after that, contact us at support@eventhub.in with your payment reference number and we'll resolve it immediately.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-q" onclick="toggleFaq(this)">
+                                Can I transfer my ticket to someone else?
+                                <i class="fas fa-chevron-down" style="font-size:.75rem;color:#7C3AED;transition:transform .2s;"></i>
+                            </div>
+                            <div class="faq-a">Ticket transfers depend on the event Organiser's policy. Contact us with your booking ID and we'll check if a transfer is possible for your specific event.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-q" onclick="toggleFaq(this)">
+                                How do I become an event organiser on EventHub?
+                                <i class="fas fa-chevron-down" style="font-size:.75rem;color:#7C3AED;transition:transform .2s;"></i>
+                            </div>
+                            <div class="faq-a">Send us an email at support@eventhub.in with "Become an Organiser" in the subject line. Include details about your organisation and the type of events you plan to host.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleFaq(el) {
+    const answer = el.nextElementSibling;
+    const icon = el.querySelector('i');
+    const isOpen = answer.style.display === 'block';
+    // Close all
+    document.querySelectorAll('.faq-a').forEach(function(a){ a.style.display='none'; });
+    document.querySelectorAll('.faq-q i').forEach(function(i){ i.style.transform=''; });
+    // Open clicked if it was closed
+    if (!isOpen) {
+        answer.style.display = 'block';
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+function submitForm(e) {
+    e.preventDefault();
+    // Simulate form submission (replace with actual backend if needed)
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+}
+</script>
+{% endblock %}

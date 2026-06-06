@@ -1,0 +1,376 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Browse Events — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Page-level overrides ─────────────────────────────── */
+.section-container { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+/* ── Filter / Tab bar ─────────────────────────────────── */
+.filter-bar {
+  position: sticky;
+  top: 65px;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1.5px solid #F0EBFF;
+  box-shadow: 0 2px 16px rgba(124,58,237,.06);
+}
+
+/* ── Category tab pills ───────────────────────────────── */
+.cat-tab {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .55rem 1.15rem;
+  border-radius: 50px;
+  border: 1.5px solid #E5E7EB;
+  background: #fff;
+  color: #374151;
+  font-weight: 600;
+  font-size: .84rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.cat-tab:hover  { border-color: #7C3AED; color: #7C3AED; background: #F5F3FF; }
+.cat-tab.active { background: linear-gradient(135deg,#7C3AED,#4C1D95); border-color: transparent; color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,.35); }
+.cat-tab .badge-count {
+  background: rgba(0,0,0,.1); color: inherit;
+  border-radius: 50px; padding: .05rem .5rem;
+  font-size: .72rem; font-weight: 700;
+}
+.cat-tab.active .badge-count { background: rgba(255,255,255,.25); }
+
+/* ── Event cards ──────────────────────────────────────── */
+.ev-card { transition: transform .25s, box-shadow .25s; }
+.ev-card:hover { transform: translateY(-6px); box-shadow: 0 14px 44px rgba(124,58,237,.14) !important; }
+
+/* ── Category section divider ─────────────────────────── */
+.cat-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #F0EBFF;
+}
+
+/* ── Sort dropdown ────────────────────────────────────── */
+.sort-select {
+  border: 1.5px solid #E5E7EB; border-radius: 50px;
+  padding: .45rem 2rem .45rem 1rem;
+  font-size: .84rem; font-weight: 600; color: #374151;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right .75rem center;
+  appearance: none; -webkit-appearance: none;
+  cursor: pointer; outline: none;
+  transition: border-color .2s;
+}
+.sort-select:focus { border-color: #7C3AED; }
+
+/* ── Empty state ──────────────────────────────────────── */
+.empty-state { text-align: center; padding: 4.5rem 2rem; background: #FAFAFA; border-radius: 24px; border: 2px dashed #E5E7EB; }
+
+/* ── Scroll shadows on filter bar ────────────────────── */
+.tab-scroll { overflow-x: auto; scrollbar-width: none; }
+.tab-scroll::-webkit-scrollbar { display: none; }
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: fade-in-up .4s ease both; }
+</style>
+{% endblock %}
+
+
+{% block fullcontent %}
+
+<!-- ══════════════════ PAGE HEADER ══════════════════ -->
+<section style="background:linear-gradient(135deg,#4C1D95 0%,#7C3AED 60%,#6D28D9 100%);padding:3.5rem 0 3rem;position:relative;overflow:hidden;">
+  <!-- Decorative blobs -->
+  <div style="position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 65%);border-radius:50%;pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-60px;left:5%;width:260px;height:260px;background:radial-gradient(circle,rgba(255,255,255,.07),transparent 70%);border-radius:50%;pointer-events:none;"></div>
+  <!-- Dot grid -->
+  <div style="position:absolute;top:30px;right:120px;width:110px;height:110px;opacity:.15;background-image:radial-gradient(circle,#fff 1.5px,transparent 1.5px);background-size:16px 16px;pointer-events:none;"></div>
+
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.85rem;">
+          <span style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.9);">
+            <i class="fas fa-calendar-alt me-1"></i>
+            {{ total_count }} Event{{ total_count|pluralize }} Available
+          </span>
+        </div>
+        <h1 style="font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:-2px;line-height:1.05;margin-bottom:.75rem;">
+          Browse All Events
+        </h1>
+        <p style="color:rgba(255,255,255,.75);font-size:1rem;margin:0;max-width:400px;line-height:1.6;">
+          Discover concerts, tech talks, food festivals, sports championships and more — all in one place.
+        </p>
+      </div>
+      <!-- Header Search -->
+      <div class="col-lg-6">
+        <form method="get" action="{% url 'all_events' %}" style="background:rgba(255,255,255,.12);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.25);border-radius:60px;padding:.6rem .6rem .6rem 1.5rem;display:flex;align-items:center;gap:.75rem;">
+          <i class="fas fa-search" style="color:rgba(255,255,255,.7);flex-shrink:0;"></i>
+          <input type="text" name="search" value="{{ search_query }}" placeholder="Search events, venues, artists…"
+                 style="flex:1;border:none;outline:none;background:transparent;color:#fff;font-size:.95rem;min-width:0;">
+          <input type="hidden" name="category" value="{{ selected_category }}">
+          <input type="hidden" name="sort" value="{{ sort }}">
+          <button type="submit" style="background:#fff;color:#7C3AED;border:none;border-radius:50px;padding:.65rem 1.75rem;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+            Search
+          </button>
+        </form>
+        {% if search_query %}
+        <div style="margin-top:.75rem;">
+          <a href="{% url 'all_events' %}" style="color:rgba(255,255,255,.7);font-size:.8rem;text-decoration:none;">
+            <i class="fas fa-times me-1"></i>Clear search "{{ search_query }}"
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ══════════════════ STICKY FILTER BAR ══════════════════ -->
+<div class="filter-bar">
+  <div style="padding:.85rem 0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:nowrap;">
+
+      <!-- Category Tabs -->
+      <div class="tab-scroll" style="flex:1;">
+        <div style="display:flex;gap:.5rem;padding:.1rem .05rem;">
+
+          <!-- All tab -->
+          <a href="{% url 'all_events' %}{% if search_query %}?search={{ search_query }}{% endif %}"
+             class="cat-tab {% if not selected_category %}active{% endif %}">
+            <i class="fas fa-th" style="font-size:.8rem;"></i> All
+            <span class="badge-count">{{ total_count }}</span>
+          </a>
+
+          {% for code, name, count in categories_with_counts %}
+          <a href="{% url 'all_events' %}?category={{ code }}{% if search_query %}&search={{ search_query }}{% endif %}"
+             class="cat-tab {% if selected_category == code %}active{% endif %}">
+            {% if code == 'music' %}<i class="fas fa-music" style="font-size:.8rem;"></i>
+            {% elif code == 'tech' %}<i class="fas fa-microchip" style="font-size:.8rem;"></i>
+            {% elif code == 'sports' %}<i class="fas fa-futbol" style="font-size:.8rem;"></i>
+            {% elif code == 'food' %}<i class="fas fa-utensils" style="font-size:.8rem;"></i>
+            {% elif code == 'art' %}<i class="fas fa-palette" style="font-size:.8rem;"></i>
+            {% elif code == 'business' %}<i class="fas fa-briefcase" style="font-size:.8rem;"></i>
+            {% else %}<i class="fas fa-star" style="font-size:.8rem;"></i>{% endif %}
+            {{ name }}
+            <span class="badge-count">{{ count }}</span>
+          </a>
+          {% endfor %}
+
+        </div>
+      </div>
+
+      <!-- Sort Dropdown -->
+      <div style="flex-shrink:0;">
+        <form method="get" action="{% url 'all_events' %}" id="sort-form" style="display:inline;">
+          <input type="hidden" name="category" value="{{ selected_category }}">
+          <input type="hidden" name="search" value="{{ search_query }}">
+          <select name="sort" class="sort-select" onchange="document.getElementById('sort-form').submit()">
+            <option value="date"       {% if sort == 'date' %}selected{% endif %}>Date: Soonest</option>
+            <option value="newest"     {% if sort == 'newest' %}selected{% endif %}>Date: Latest</option>
+            <option value="price_asc"  {% if sort == 'price_asc' %}selected{% endif %}>Price: Low → High</option>
+            <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High → Low</option>
+          </select>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+<div style="padding:2.5rem 0 4rem;">
+
+  {% if show_grouped %}
+  {# ─── GROUPED VIEW — All categories ────────────────────── #}
+
+    {% if grouped_events %}
+      {% for code, group in grouped_events.items %}
+      <div class="animate-in" style="margin-bottom:3.5rem;">
+
+        <!-- Category Section Header -->
+        <div class="cat-section-head">
+          <div style="display:flex;align-items:center;gap:.85rem;">
+            <div style="width:48px;height:48px;background:{{ group.grad }};border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.15);">
+              <i class="fas {{ group.icon }}" style="color:#fff;font-size:1.1rem;"></i>
+            </div>
+            <div>
+              <h3 style="font-weight:900;font-size:1.25rem;color:#111827;margin:0;letter-spacing:-.4px;">{{ group.name }}</h3>
+              <span style="color:#6B7280;font-size:.82rem;">{{ group.total }} event{{ group.total|pluralize }} available</span>
+            </div>
+          </div>
+          {% if group.total > 4 %}
+          <a href="{% url 'all_events' %}?category={{ code }}"
+             style="display:inline-flex;align-items:center;gap:.4rem;background:{{ group.light }};color:#374151;border:1.5px solid {{ group.border }};border-radius:50px;padding:.45rem 1.1rem;font-size:.82rem;font-weight:600;text-decoration:none;white-space:nowrap;transition:all .2s;" onmouseover="this.style.background='{{ group.grad }}';this.style.color='#fff';this.style.borderColor='transparent'" onmouseout="this.style.background='{{ group.light }}';this.style.color='#374151';this.style.borderColor='{{ group.border }}'">
+            View all {{ group.total }} <i class="fas fa-arrow-right" style="font-size:.75rem;"></i>
+          </a>
+          {% endif %}
+        </div>
+
+        <!-- Events Grid for this category -->
+        <div class="row g-4">
+          {% for event in group.events %}
+          <div class="col-sm-6 col-lg-3">
+            <div class="card ev-card h-100" style="border-radius:20px;">
+              <div style="position:relative;overflow:hidden;height:200px;">
+                <img src="{{ event.image }}" alt="{{ event.title }}"
+                     style="width:100%;height:100%;object-fit:cover;transition:transform .4s;"
+                     onmouseover="this.style.transform='scale(1.06)'"
+                     onmouseout="this.style.transform='scale(1)'">
+                {% if event.is_free %}
+                <div style="position:absolute;top:10px;right:10px;background:#059669;color:#fff;padding:.2rem .7rem;border-radius:50px;font-size:.68rem;font-weight:700;">FREE</div>
+                {% endif %}
+                {% if event.is_sold_out %}
+                <div style="position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;">
+                  <span style="background:rgba(239,68,68,.9);color:#fff;padding:.4rem 1rem;border-radius:50px;font-size:.78rem;font-weight:700;">Sold Out</span>
+                </div>
+                {% endif %}
+              </div>
+              <div class="card-body d-flex flex-column" style="padding:1.1rem;">
+                <h6 style="font-weight:800;color:#111827;font-size:.92rem;line-height:1.35;margin-bottom:.6rem;flex:1;">{{ event.title }}</h6>
+                <div class="event-meta" style="font-size:.78rem;"><i class="fas fa-calendar-alt"></i><span>{{ event.date|date:"M d, Y · h:i A" }}</span></div>
+                <div class="event-meta" style="font-size:.78rem;"><i class="fas fa-map-marker-alt"></i><span>{{ event.venue }}</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.85rem;padding-top:.75rem;border-top:1px solid #F3F4F6;">
+                  {% if event.is_free %}
+                  <span style="background:#D1FAE5;color:#065F46;padding:.3rem .85rem;border-radius:50px;font-weight:800;font-size:.82rem;border:1px solid #A7F3D0;">Free</span>
+                  {% else %}
+                  <span style="background:#F5F3FF;color:#6D28D9;padding:.3rem .85rem;border-radius:50px;font-weight:800;font-size:.85rem;border:1px solid #DDD6FE;">₹{{ event.price }}</span>
+                  {% endif %}
+                  <a href="{% url 'event_detail' event.id %}" class="btn btn-primary" style="padding:.45rem 1rem;font-size:.78rem;border-radius:50px;">
+                    Book <i class="fas fa-arrow-right ms-1"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% endfor %}
+
+    {% else %}
+    <!-- No events at all -->
+    <div class="empty-state">
+      <div style="width:80px;height:80px;background:#F5F3FF;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+        <i class="fas fa-calendar-times" style="font-size:2rem;color:#A78BFA;"></i>
+      </div>
+      <h4 style="font-weight:700;color:#374151;">No events available</h4>
+      <p style="color:#6B7280;margin-top:.5rem;">Check back soon for upcoming events!</p>
+    </div>
+    {% endif %}
+
+  {% else %}
+  {# ─── FLAT VIEW — Category selected or searching ────────── #}
+
+    <!-- Result Info Bar -->
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;margin-bottom:1.75rem;">
+      <p style="color:#6B7280;font-size:.88rem;margin:0;">
+        {% if events %}
+          <strong style="color:#111827;">{{ events|length }}</strong> event{{ events|length|pluralize }} found
+          {% if search_query %} for "<strong style="color:#7C3AED;">{{ search_query }}</strong>"{% endif %}
+          {% if selected_category %} in <strong style="color:#7C3AED;">
+            {% for code, name in categories %}{% if code == selected_category %}{{ name }}{% endif %}{% endfor %}
+          </strong>{% endif %}
+        {% else %}
+          No events found
+        {% endif %}
+      </p>
+      <a href="{% url 'all_events' %}" style="color:#7C3AED;font-size:.82rem;text-decoration:none;font-weight:600;">
+        <i class="fas fa-times me-1"></i>Clear filters
+      </a>
+    </div>
+
+    <!-- Events Grid -->
+    {% if events %}
+    <div class="row g-4 animate-in">
+      {% for event in events %}
+      <div class="col-sm-6 col-lg-4">
+        <div class="card ev-card h-100" style="border-radius:22px;position:relative;">
+          <!-- Image -->
+          <div style="position:relative;overflow:hidden;height:220px;">
+            <img src="{{ event.image }}" alt="{{ event.title }}"
+                 style="width:100%;height:100%;object-fit:cover;transition:transform .4s;"
+                 onmouseover="this.style.transform='scale(1.06)'"
+                 onmouseout="this.style.transform='scale(1)'">
+            {% if event.is_free %}
+            <div style="position:absolute;top:12px;right:12px;background:#059669;color:#fff;padding:.25rem .8rem;border-radius:50px;font-size:.7rem;font-weight:700;">FREE</div>
+            {% endif %}
+            <div style="position:absolute;bottom:12px;left:12px;">
+              <span class="badge bg-primary">{{ event.get_category_display }}</span>
+            </div>
+            {% if event.is_sold_out %}
+            <div style="position:absolute;inset:0;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;">
+              <span style="background:rgba(239,68,68,.9);color:#fff;padding:.4rem 1.25rem;border-radius:50px;font-size:.8rem;font-weight:700;">Sold Out</span>
+            </div>
+            {% endif %}
+          </div>
+          <!-- Body -->
+          <div class="card-body d-flex flex-column" style="padding:1.25rem;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              {% if event.is_sold_out %}
+              <span class="badge bg-danger">Sold Out</span>
+              {% elif event.available_seats <= 10 %}
+              <span class="badge bg-warning"><i class="fas fa-fire me-1"></i>{{ event.available_seats }} left</span>
+              {% else %}
+              <span class="badge bg-success"><i class="fas fa-check me-1"></i>Available</span>
+              {% endif %}
+              <span style="font-size:.74rem;color:#9CA3AF;">{{ event.available_seats }} seats</span>
+            </div>
+            <h5 style="font-weight:800;font-size:1rem;letter-spacing:-.3px;color:#111827;line-height:1.3;margin-bottom:.75rem;">{{ event.title }}</h5>
+            <div class="event-meta"><i class="fas fa-calendar-alt"></i><span>{{ event.date|date:"D, M d, Y" }}</span></div>
+            <div class="event-meta"><i class="fas fa-clock"></i><span>{{ event.date|date:"h:i A" }}</span></div>
+            <div class="event-meta"><i class="fas fa-map-marker-alt"></i><span>{{ event.venue }}</span></div>
+            <div class="d-flex justify-content-between align-items-center mt-auto pt-3" style="border-top:1px solid #F3F4F6;">
+              {% if event.is_free %}
+              <div class="price-tag" style="background:#D1FAE5;color:#065F46;border-color:#A7F3D0;">Free</div>
+              {% else %}
+              <div class="price-tag">₹{{ event.price }}</div>
+              {% endif %}
+              <a href="{% url 'event_detail' event.id %}" class="btn btn-primary" style="padding:.55rem 1.2rem;font-size:.82rem;">
+                Book Now <i class="fas fa-arrow-right ms-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+      <div style="width:80px;height:80px;background:#F5F3FF;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+        <i class="fas fa-search" style="font-size:2rem;color:#A78BFA;"></i>
+      </div>
+      <h4 style="font-weight:700;color:#374151;">No events found</h4>
+      <p style="color:#6B7280;margin-top:.5rem;margin-bottom:1.5rem;">Try a different category or search term.</p>
+      <a href="{% url 'all_events' %}" class="btn btn-primary" style="padding:.7rem 2rem;">Browse All Events</a>
+    </div>
+    {% endif %}
+
+  {% endif %}
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+// Highlight active tab in filter bar by scrolling it into view
+document.addEventListener('DOMContentLoaded', function() {
+  var active = document.querySelector('.cat-tab.active');
+  if (active) active.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+});
+</script>
+{% endblock %}

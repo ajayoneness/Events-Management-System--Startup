@@ -1,0 +1,147 @@
+{% extends 'events/base.html' %}
+{% block title %}Delivery Policy — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.legal-section { margin-bottom:2.5rem; }
+.legal-section h2 { font-size:1.1rem;font-weight:800;color:#111827;margin-bottom:.75rem; }
+.legal-section p, .legal-section li { font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:.5rem; }
+.legal-section ul { padding-left:1.25rem; }
+.delivery-step { display:flex;align-items:flex-start;gap:1rem;padding:1rem 0;border-bottom:1px solid #F3F4F6; }
+.delivery-step:last-child { border-bottom:none; }
+.step-num { min-width:36px;height:36px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;flex-shrink:0; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:800px;margin:0 auto;">
+
+    <div style="margin-bottom:2.5rem;">
+        <div style="display:inline-flex;align-items:center;gap:.5rem;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:50px;padding:.4rem 1rem;font-size:.8rem;font-weight:600;color:#0369A1;margin-bottom:1rem;">
+            <i class="fas fa-paper-plane"></i> Legal Document
+        </div>
+        <h1 style="font-size:2rem;font-weight:900;color:#111827;margin-bottom:.5rem;">Ticket Delivery Policy</h1>
+        <p style="color:#6B7280;font-size:.9rem;">Last updated: June 2025 &nbsp;|&nbsp; Effective from: January 2024</p>
+    </div>
+
+    <!-- Highlight box -->
+    <div style="background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:20px;padding:1.5rem 2rem;color:#fff;margin-bottom:2rem;display:flex;align-items:center;gap:1.5rem;">
+        <div style="font-size:2.5rem;opacity:.8;"><i class="fas fa-bolt"></i></div>
+        <div>
+            <div style="font-weight:800;font-size:1.05rem;margin-bottom:.25rem;">Instant Digital Delivery</div>
+            <div style="font-size:.88rem;opacity:.9;">All EventHub tickets are digital. No physical shipping required. Your ticket is delivered instantly to your email after payment confirmation.</div>
+        </div>
+    </div>
+
+    <div class="card" style="padding:0;">
+        <div class="card-body" style="padding:2.5rem;">
+
+            <p style="font-size:.92rem;color:#374151;line-height:1.85;margin-bottom:2rem;">
+                EventHub is a 100% digital ticketing platform. We do not sell or ship any physical goods. All tickets are delivered electronically. This policy explains how and when you will receive your tickets after a successful booking.
+            </p>
+
+            <div class="legal-section">
+                <h2>How Ticket Delivery Works</h2>
+                <div>
+                    <div class="delivery-step">
+                        <div class="step-num">1</div>
+                        <div>
+                            <div style="font-weight:700;color:#111827;font-size:.92rem;">Complete Payment</div>
+                            <p style="color:#6B7280;font-size:.85rem;margin-top:.25rem;">After selecting your tickets and entering attendee details, complete payment via Razorpay (UPI, card, netbanking, wallet).</p>
+                        </div>
+                    </div>
+                    <div class="delivery-step">
+                        <div class="step-num">2</div>
+                        <div>
+                            <div style="font-weight:700;color:#111827;font-size:.92rem;">Instant Booking Confirmation</div>
+                            <p style="color:#6B7280;font-size:.85rem;margin-top:.25rem;">Upon successful payment, your booking is confirmed immediately and a unique QR code ticket is generated.</p>
+                        </div>
+                    </div>
+                    <div class="delivery-step">
+                        <div class="step-num">3</div>
+                        <div>
+                            <div style="font-weight:700;color:#111827;font-size:.92rem;">Email Delivery</div>
+                            <p style="color:#6B7280;font-size:.85rem;margin-top:.25rem;">Your ticket (with QR code) is emailed to the address you provided at booking. Check your spam/junk folder if you don't receive it within 15 minutes.</p>
+                        </div>
+                    </div>
+                    <div class="delivery-step">
+                        <div class="step-num">4</div>
+                        <div>
+                            <div style="font-weight:700;color:#111827;font-size:.92rem;">WhatsApp Notification (if enabled)</div>
+                            <p style="color:#6B7280;font-size:.85rem;margin-top:.25rem;">Depending on the event, a booking confirmation may also be sent to your WhatsApp number.</p>
+                        </div>
+                    </div>
+                    <div class="delivery-step">
+                        <div class="step-num">5</div>
+                        <div>
+                            <div style="font-weight:700;color:#111827;font-size:.92rem;">Download Anytime</div>
+                            <p style="color:#6B7280;font-size:.85rem;margin-top:.25rem;">Log in to your account and visit <strong>My Tickets</strong> to download or view your ticket at any time, even without the email.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legal-section">
+                <h2>Delivery Channels</h2>
+                <ul>
+                    <li><strong>Email</strong> — Ticket with QR code sent to your registered email address.</li>
+                    <li><strong>Account Dashboard</strong> — Always accessible at <em>My Tickets</em> after login.</li>
+                    <li><strong>Booking Confirmation Page</strong> — Available immediately after payment.</li>
+                    <li><strong>WhatsApp</strong> — Optional notification to your phone number (event-specific).</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>Delivery Timeframes</h2>
+                <ul>
+                    <li><strong>Email confirmation:</strong> Within 5–15 minutes of successful payment.</li>
+                    <li><strong>Account access:</strong> Immediate — available as soon as payment is confirmed.</li>
+                    <li><strong>Delayed emails:</strong> If you don't receive your email within 30 minutes, please check spam and contact us.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>Ticket Access at Event</h2>
+                <ul>
+                    <li>Present your QR code (on phone or printed) at the event entry gate.</li>
+                    <li>Event staff will scan your QR code using EventHub's verification system.</li>
+                    <li>Each QR code is valid for single-use entry only.</li>
+                    <li>Ensure your phone screen brightness is adequate for scanning.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>Lost or Missing Tickets</h2>
+                <p>If you cannot find your ticket:</p>
+                <ul>
+                    <li>Log in to your EventHub account and visit <strong><a href="{% url 'my_tickets' %}" style="color:#7C3AED;">My Tickets</a></strong> to download it again.</li>
+                    <li>Use <strong><a href="{% url 'search_booking' %}" style="color:#7C3AED;">Find My Booking</a></strong> with your booking ID or email — no login required.</li>
+                    <li>Contact us at <strong>support@eventhub.in</strong> with your booking ID and registered email.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section" style="margin-bottom:0;">
+                <h2>No Physical Shipping</h2>
+                <p>EventHub does not ship any physical products. If you are expecting a physical ticket, wristband, or merchandise, please contact the event Organiser directly. EventHub only handles digital ticket delivery.</p>
+                <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:12px;padding:1rem 1.25rem;margin-top:1rem;font-size:.88rem;color:#92400E;">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>No physical goods are sold or shipped by EventHub.</strong> All products are digital tickets delivered electronically.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem;">
+        <a href="{% url 'terms' %}" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;font-size:.82rem;font-weight:600;color:#7C3AED;text-decoration:none;">
+            <i class="fas fa-file-contract"></i> Terms &amp; Conditions
+        </a>
+        <a href="{% url 'refund_policy' %}" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;font-size:.82rem;font-weight:600;color:#7C3AED;text-decoration:none;">
+            <i class="fas fa-undo"></i> Refund Policy
+        </a>
+        <a href="{% url 'contact' %}" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;font-size:.82rem;font-weight:600;color:#7C3AED;text-decoration:none;">
+            <i class="fas fa-envelope"></i> Contact Us
+        </a>
+    </div>
+</div>
+{% endblock %}

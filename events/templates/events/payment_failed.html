@@ -1,0 +1,40 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Payment Failed{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="fas fa-times-circle fa-5x text-danger mb-4"></i>
+                <h1 class="display-4 fw-bold mb-3">Payment Failed</h1>
+                <p class="lead text-muted mb-4">Unfortunately, your payment could not be processed.</p>
+                
+                <div class="card bg-light mb-4">
+                    <div class="card-body text-start">
+                        <h5 class="fw-bold mb-3">Booking Details</h5>
+                        <p><strong>Event:</strong> {{ booking.event.title }}</p>
+                        <p><strong>Date:</strong> {{ booking.event.date|date:"M d, Y" }}</p>
+                        <p><strong>Tickets:</strong> {{ booking.number_of_tickets }}</p>
+                        <p><strong>Amount:</strong> ₹{{ booking.total_amount }}</p>
+                        <p class="mb-0"><strong>Status:</strong> <span class="text-danger">Payment Failed</span></p>
+                    </div>
+                </div>
+                
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'payment_page' booking.id %}" class="btn btn-primary">
+                        <i class="fas fa-redo"></i> Try Again
+                    </a>
+                    <a href="{% url 'event_detail' booking.event.id %}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Event
+                    </a>
+                    <a href="{% url 'event_list' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-home"></i> Browse Events
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

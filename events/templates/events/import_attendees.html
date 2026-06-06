@@ -1,0 +1,108 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Import Attendees — {{ event.title }}{% endblock %}
+
+{% block content %}
+<div style="max-width:720px;margin:0 auto;">
+    <!-- Header -->
+    <div style="margin-bottom:2rem;">
+        <a href="{% url 'sales_dashboard' %}" style="color:#7C3AED;font-size:.85rem;font-weight:600;text-decoration:none;margin-bottom:.75rem;display:inline-block;">
+            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+        <h1 style="font-size:1.6rem;font-weight:900;color:#111827;margin-bottom:.4rem;">
+            <i class="fas fa-file-import me-2" style="color:#7C3AED;"></i>Import Attendees
+        </h1>
+        <p style="color:#6B7280;font-size:.9rem;">{{ event.title }}</p>
+    </div>
+
+    <!-- Instructions -->
+    <div style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;">
+        <h6 style="font-weight:700;color:#0369A1;margin-bottom:.75rem;"><i class="fas fa-info-circle me-1"></i> CSV Format</h6>
+        <p style="font-size:.85rem;color:#0369A1;margin-bottom:.5rem;">Your CSV file should have these columns (header row required):</p>
+        <div style="background:#fff;border-radius:10px;padding:.75rem 1rem;font-family:monospace;font-size:.82rem;color:#374151;overflow-x:auto;">
+            Name, Email, Phone, Ticket Type, Tickets
+        </div>
+        <ul style="font-size:.82rem;color:#0369A1;margin-top:.75rem;margin-bottom:0;padding-left:1.25rem;">
+            <li><strong>Name</strong> and <strong>Email</strong> are required</li>
+            <li><strong>Ticket Type</strong> must match an existing ticket type name (case-insensitive)</li>
+            <li><strong>Tickets</strong> defaults to 1 if not provided</li>
+            <li>Duplicate email addresses for the same event are skipped</li>
+        </ul>
+    </div>
+
+    <!-- Sample download -->
+    <div style="margin-bottom:1.5rem;">
+        <a href="data:text/csv;charset=utf-8,Name%2CEmail%2CPhone%2CTicket%20Type%2CTickets%0ARahul%20Sharma%2Crahul%40example.com%2C9876543210%2CGeneral%2C1%0APriya%20Patel%2Cpriya%40example.com%2C8765432109%2CVIP%2C2"
+           download="sample_import.csv"
+           style="color:#7C3AED;font-size:.85rem;font-weight:600;text-decoration:none;">
+            <i class="fas fa-download me-1"></i> Download Sample CSV
+        </a>
+    </div>
+
+    <!-- Upload form -->
+    <div class="card" style="padding:0;">
+        <div class="card-body" style="padding:2rem;">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">
+                        CSV File <span style="color:#DC2626;">*</span>
+                    </label>
+                    <input type="file" name="csv_file" accept=".csv,.txt" required class="form-control"
+                           style="border-radius:10px;padding:.65rem .9rem;">
+                    <div style="font-size:.75rem;color:#9CA3AF;margin-top:.3rem;">Accepted: .csv files only</div>
+                </div>
+
+                <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;padding:1.1rem;margin-bottom:1.5rem;">
+                    <p style="font-size:.85rem;font-weight:700;color:#374151;margin-bottom:.75rem;">After importing, automatically:</p>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.85rem;color:#374151;">
+                                <input type="checkbox" name="send_email" style="width:16px;height:16px;accent-color:#7C3AED;">
+                                <span><i class="fas fa-envelope me-1" style="color:#7C3AED;"></i> Send ticket email to each attendee</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;font-size:.85rem;color:#374151;">
+                                <input type="checkbox" name="send_whatsapp" style="width:16px;height:16px;accent-color:#7C3AED;">
+                                <span><i class="fab fa-whatsapp me-1" style="color:#25D366;"></i> Send WhatsApp notification</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ticket types reference -->
+                {% with ticket_types=event.ticket_types.all %}
+                {% if ticket_types %}
+                <div style="margin-bottom:1.5rem;">
+                    <p style="font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.5rem;">Available ticket types for "{{ event.title }}":</p>
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                        {% for tt in ticket_types %}
+                        <span style="background:#EDE9FE;color:#7C3AED;padding:.25rem .8rem;border-radius:50px;font-size:.78rem;font-weight:600;font-family:monospace;">
+                            {{ tt.name }} (₹{{ tt.price }})
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                <button type="submit" class="btn btn-primary w-100" style="padding:.8rem;font-size:.95rem;font-weight:700;border-radius:12px;">
+                    <i class="fas fa-upload me-2"></i> Import & Generate Tickets
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing attendees count -->
+    <div style="margin-top:1.5rem;padding:1rem 1.25rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:.85rem;color:#374151;font-weight:600;">
+            <i class="fas fa-users me-1" style="color:#7C3AED;"></i>
+            Already confirmed: {{ event.bookings.all|length }} bookings
+        </span>
+        <a href="{% url 'export_attendees_csv' event.id %}" style="font-size:.82rem;color:#7C3AED;font-weight:600;text-decoration:none;">
+            <i class="fas fa-download me-1"></i> Export All
+        </a>
+    </div>
+</div>
+{% endblock %}

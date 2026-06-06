@@ -1,0 +1,702 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EventHub{% endblock %}</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── Reset & base ──────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --purple-50:  #F5F3FF;
+            --purple-100: #EDE9FE;
+            --purple-200: #DDD6FE;
+            --purple-500: #8B5CF6;
+            --purple-600: #7C3AED;
+            --purple-700: #6D28D9;
+            --purple-900: #4C1D95;
+            --gray-50:  #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #FFFFFF;
+            color: var(--gray-900);
+            min-height: 100vh;
+        }
+
+        /* ── Navbar ────────────────────────────────────────────────── */
+        .navbar {
+            background: #FFFFFF !important;
+            border-bottom: 1px solid #F0EBFF;
+            padding: 0.9rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 20px rgba(124,58,237,.06);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .brand-text {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--gray-700) !important;
+            padding: 0.5rem 0.9rem !important;
+            border-radius: 8px;
+            transition: background .2s, color .2s;
+        }
+
+        .nav-link:hover {
+            background: var(--purple-50);
+            color: var(--purple-600) !important;
+        }
+
+        .nav-link.active {
+            background: var(--purple-50);
+            color: var(--purple-600) !important;
+        }
+
+        .btn-nav-cta {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+            color: #fff !important;
+            padding: 0.5rem 1.25rem !important;
+            border-radius: 50px !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            transition: opacity .2s, transform .2s;
+        }
+
+        .btn-nav-cta:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+        }
+
+        /* ── Hero / Page header ────────────────────────────────────── */
+        .page-hero {
+            background: #FFFFFF;
+            padding: 4rem 0 2.5rem;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            color: var(--gray-900);
+            line-height: 1.1;
+        }
+
+        .page-hero h1 span {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-hero p {
+            font-size: 1.05rem;
+            color: var(--gray-500);
+            margin-top: 0.75rem;
+        }
+
+        /* ── Buttons ───────────────────────────────────────────────── */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+            border: none;
+            color: #fff;
+            padding: 0.7rem 1.8rem;
+            font-weight: 700;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: opacity .2s, transform .2s, box-shadow .2s;
+            box-shadow: 0 4px 14px rgba(124,58,237,.35);
+        }
+
+        .btn-primary:hover {
+            opacity: .9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124,58,237,.45);
+            color: #fff;
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--purple-600);
+            color: var(--purple-600);
+            background: transparent;
+            padding: 0.65rem 1.6rem;
+            font-weight: 600;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: all .2s;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--purple-600);
+            color: #fff;
+        }
+
+        .btn-dark-cta {
+            background: #111827;
+            color: #fff;
+            padding: 0.75rem 2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            border: none;
+            font-size: 0.95rem;
+            transition: background .2s, transform .2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-dark-cta:hover {
+            background: #1f2937;
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        /* ── Cards ─────────────────────────────────────────────────── */
+        .card {
+            border: 1px solid #F0EBFF;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform .25s, box-shadow .25s;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,.05);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(124,58,237,.12);
+        }
+
+        .card-img-top {
+            height: 220px;
+            object-fit: cover;
+        }
+
+        /* ── Badge ─────────────────────────────────────────────────── */
+        .badge {
+            padding: 0.4rem 0.9rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: .3px;
+        }
+
+        .badge.bg-primary {
+            background: var(--purple-100) !important;
+            color: var(--purple-700) !important;
+        }
+
+        .badge.bg-success {
+            background: #D1FAE5 !important;
+            color: #065F46 !important;
+        }
+
+        .badge.bg-danger {
+            background: #FEE2E2 !important;
+            color: #991B1B !important;
+        }
+
+        .badge.bg-warning {
+            background: #FEF3C7 !important;
+            color: #92400E !important;
+        }
+
+        /* ── Event meta ────────────────────────────────────────────── */
+        .event-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            margin: 0.4rem 0;
+        }
+
+        .event-meta i {
+            color: var(--purple-600);
+            width: 16px;
+            text-align: center;
+        }
+
+        /* ── Price tag ─────────────────────────────────────────────── */
+        .price-tag {
+            background: var(--purple-50);
+            color: var(--purple-700);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: 1px solid var(--purple-200);
+            display: inline-block;
+        }
+
+        /* ── Search box ────────────────────────────────────────────── */
+        .search-box {
+            background: #fff;
+            border-radius: 60px;
+            padding: 0.6rem 0.6rem 0.6rem 1.5rem;
+            box-shadow: 0 2px 20px rgba(124,58,237,.1);
+            border: 1.5px solid var(--purple-100);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.95rem;
+            color: var(--gray-900);
+            background: transparent;
+        }
+
+        .search-box input::placeholder { color: var(--gray-400); }
+
+        /* ── Category filter ───────────────────────────────────────── */
+        .category-filter {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            border: 1.5px solid var(--purple-200);
+            background: #fff;
+            color: var(--gray-700);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all .2s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: var(--purple-600);
+            color: #fff;
+            border-color: var(--purple-600);
+        }
+
+        /* ── Alert ─────────────────────────────────────────────────── */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .alert-success {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .alert-danger {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .alert-info {
+            background: var(--purple-50);
+            color: var(--purple-900);
+        }
+
+        .alert-warning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        /* ── QR code ───────────────────────────────────────────────── */
+        .qr-code-container {
+            text-align: center;
+            padding: 2rem;
+            background: var(--purple-50);
+            border-radius: 20px;
+            border: 1.5px dashed var(--purple-200);
+        }
+
+        .qr-code-container img {
+            max-width: 240px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.1);
+        }
+
+        /* ── Map ───────────────────────────────────────────────────── */
+        #map {
+            height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,.08);
+        }
+
+        /* ── Sticky purchase bar (mobile) ──────────────────────────── */
+        .sticky-purchase-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: #fff;
+            border-top: 1.5px solid var(--purple-100);
+            padding: 0.9rem 1.25rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+        }
+
+        @media (max-width: 991px) {
+            .sticky-purchase-bar { display: flex; align-items: center; gap: 1rem; }
+            body { padding-bottom: 80px; }
+        }
+
+        /* ── Section wrappers ──────────────────────────────────────── */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-900));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Stats chips ───────────────────────────────────────────── */
+        .stat-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--purple-50);
+            border: 1px solid var(--purple-200);
+            border-radius: 50px;
+            padding: 0.35rem 0.9rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--purple-700);
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        footer {
+            background: var(--gray-900);
+            color: var(--gray-400);
+            padding: 2.5rem 0;
+            margin-top: 5rem;
+            font-size: 0.85rem;
+        }
+
+        footer a { color: var(--purple-400, #a78bfa); text-decoration: none; }
+        footer a:hover { color: #fff; }
+
+        /* ── Misc ──────────────────────────────────────────────────── */
+        .form-control {
+            border: 1.5px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 0.65rem 0.9rem;
+            font-size: 0.9rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--purple-500);
+            box-shadow: 0 0 0 3px rgba(124,58,237,.12);
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .card-img-top { height: 180px; }
+            #map { height: 280px; }
+            .page-hero { padding: 2.5rem 0 1.5rem; }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'event_list' %}">
+                <span class="brand-icon"><i class="fas fa-calendar-star"></i></span>
+                <span class="brand-text">EventHub</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'all_events' %}">
+                            <i class="fas fa-compass me-1"></i> Browse Events
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'organizer_list' %}">
+                            <i class="fas fa-building me-1"></i> Organisers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_tickets' %}">
+                            <i class="fas fa-ticket-alt me-1"></i> My Tickets
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'search_booking' %}">
+                            <i class="fas fa-search me-1"></i> Find Booking
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'sales_dashboard' %}" style="color:#7C3AED !important;font-weight:700;">
+                            <i class="fas fa-chart-bar me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user.team_member_profile.role == 'verifier' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'qr_scanner' %}" style="color:#059669 !important;font-weight:700;">
+                            <i class="fas fa-qrcode me-1"></i> Scanner
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:profile' %}">
+                            <i class="fas fa-user-circle me-1"></i> {{ user.get_full_name|default:user.email|default:user.username|truncatechars:15 }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:logout' %}">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="nav-link btn-nav-cta" href="{% url 'accounts:register' %}">
+                            Get Started →
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Full-width blocks (outside max-width container) -->
+    {% block fullcontent %}{% endblock %}
+
+    <!-- Main content (inside 1200px container) -->
+    <div class="section-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Full-width blocks after main content -->
+    {% block fullcontent_after %}{% endblock %}
+
+    <!-- Footer -->
+    <footer style="background:#0F0A1E;color:#9CA3AF;padding:4rem 0 0;margin-top:0;">
+        <div class="container">
+            <div class="row g-4" style="padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08);">
+                <!-- Brand -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="{% url 'event_list' %}" class="navbar-brand mb-3 d-inline-flex" style="text-decoration:none;">
+                        <span class="brand-icon"><i class="fas fa-calendar-star"></i></span>
+                        <span class="brand-text ms-2" style="font-size:1.3rem;font-weight:900;">EventHub</span>
+                    </a>
+                    <p style="font-size:.88rem;line-height:1.7;color:#6B7280;margin-bottom:1.25rem;max-width:280px;">
+                        India's premier event discovery and ticketing platform. Find, book, and enjoy unforgettable experiences.
+                    </p>
+                    <div style="display:flex;gap:.75rem;">
+                        <a href="#" style="width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9CA3AF;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(124,58,237,.4)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.color='#9CA3AF'">
+                            <i class="fab fa-instagram" style="font-size:.85rem;"></i>
+                        </a>
+                        <a href="#" style="width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9CA3AF;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(124,58,237,.4)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.color='#9CA3AF'">
+                            <i class="fab fa-twitter" style="font-size:.85rem;"></i>
+                        </a>
+                        <a href="#" style="width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9CA3AF;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(124,58,237,.4)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.color='#9CA3AF'">
+                            <i class="fab fa-linkedin-in" style="font-size:.85rem;"></i>
+                        </a>
+                        <a href="#" style="width:36px;height:36px;background:rgba(255,255,255,.07);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9CA3AF;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(124,58,237,.4)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,.07)';this.style.color='#9CA3AF'">
+                            <i class="fab fa-youtube" style="font-size:.85rem;"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h6 style="font-weight:700;color:#fff;font-size:.85rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:1rem;">Explore</h6>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.6rem;">
+                        <li><a href="{% url 'all_events' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">Browse Events</a></li>
+                        <li><a href="{% url 'organizer_list' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">Organisers</a></li>
+                        <li><a href="{% url 'my_tickets' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">My Tickets</a></li>
+                        <li><a href="{% url 'search_booking' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">Find Booking</a></li>
+                        <li><a href="{% url 'about' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">About Us</a></li>
+                    </ul>
+                </div>
+                <!-- Account -->
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h6 style="font-weight:700;color:#fff;font-size:.85rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:1rem;">Account</h6>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.6rem;">
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'accounts:profile' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">My Profile</a></li>
+                        <li><a href="{% url 'my_tickets' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">My Tickets</a></li>
+                        <li><a href="{% url 'my_bookings' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">My Bookings</a></li>
+                        <li><a href="{% url 'accounts:logout' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">Logout</a></li>
+                        {% else %}
+                        <li><a href="{% url 'accounts:login' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">Sign In</a></li>
+                        <li><a href="{% url 'accounts:register' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">Create Account</a></li>
+                        <li><a href="{% url 'search_booking' %}" style="color:#6B7280;font-size:.85rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#6B7280'">Find My Booking</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- Contact / Support -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 style="font-weight:700;color:#fff;font-size:.85rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:1rem;">Get in Touch</h6>
+                    <div style="display:flex;flex-direction:column;gap:.75rem;">
+                        <div style="display:flex;align-items:center;gap:.75rem;">
+                            <div style="width:36px;height:36px;background:rgba(124,58,237,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-envelope" style="color:#A78BFA;font-size:.85rem;"></i>
+                            </div>
+                            <span style="color:#6B7280;font-size:.85rem;">support@eventhub.in</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:.75rem;">
+                            <div style="width:36px;height:36px;background:rgba(124,58,237,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fab fa-whatsapp" style="color:#A78BFA;font-size:.85rem;"></i>
+                            </div>
+                            <span style="color:#6B7280;font-size:.85rem;">+91 98765 43210</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:.75rem;">
+                            <div style="width:36px;height:36px;background:rgba(124,58,237,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-map-marker-alt" style="color:#A78BFA;font-size:.85rem;"></i>
+                            </div>
+                            <span style="color:#6B7280;font-size:.85rem;">Bengaluru, Karnataka, India</span>
+                        </div>
+                    </div>
+                    <!-- Newsletter -->
+                    <div style="margin-top:1.25rem;background:rgba(255,255,255,.05);border-radius:14px;padding:1rem;border:1px solid rgba(255,255,255,.07);">
+                        <p style="color:#D1D5DB;font-size:.8rem;font-weight:600;margin-bottom:.6rem;">Get event updates in your inbox</p>
+                        <div style="display:flex;gap:.5rem;">
+                            <input type="email" placeholder="your@email.com" style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.5rem .75rem;font-size:.82rem;color:#fff;outline:none;min-width:0;">
+                            <button style="background:linear-gradient(135deg,#7C3AED,#4C1D95);color:#fff;border:none;border-radius:10px;padding:.5rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom bar -->
+            <div style="padding:1.25rem 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;">
+                <p style="margin:0;font-size:.8rem;color:#4B5563;">&copy; 2025 <strong style="color:#fff;">EventHub</strong>. All rights reserved. | Built by <a href="{% url 'about' %}" style="color:#A78BFA;text-decoration:none;">CodeAj Marketplace</a></p>
+                <div style="display:flex;gap:1.25rem;flex-wrap:wrap;">
+                    <a href="{% url 'privacy' %}" style="color:#4B5563;font-size:.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#4B5563'">Privacy Policy</a>
+                    <a href="{% url 'terms' %}" style="color:#4B5563;font-size:.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#4B5563'">Terms of Service</a>
+                    <a href="{% url 'refund_policy' %}" style="color:#4B5563;font-size:.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#4B5563'">Refund Policy</a>
+                    <a href="{% url 'shipping_policy' %}" style="color:#4B5563;font-size:.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#4B5563'">Delivery Policy</a>
+                    <a href="{% url 'contact' %}" style="color:#4B5563;font-size:.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#A78BFA'" onmouseout="this.style.color='#4B5563'">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+    // Clean up any Bootstrap overlays or full-page spinners that may persist
+    // when the browser restores a page from its back-forward cache (bfcache).
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            document.querySelectorAll('.modal-backdrop').forEach(function(el) { el.remove(); });
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+            // Hide payment processing overlay if present
+            var payProc = document.getElementById('payment-processing');
+            if (payProc) payProc.style.display = 'none';
+        }
+    });
+
+    // Also clean up before the page is stored in bfcache so the state is clean.
+    window.addEventListener('pagehide', function() {
+        document.querySelectorAll('.modal-backdrop').forEach(function(el) { el.remove(); });
+        document.body.classList.remove('modal-open');
+    });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

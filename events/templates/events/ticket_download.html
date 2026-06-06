@@ -1,0 +1,192 @@
+{% extends 'events/base.html' %}
+{% block title %}Your Ticket — {{ booking.event.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+@media print {
+    .no-print { display: none !important; }
+    body { background: #fff !important; padding-bottom: 0 !important; }
+    nav, footer, .sticky-purchase-bar { display: none !important; }
+    .section-container { padding: 0 !important; max-width: 100% !important; }
+    .ticket-card { box-shadow: none !important; border: 1px solid #ddd !important; }
+    .print-break { page-break-inside: avoid; }
+}
+
+.ticket-card {
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(124,58,237,.15);
+    border: 1.5px solid #EDE9FE;
+    max-width: 680px;
+    margin: 0 auto;
+}
+.ticket-header {
+    background: linear-gradient(135deg, #7C3AED, #4C1D95);
+    padding: 2rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.ticket-header::before {
+    content: '';
+    position: absolute;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,.07);
+    border-radius: 50%;
+    top: -60px; right: -40px;
+}
+.ticket-body { padding: 2rem; }
+.ticket-divider {
+    display: flex;
+    align-items: center;
+    margin: 0 -2rem;
+    position: relative;
+}
+.ticket-divider::before, .ticket-divider::after {
+    content: '';
+    flex: 1;
+    border-top: 2px dashed #EDE9FE;
+}
+.ticket-circle {
+    width: 28px; height: 28px;
+    background: #F5F3FF;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin: 0 .75rem;
+    border: 1.5px solid #EDE9FE;
+}
+.meta-row { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:.75rem; }
+.meta-item { flex:1; min-width:120px; }
+.meta-label { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:#9CA3AF; font-weight:600; margin-bottom:.15rem; }
+.meta-val { font-size:.92rem; font-weight:700; color:#111827; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="no-print d-flex justify-content-between align-items-center mb-4">
+    <h2 style="font-size:1.4rem;font-weight:800;color:#111827;margin:0;">
+        <i class="fas fa-ticket-alt me-2" style="color:#7C3AED;"></i>Your Ticket
+    </h2>
+    <div class="d-flex gap-2">
+        <a href="{% url 'my_bookings' %}" class="btn btn-outline-primary" style="font-size:.85rem;padding:.5rem 1.1rem;">
+            <i class="fas fa-arrow-left me-1"></i> My Bookings
+        </a>
+        <button onclick="window.print()" class="btn btn-primary" style="font-size:.85rem;padding:.5rem 1.25rem;">
+            <i class="fas fa-download me-1"></i> Download / Print
+        </button>
+    </div>
+</div>
+
+<div class="print-break">
+<div class="ticket-card">
+
+    <!-- Header -->
+    <div class="ticket-header">
+        <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:1px;opacity:.7;margin-bottom:.5rem;">
+            EventHub — Official Ticket
+        </div>
+        <h2 style="font-size:1.5rem;font-weight:900;margin:0 0 .25rem;line-height:1.2;">{{ booking.event.title }}</h2>
+        <div style="opacity:.85;font-size:.88rem;">{{ booking.event.venue }} · {{ booking.event.address }}</div>
+
+        <!-- Booking ID badge -->
+        <div style="margin-top:1.25rem;background:rgba(255,255,255,.15);border-radius:10px;padding:.6rem 1rem;display:inline-block;font-family:monospace;font-size:.88rem;letter-spacing:1px;">
+            <i class="fas fa-barcode me-1"></i> #{{ booking.id|stringformat:"s"|slice:"0:8"|upper }}
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="ticket-body">
+
+        <!-- Meta grid -->
+        <div class="meta-row">
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-user me-1"></i> Attendee</div>
+                <div class="meta-val">{{ booking.name }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-envelope me-1"></i> Email</div>
+                <div class="meta-val" style="word-break:break-all;">{{ booking.email }}</div>
+            </div>
+        </div>
+        <div class="meta-row">
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-calendar me-1"></i> Event Date</div>
+                <div class="meta-val">{{ booking.event.date|date:"l, d F Y" }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-clock me-1"></i> Time</div>
+                <div class="meta-val">{{ booking.event.date|date:"h:i A" }}</div>
+            </div>
+        </div>
+        <div class="meta-row">
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-ticket-alt me-1"></i> Ticket Type</div>
+                <div class="meta-val">{{ booking.ticket_type.name|default:"Standard" }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-hashtag me-1"></i> Quantity</div>
+                <div class="meta-val">{{ booking.number_of_tickets }} ticket{{ booking.number_of_tickets|pluralize }}</div>
+            </div>
+        </div>
+        <div class="meta-row">
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-rupee-sign me-1"></i> Amount Paid</div>
+                <div class="meta-val" style="color:#7C3AED;">₹{{ booking.total_amount|floatformat:0 }}
+                    {% if booking.discount_amount > 0 %}
+                    <span style="font-size:.75rem;color:#059669;font-weight:600;">(Saved ₹{{ booking.discount_amount|floatformat:0 }})</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label"><i class="fas fa-phone me-1"></i> Phone</div>
+                <div class="meta-val">{{ booking.phone }}</div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="ticket-divider my-3">
+            <div class="ticket-circle"></div>
+        </div>
+
+        <!-- QR + status row -->
+        <div class="d-flex align-items-center gap-4 justify-content-between flex-wrap">
+            {% if booking.qr_code %}
+            <div style="text-align:center;">
+                <img src="{{ booking.qr_code.url }}" alt="QR Code"
+                     style="width:130px;height:130px;border-radius:12px;border:2px solid #EDE9FE;padding:4px;background:#fff;">
+                <div style="font-size:.7rem;color:#9CA3AF;margin-top:.35rem;">Scan at entry</div>
+            </div>
+            {% endif %}
+
+            <div style="flex:1;text-align:right;">
+                <div style="background:#D1FAE5;border-radius:14px;padding:1rem 1.5rem;display:inline-block;">
+                    <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;color:#059669;font-weight:600;">Status</div>
+                    <div style="font-size:1.4rem;font-weight:900;color:#065F46;">✓ CONFIRMED</div>
+                </div>
+                <div style="font-size:.75rem;color:#9CA3AF;margin-top:.75rem;">
+                    Booking date: {{ booking.booking_date|date:"d M Y, h:i A" }}<br>
+                    Payment ID: {{ booking.razorpay_payment_id|default:"N/A" }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer strip -->
+    <div style="background:#F9FAFB;padding:.85rem 2rem;border-top:1.5px dashed #EDE9FE;font-size:.75rem;color:#9CA3AF;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+        <span><i class="fas fa-shield-alt me-1" style="color:#7C3AED;"></i> This is an official EventHub ticket</span>
+        <span>Organizer: {{ booking.event.organizer }}</span>
+    </div>
+
+</div>
+</div>
+
+<!-- Print tip -->
+<div class="no-print" style="text-align:center;margin-top:1.5rem;color:#9CA3AF;font-size:.82rem;">
+    <i class="fas fa-info-circle me-1" style="color:#7C3AED;"></i>
+    To save as PDF: click "Download / Print" → change printer to "Save as PDF"
+</div>
+
+{% endblock %}

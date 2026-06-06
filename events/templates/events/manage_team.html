@@ -1,0 +1,160 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Manage Team — EventHub{% endblock %}
+
+{% block content %}
+<div style="max-width:900px;margin:0 auto;">
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+        <div>
+            <h1 style="font-size:1.6rem;font-weight:900;color:#111827;margin-bottom:.3rem;">
+                <i class="fas fa-users-cog me-2" style="color:#7C3AED;"></i>Manage Team
+            </h1>
+            <p style="color:#6B7280;font-size:.9rem;">Add and manage team members with their login accounts.</p>
+        </div>
+        <button onclick="document.getElementById('add-form').style.display = document.getElementById('add-form').style.display === 'none' ? 'block' : 'none'"
+                class="btn btn-primary" style="border-radius:50px;">
+            <i class="fas fa-plus me-1"></i> Add Member
+        </button>
+    </div>
+
+    <!-- Add form (hidden by default) -->
+    <div id="add-form" style="display:none;margin-bottom:1.5rem;">
+        <div class="card" style="padding:0;">
+            <div class="card-body" style="padding:1.75rem;">
+                <h6 style="font-weight:700;color:#111827;margin-bottom:1.25rem;">
+                    <i class="fas fa-user-plus me-1" style="color:#7C3AED;"></i> Add New Team Member
+                </h6>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_member">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Full Name *</label>
+                            <input type="text" name="name" class="form-control" placeholder="Ravi Kumar" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Email *</label>
+                            <input type="email" name="email" class="form-control" placeholder="ravi@example.com" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Phone</label>
+                            <input type="text" name="phone" class="form-control" placeholder="+91 98765 43210">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.82rem;font-weight:600;color:#374151;">Role</label>
+                            <select name="role" class="form-control">
+                                <option value="verifier">Ticket Verifier / QR Scanner</option>
+                                <option value="manager">Event Manager</option>
+                                <option value="support">Support Staff</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top:1rem;padding:.85rem 1rem;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:10px;font-size:.8rem;color:#0369A1;">
+                        <i class="fas fa-info-circle me-1"></i>
+                        A login account will be automatically created. Username and temporary password will be shown after saving.
+                    </div>
+                    <div style="display:flex;gap:.75rem;margin-top:1.25rem;">
+                        <button type="submit" class="btn btn-primary" style="border-radius:50px;">
+                            <i class="fas fa-save me-1"></i> Add Member
+                        </button>
+                        <button type="button" onclick="document.getElementById('add-form').style.display='none'"
+                                class="btn btn-outline-primary" style="border-radius:50px;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team members list -->
+    {% if team_members %}
+    <div class="card" style="padding:0;overflow:hidden;">
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#F9FAFB;border-bottom:1px solid #E5E7EB;">
+                        <th style="padding:.9rem 1.25rem;font-size:.78rem;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;text-align:left;">Member</th>
+                        <th style="padding:.9rem 1.25rem;font-size:.78rem;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;text-align:left;">Role</th>
+                        <th style="padding:.9rem 1.25rem;font-size:.78rem;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;text-align:left;">Login Username</th>
+                        <th style="padding:.9rem 1.25rem;font-size:.78rem;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;text-align:left;">Status</th>
+                        <th style="padding:.9rem 1.25rem;font-size:.78rem;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;text-align:left;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in team_members %}
+                    <tr style="border-bottom:1px solid #F3F4F6;">
+                        <td style="padding:1rem 1.25rem;">
+                            <div style="font-weight:700;color:#111827;font-size:.88rem;">{{ member.name }}</div>
+                            <div style="font-size:.78rem;color:#9CA3AF;">{{ member.email }}</div>
+                            {% if member.phone %}<div style="font-size:.78rem;color:#9CA3AF;">{{ member.phone }}</div>{% endif %}
+                        </td>
+                        <td style="padding:1rem 1.25rem;">
+                            {% if member.role == 'verifier' %}
+                            <span style="background:#EDE9FE;color:#7C3AED;padding:.25rem .75rem;border-radius:50px;font-size:.75rem;font-weight:600;">
+                                <i class="fas fa-qrcode me-1"></i> QR Scanner
+                            </span>
+                            {% elif member.role == 'manager' %}
+                            <span style="background:#DBEAFE;color:#1D4ED8;padding:.25rem .75rem;border-radius:50px;font-size:.75rem;font-weight:600;">
+                                <i class="fas fa-user-tie me-1"></i> Manager
+                            </span>
+                            {% else %}
+                            <span style="background:#F3F4F6;color:#6B7280;padding:.25rem .75rem;border-radius:50px;font-size:.75rem;font-weight:600;">
+                                <i class="fas fa-headset me-1"></i> Support
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td style="padding:1rem 1.25rem;">
+                            {% if member.user %}
+                            <code style="background:#F9FAFB;padding:.2rem .5rem;border-radius:6px;font-size:.82rem;color:#7C3AED;">{{ member.user.username }}</code>
+                            {% else %}
+                            <span style="color:#9CA3AF;font-size:.82rem;">No account</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding:1rem 1.25rem;">
+                            {% if member.is_active %}
+                            <span style="background:#D1FAE5;color:#065F46;padding:.25rem .75rem;border-radius:50px;font-size:.75rem;font-weight:600;">Active</span>
+                            {% else %}
+                            <span style="background:#FEE2E2;color:#991B1B;padding:.25rem .75rem;border-radius:50px;font-size:.75rem;font-weight:600;">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding:1rem 1.25rem;">
+                            <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+                            {% if member.user %}
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="reset_password">
+                                <input type="hidden" name="member_id" value="{{ member.id }}">
+                                <button type="submit" style="background:none;border:none;color:#7C3AED;font-size:.8rem;font-weight:600;cursor:pointer;padding:0;"
+                                        onclick="return confirm('Reset password for {{ member.name }}? A new password will be generated.')">
+                                    <i class="fas fa-key me-1"></i> Reset PW
+                                </button>
+                            </form>
+                            {% endif %}
+                            {% if member.is_active %}
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="deactivate">
+                                <input type="hidden" name="member_id" value="{{ member.id }}">
+                                <button type="submit" style="background:none;border:none;color:#DC2626;font-size:.8rem;font-weight:600;cursor:pointer;padding:0;"
+                                        onclick="return confirm('Deactivate {{ member.name }}?')">
+                                    <i class="fas fa-ban me-1"></i> Deactivate
+                                </button>
+                            </form>
+                            {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:4rem 2rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:20px;">
+        <i class="fas fa-users" style="font-size:2.5rem;color:#D1D5DB;margin-bottom:.75rem;display:block;"></i>
+        <h5 style="font-weight:700;color:#374151;">No team members yet</h5>
+        <p style="color:#6B7280;font-size:.85rem;">Add your first team member to give them a login account.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

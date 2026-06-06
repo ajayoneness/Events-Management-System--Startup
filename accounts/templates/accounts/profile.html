@@ -1,0 +1,417 @@
+{% extends 'events/base.html' %}
+
+{% block title %}My Profile — {{ user.get_full_name|default:user.username }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Profile Cover ─────────────────────────────────── */
+.profile-cover {
+  height: 200px;
+  background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 55%, #1F1035 100%);
+  border-radius: 24px 24px 0 0;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.profile-cover::before {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(255,255,255,.14), transparent 65%);
+  top: -90px; right: -60px; border-radius: 50%;
+}
+.profile-cover::after {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(124,58,237,.5), transparent 65%);
+  bottom: -60px; left: 30px; border-radius: 50%;
+}
+.cover-dots {
+  position: absolute;
+  bottom: 24px; right: 24px;
+  width: 90px; height: 90px;
+  opacity: .18;
+  background-image: radial-gradient(circle, #fff 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+}
+
+/* ── Avatar ────────────────────────────────────────── */
+.profile-avatar {
+  width: 104px; height: 104px;
+  background: linear-gradient(135deg, #7C3AED, #4C1D95);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 2.5rem; font-weight: 900;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 28px rgba(124,58,237,.42);
+  flex-shrink: 0;
+}
+
+/* ── Stat boxes ───────────────────────────────────── */
+.stat-box {
+  text-align: center; padding: 1.1rem 1.25rem;
+  border-radius: 18px; transition: transform .25s, box-shadow .25s;
+}
+.stat-box:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(124,58,237,.15); }
+
+/* ── Custom tabs ──────────────────────────────────── */
+.profile-tabs { display: inline-flex; gap: .3rem; background: #F3F4F6; border-radius: 50px; padding: .3rem; border: none; }
+.profile-tabs .nav-link {
+  border: none !important; background: transparent !important;
+  border-radius: 50px !important; padding: .55rem 1.5rem !important;
+  font-weight: 600; font-size: .88rem; color: #6B7280 !important;
+  transition: all .2s;
+}
+.profile-tabs .nav-link.active {
+  background: linear-gradient(135deg, #7C3AED, #4C1D95) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(124,58,237,.35);
+}
+
+/* ── Booking Cards ────────────────────────────────── */
+.booking-row {
+  border: 1.5px solid #F0EBFF; border-radius: 20px;
+  padding: 1.25rem; background: #fff;
+  transition: transform .25s, box-shadow .25s;
+  margin-bottom: .85rem;
+}
+.booking-row:hover { transform: translateY(-4px); box-shadow: 0 10px 36px rgba(124,58,237,.12); }
+
+/* ── Modal overlay ────────────────────────────────── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(17,24,39,.72); z-index: 9999;
+  align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-box {
+  background: #fff; border-radius: 28px; padding: 2.25rem;
+  max-width: 460px; width: 100%;
+  box-shadow: 0 24px 70px rgba(0,0,0,.25);
+  animation: float-up .3s ease;
+}
+@keyframes float-up {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════ PROFILE HEADER CARD ══════════════════ -->
+<div class="card" style="padding:0 !important;margin-bottom:1.5rem;border-radius:24px;overflow:hidden;">
+
+  <!-- Cover Banner -->
+  <div class="profile-cover">
+    <!-- Decorative circles -->
+    <div style="position:absolute;width:130px;height:130px;border:2px solid rgba(255,255,255,.1);border-radius:50%;top:24px;left:38%;"></div>
+    <div style="position:absolute;width:70px;height:70px;border:2px solid rgba(255,255,255,.07);border-radius:50%;top:80px;left:28%;"></div>
+    <div class="cover-dots"></div>
+    <!-- Floating badge -->
+    <div style="position:absolute;top:20px;left:24px;display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:.4rem 1rem;font-size:.78rem;font-weight:600;color:#fff;">
+      <span style="width:7px;height:7px;background:#4ADE80;border-radius:50%;display:inline-block;"></span>
+      Active Member
+    </div>
+  </div>
+
+  <!-- Profile Info (overlapping cover) -->
+  <div style="padding:0 2rem 2rem;position:relative;">
+    <div style="display:flex;align-items:flex-end;gap:1.25rem;margin-top:-52px;flex-wrap:wrap;">
+
+      <!-- Avatar -->
+      <div class="profile-avatar">
+        {% if user.first_name %}{{ user.first_name|first|upper }}{% if user.last_name %}{{ user.last_name|first|upper }}{% endif %}{% else %}{{ user.username|first|upper }}{% endif %}
+      </div>
+
+      <!-- Name & Meta -->
+      <div style="flex:1;min-width:200px;">
+        <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
+          <h2 style="font-weight:900;font-size:1.55rem;color:#111827;margin:0;letter-spacing:-.5px;">
+            {{ user.get_full_name|default:user.username }}
+          </h2>
+          {% if user.is_staff %}
+          <span style="background:#FEF3C7;color:#92400E;padding:.2rem .7rem;border-radius:50px;font-size:.72rem;font-weight:700;">Admin</span>
+          {% endif %}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:.85rem;margin-top:.4rem;">
+          <span style="color:#6B7280;font-size:.82rem;"><i class="fas fa-at me-1" style="color:#A78BFA;"></i>{{ user.username }}</span>
+          <span style="color:#6B7280;font-size:.82rem;"><i class="fas fa-envelope me-1" style="color:#A78BFA;"></i>{{ user.email }}</span>
+          <span style="color:#6B7280;font-size:.82rem;"><i class="fas fa-calendar-check me-1" style="color:#A78BFA;"></i>Member since {{ user.date_joined|date:"M Y" }}</span>
+        </div>
+      </div>
+
+      <!-- Edit Button -->
+      <div style="padding-bottom:.5rem;">
+        <button onclick="document.getElementById('edit-modal').style.display='flex'"
+                class="btn btn-outline-primary" style="padding:.6rem 1.5rem;font-size:.85rem;">
+          <i class="fas fa-pen me-1"></i> Edit Profile
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ STATS ROW ══════════════════ -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-box" style="background:#F5F3FF;border:1.5px solid #EDE9FE;">
+      <div style="font-size:2rem;font-weight:900;color:#7C3AED;letter-spacing:-1px;">{{ total_count }}</div>
+      <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;"><i class="fas fa-ticket-alt me-1" style="color:#A78BFA;"></i>Total Bookings</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-box" style="background:#F0FDF4;border:1.5px solid #BBF7D0;">
+      <div style="font-size:2rem;font-weight:900;color:#059669;letter-spacing:-1px;">{{ confirmed_count }}</div>
+      <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;"><i class="fas fa-check-circle me-1" style="color:#34D399;"></i>Confirmed</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-box" style="background:#FEF3C7;border:1.5px solid #FDE68A;">
+      <div style="font-size:2rem;font-weight:900;color:#D97706;letter-spacing:-1px;">{{ pending_count }}</div>
+      <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;"><i class="fas fa-clock me-1" style="color:#FBBF24;"></i>Pending</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-box" style="background:#FDF4FF;border:1.5px solid #E9D5FF;">
+      <div style="font-size:2rem;font-weight:900;color:#7C3AED;letter-spacing:-1px;">₹{{ total_spent }}</div>
+      <div style="font-size:.78rem;color:#6B7280;font-weight:600;margin-top:.15rem;"><i class="fas fa-rupee-sign me-1" style="color:#A78BFA;"></i>Total Spent</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ TABS ══════════════════ -->
+<div style="margin-bottom:1.75rem;">
+  <ul class="nav profile-tabs" id="profileTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings-pane" type="button" role="tab">
+        <i class="fas fa-ticket-alt me-1"></i> My Bookings
+        <span style="background:rgba(124,58,237,.15);color:#7C3AED;border-radius:50px;padding:.1rem .55rem;font-size:.75rem;font-weight:800;margin-left:.35rem;">{{ total_count }}</span>
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-pane" type="button" role="tab">
+        <i class="fas fa-user me-1"></i> Profile Details
+      </button>
+    </li>
+  </ul>
+</div>
+
+
+<!-- ══════════════════ TAB CONTENT ══════════════════ -->
+<div class="tab-content">
+
+  <!-- ─── Bookings Tab ──────────────────────────── -->
+  <div class="tab-pane fade show active" id="bookings-pane" role="tabpanel">
+    {% if bookings %}
+      {% for booking in bookings %}
+      <div class="booking-row">
+        <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+
+          <!-- Event Thumbnail -->
+          <img src="{{ booking.event.image }}" alt="{{ booking.event.title }}"
+               style="width:84px;height:84px;border-radius:16px;object-fit:cover;flex-shrink:0;border:1.5px solid #F0EBFF;">
+
+          <!-- Info -->
+          <div style="flex:1;min-width:180px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;flex-wrap:wrap;">
+              <h6 style="font-weight:800;color:#111827;font-size:.97rem;margin:0 0 .4rem;">{{ booking.event.title }}</h6>
+              <!-- Status Badge -->
+              {% if booking.status == 'confirmed' %}
+              <span style="background:#D1FAE5;color:#065F46;padding:.3rem .9rem;border-radius:50px;font-size:.73rem;font-weight:700;white-space:nowrap;flex-shrink:0;"><i class="fas fa-check-circle me-1"></i>Confirmed</span>
+              {% elif booking.status == 'pending' %}
+              <span style="background:#FEF3C7;color:#92400E;padding:.3rem .9rem;border-radius:50px;font-size:.73rem;font-weight:700;white-space:nowrap;flex-shrink:0;"><i class="fas fa-clock me-1"></i>Pending</span>
+              {% elif booking.status == 'failed' %}
+              <span style="background:#FEE2E2;color:#991B1B;padding:.3rem .9rem;border-radius:50px;font-size:.73rem;font-weight:700;white-space:nowrap;flex-shrink:0;"><i class="fas fa-times-circle me-1"></i>Failed</span>
+              {% elif booking.status == 'cancelled' %}
+              <span style="background:#F3F4F6;color:#374151;padding:.3rem .9rem;border-radius:50px;font-size:.73rem;font-weight:700;white-space:nowrap;flex-shrink:0;"><i class="fas fa-ban me-1"></i>Cancelled</span>
+              {% elif booking.status == 'refunded' %}
+              <span style="background:#EFF6FF;color:#1D4ED8;padding:.3rem .9rem;border-radius:50px;font-size:.73rem;font-weight:700;white-space:nowrap;flex-shrink:0;"><i class="fas fa-undo me-1"></i>Refunded</span>
+              {% endif %}
+            </div>
+
+            <!-- Event Meta -->
+            <div style="display:flex;flex-wrap:wrap;gap:.65rem;margin-bottom:.5rem;">
+              <span style="color:#6B7280;font-size:.8rem;"><i class="fas fa-calendar-alt me-1" style="color:#7C3AED;"></i>{{ booking.event.date|date:"M d, Y · h:i A" }}</span>
+              <span style="color:#6B7280;font-size:.8rem;"><i class="fas fa-map-marker-alt me-1" style="color:#7C3AED;"></i>{{ booking.event.venue }}</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:.65rem;margin-bottom:.75rem;">
+              <span style="color:#6B7280;font-size:.8rem;"><i class="fas fa-ticket-alt me-1" style="color:#7C3AED;"></i>{{ booking.number_of_tickets }} ticket{{ booking.number_of_tickets|pluralize }}</span>
+              {% if booking.ticket_type %}<span style="color:#6B7280;font-size:.8rem;"><i class="fas fa-layer-group me-1" style="color:#7C3AED;"></i>{{ booking.ticket_type.name }}</span>{% endif %}
+              <span style="font-weight:800;color:#7C3AED;font-size:.85rem;">₹{{ booking.total_amount }}</span>
+            </div>
+
+            <!-- Actions -->
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+              {% if booking.status == 'confirmed' %}
+              <a href="{% url 'booking_success' booking.id %}" class="btn btn-primary" style="padding:.45rem 1.15rem;font-size:.78rem;border-radius:50px;">
+                <i class="fas fa-qrcode me-1"></i>View Ticket
+              </a>
+              <a href="{% url 'download_calendar' booking.id %}"
+                 style="display:inline-flex;align-items:center;gap:.4rem;background:#F5F3FF;color:#7C3AED;border:1.5px solid #DDD6FE;border-radius:50px;padding:.45rem 1.15rem;font-size:.78rem;font-weight:600;text-decoration:none;transition:background .2s;"
+                 onmouseover="this.style.background='#EDE9FE'" onmouseout="this.style.background='#F5F3FF'">
+                <i class="fas fa-calendar-plus"></i>Add to Calendar
+              </a>
+              {% elif booking.status == 'pending' %}
+              <a href="{% url 'payment_page' booking.id %}" class="btn btn-primary" style="padding:.45rem 1.15rem;font-size:.78rem;border-radius:50px;">
+                <i class="fas fa-credit-card me-1"></i>Complete Payment
+              </a>
+              {% endif %}
+              <span style="font-size:.75rem;color:#9CA3AF;margin-left:.25rem;">Booked {{ booking.booking_date|date:"M d, Y" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+    {% else %}
+    <div style="text-align:center;padding:4rem 2rem;background:#FAFAFA;border-radius:24px;border:2px dashed #E5E7EB;">
+      <div style="width:84px;height:84px;background:#F5F3FF;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+        <i class="fas fa-ticket-alt" style="font-size:2rem;color:#A78BFA;"></i>
+      </div>
+      <h5 style="font-weight:700;color:#374151;margin-bottom:.5rem;">No bookings yet</h5>
+      <p style="color:#6B7280;font-size:.9rem;margin-bottom:1.5rem;">Discover and book your first event today!</p>
+      <a href="{% url 'event_list' %}" class="btn btn-primary" style="padding:.7rem 2rem;">
+        <i class="fas fa-compass me-2"></i>Browse Events
+      </a>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ─── Profile Details Tab ──────────────────── -->
+  <div class="tab-pane fade" id="profile-pane" role="tabpanel">
+    <div class="row g-4">
+      <!-- Personal Info -->
+      <div class="col-md-6">
+        <div style="background:#F9FAFB;border-radius:22px;padding:1.75rem;border:1.5px solid #F0EBFF;height:100%;">
+          <h6 style="font-weight:800;color:#111827;margin-bottom:1.25rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:28px;height:28px;background:#F5F3FF;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+              <i class="fas fa-user" style="color:#7C3AED;font-size:.75rem;"></i>
+            </span>
+            Personal Information
+          </h6>
+          <div>
+            {% for label, val in personal_info %}
+            {% endfor %}
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Full Name</span>
+              <span style="font-weight:700;color:#111827;font-size:.85rem;">{{ user.get_full_name|default:"Not set" }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Username</span>
+              <span style="font-weight:700;color:#111827;font-size:.85rem;">@{{ user.username }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Email</span>
+              <span style="font-weight:700;color:#111827;font-size:.85rem;word-break:break-all;">{{ user.email }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Member Since</span>
+              <span style="font-weight:700;color:#111827;font-size:.85rem;">{{ user.date_joined|date:"F d, Y" }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;">
+              <span style="color:#6B7280;font-size:.85rem;">Last Login</span>
+              <span style="font-weight:700;color:#111827;font-size:.85rem;">{{ user.last_login|date:"M d, Y" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Activity Summary -->
+      <div class="col-md-6">
+        <div style="background:#F9FAFB;border-radius:22px;padding:1.75rem;border:1.5px solid #F0EBFF;height:100%;">
+          <h6 style="font-weight:800;color:#111827;margin-bottom:1.25rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:.5rem;">
+            <span style="width:28px;height:28px;background:#F5F3FF;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+              <i class="fas fa-chart-bar" style="color:#7C3AED;font-size:.75rem;"></i>
+            </span>
+            Activity Summary
+          </h6>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Total Bookings</span>
+              <span style="font-weight:800;color:#7C3AED;font-size:.85rem;">{{ total_count }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Confirmed Events</span>
+              <span style="font-weight:800;color:#059669;font-size:.85rem;">{{ confirmed_count }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Pending Payments</span>
+              <span style="font-weight:800;color:#D97706;font-size:.85rem;">{{ pending_count }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid #F0EBFF;">
+              <span style="color:#6B7280;font-size:.85rem;">Total Amount Spent</span>
+              <span style="font-weight:800;color:#7C3AED;font-size:.85rem;">₹{{ total_spent }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;">
+              <span style="color:#6B7280;font-size:.85rem;">Account Status</span>
+              <span style="background:#D1FAE5;color:#065F46;padding:.25rem .8rem;border-radius:50px;font-size:.73rem;font-weight:700;">
+                <i class="fas fa-check-circle me-1"></i>Active
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- Quick Actions -->
+        <!-- <div style="background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border-radius:22px;padding:1.5rem;border:1.5px solid #DDD6FE;margin-top:1rem;">
+          <h6 style="font-weight:800;color:#111827;margin-bottom:1rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.6px;">Quick Actions</h6>
+          <div style="display:flex;flex-direction:column;gap:.6rem;">
+            <a href="{% url 'event_list' %}" style="display:flex;align-items:center;gap:.75rem;color:#374151;text-decoration:none;font-size:.85rem;font-weight:600;padding:.6rem .75rem;background:#fff;border-radius:12px;border:1px solid #EDE9FE;transition:all .2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(124,58,237,.12)'" onmouseout="this.style.boxShadow='none'">
+              <i class="fas fa-compass" style="color:#7C3AED;width:16px;text-align:center;"></i> Browse Events
+            </a>
+            <a href="{% url 'my_bookings' %}" style="display:flex;align-items:center;gap:.75rem;color:#374151;text-decoration:none;font-size:.85rem;font-weight:600;padding:.6rem .75rem;background:#fff;border-radius:12px;border:1px solid #EDE9FE;transition:all .2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(124,58,237,.12)'" onmouseout="this.style.boxShadow='none'">
+              <i class="fas fa-list" style="color:#7C3AED;width:16px;text-align:center;"></i> All Bookings
+            </a>
+            <a href="{% url 'accounts:logout' %}" style="display:flex;align-items:center;gap:.75rem;color:#991B1B;text-decoration:none;font-size:.85rem;font-weight:600;padding:.6rem .75rem;background:#FEE2E2;border-radius:12px;border:1px solid #FECACA;transition:all .2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(239,68,68,.12)'" onmouseout="this.style.boxShadow='none'">
+              <i class="fas fa-sign-out-alt" style="width:16px;text-align:center;"></i> Sign Out
+            </a>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- End tab content -->
+
+
+<!-- ══════════════════ EDIT PROFILE MODAL ══════════════════ -->
+<div id="edit-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;">
+      <div>
+        <h5 style="font-weight:900;color:#111827;margin:0;font-size:1.2rem;">Edit Profile</h5>
+        <p style="color:#6B7280;font-size:.82rem;margin:.2rem 0 0;">Update your personal information</p>
+      </div>
+      <button onclick="document.getElementById('edit-modal').style.display='none'"
+              style="width:36px;height:36px;background:#F3F4F6;border:none;border-radius:50%;cursor:pointer;color:#6B7280;font-size:1.1rem;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+    <form method="post" action="{% url 'accounts:profile_update' %}">
+      {% csrf_token %}
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:.85rem;font-weight:700;color:#374151;display:block;margin-bottom:.4rem;">First Name</label>
+        <input type="text" name="first_name" value="{{ user.first_name }}" class="form-control" placeholder="Enter first name">
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:.85rem;font-weight:700;color:#374151;display:block;margin-bottom:.4rem;">Last Name</label>
+        <input type="text" name="last_name" value="{{ user.last_name }}" class="form-control" placeholder="Enter last name">
+      </div>
+      <div style="margin-bottom:1.75rem;">
+        <label style="font-size:.85rem;font-weight:700;color:#374151;display:block;margin-bottom:.4rem;">Email Address</label>
+        <input type="email" name="email" value="{{ user.email }}" class="form-control" placeholder="Enter email">
+      </div>
+      <div style="display:flex;gap:.75rem;">
+        <button type="submit" class="btn btn-primary flex-grow-1" style="padding:.75rem;">
+          <i class="fas fa-save me-1"></i>Save Changes
+        </button>
+        <button type="button" onclick="document.getElementById('edit-modal').style.display='none'"
+                class="btn btn-outline-primary" style="padding:.75rem 1.5rem;">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

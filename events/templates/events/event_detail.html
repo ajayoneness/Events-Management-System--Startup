@@ -1,0 +1,646 @@
+{% extends 'events/base.html' %}
+
+{% block title %}{{ event.title }} — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+    .ticket-option {
+        border: 1.5px solid #E5E7EB;
+        border-radius: 12px;
+        padding: .85rem 1rem;
+        margin-bottom: .5rem;
+        cursor: pointer;
+        transition: border-color .15s, background .15s, box-shadow .15s;
+        background: #FAFAFA;
+        user-select: none;
+    }
+    .ticket-option:hover {
+        border-color: #A78BFA;
+        background: #F5F3FF;
+    }
+    .ticket-option.selected {
+        border-color: #7C3AED;
+        background: #F5F3FF;
+        box-shadow: 0 0 0 3px rgba(124,58,237,.12);
+    }
+    .ticket-option.selected .tick-circle {
+        background: #7C3AED;
+        border-color: #7C3AED;
+    }
+    .ticket-option.selected .tick-circle::after {
+        display: block;
+    }
+    .tick-circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #D1D5DB;
+        flex-shrink: 0;
+        position: relative;
+        transition: background .15s, border-color .15s;
+    }
+    .tick-circle::after {
+        content: '';
+        display: none;
+        position: absolute;
+        top: 3px; left: 3px;
+        width: 10px; height: 10px;
+        background: #fff;
+        border-radius: 50%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+    <!-- ── Left: Event details ── -->
+    <div class="col-lg-8">
+
+        <!-- Hero image -->
+        <div style="border-radius:20px;overflow:hidden;margin-bottom:1.5rem;position:relative;height:380px;background:#F5F3FF;">
+            <img src="{{ event.image }}" alt="{{ event.title }}"
+                 style="width:100%;height:100%;object-fit:cover;">
+            {% if event.is_free %}
+            <div style="position:absolute;top:16px;right:16px;background:#059669;color:#fff;padding:.4rem 1rem;border-radius:50px;font-weight:700;font-size:.8rem;">FREE EVENT</div>
+            {% endif %}
+        </div>
+
+        <!-- Info card -->
+        <div class="card mb-4" style="padding:0;">
+            <div class="card-body" style="padding:1.75rem;">
+
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge bg-primary" style="font-size:.8rem;">{{ event.get_category_display }}</span>
+                    {% if event.is_sold_out %}
+                    <span class="badge bg-danger">Sold Out</span>
+                    {% elif event.available_seats <= 10 %}
+                    <span class="badge bg-warning">Only {{ event.available_seats }} seats left!</span>
+                    {% else %}
+                    <span class="badge bg-success">{{ event.available_seats }} seats available</span>
+                    {% endif %}
+                    {% if event.event_type == 'regular' %}
+                    <span class="badge" style="background:#EDE9FE;color:#6D28D9;">Recurring</span>
+                    {% endif %}
+                </div>
+
+                <h1 style="font-size:clamp(1.5rem,4vw,2.25rem);font-weight:900;letter-spacing:-1px;color:#111827;line-height:1.1;margin-bottom:1rem;">
+                    {{ event.title }}
+                </h1>
+
+                <p style="color:#6B7280;font-size:.95rem;line-height:1.7;margin-bottom:1.5rem;">
+                    {{ event.description }}
+                </p>
+
+                <hr style="border-color:#F3F4F6;margin:1.5rem 0;">
+
+                <!-- Meta grid -->
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-start gap-3 p-3" style="background:#F9FAFB;border-radius:12px;">
+                            <div style="width:40px;height:40px;background:#EDE9FE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-calendar-alt" style="color:#7C3AED;"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:#9CA3AF;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Date</div>
+                                <div style="font-weight:700;color:#111827;font-size:.9rem;">{{ event.date|date:"l, F d, Y" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-start gap-3 p-3" style="background:#F9FAFB;border-radius:12px;">
+                            <div style="width:40px;height:40px;background:#EDE9FE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-clock" style="color:#7C3AED;"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:#9CA3AF;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Time</div>
+                                <div style="font-weight:700;color:#111827;font-size:.9rem;">{{ event.date|date:"h:i A" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-start gap-3 p-3" style="background:#F9FAFB;border-radius:12px;">
+                            <div style="width:40px;height:40px;background:#EDE9FE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-map-marker-alt" style="color:#7C3AED;"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:#9CA3AF;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Venue</div>
+                                <div style="font-weight:700;color:#111827;font-size:.9rem;">{{ event.venue }}</div>
+                                <div style="color:#6B7280;font-size:.8rem;">{{ event.address }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-start gap-3 p-3" style="background:#F9FAFB;border-radius:12px;">
+                            <div style="width:40px;height:40px;background:#EDE9FE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <i class="fas fa-user-tie" style="color:#7C3AED;"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:.75rem;color:#9CA3AF;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Organizer</div>
+                                <div style="font-weight:700;color:#111827;font-size:.9rem;">{{ event.organizer }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ticket types info (left side — read-only reference) -->
+        {% if ticket_types %}
+        <div class="card mb-4" style="padding:0;">
+            <div class="card-body" style="padding:1.75rem;">
+                <h4 style="font-weight:800;margin-bottom:1rem;color:#111827;">
+                    <i class="fas fa-ticket-alt me-2" style="color:#7C3AED;"></i>Ticket Categories
+                </h4>
+                <div class="row g-3">
+                    {% for tt in ticket_types %}
+                    <div class="col-sm-6">
+                        <div style="
+                            border:1.5px solid {% if tt.tier == 'vip' %}#D97706{% elif tt.tier == 'premium' %}#7C3AED{% else %}#E5E7EB{% endif %};
+                            border-radius:14px;padding:1rem 1.25rem;
+                            background:{% if tt.tier == 'vip' %}#FFFBEB{% elif tt.tier == 'premium' %}#F5F3FF{% else %}#FAFAFA{% endif %};">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span style="font-weight:700;color:#111827;font-size:.9rem;">{{ tt.name }}</span>
+                                <span class="badge" style="
+                                    background:{% if tt.tier == 'vip' %}#FEF3C7;color:#92400E{% elif tt.tier == 'premium' %}#EDE9FE;color:#6D28D9{% else %}#F3F4F6;color:#374151{% endif %};">
+                                    {{ tt.get_tier_display }}
+                                </span>
+                            </div>
+                            {% if tt.description %}
+                            <p style="color:#6B7280;font-size:.8rem;margin:.25rem 0 .5rem;">{{ tt.description }}</p>
+                            {% endif %}
+                            <div style="font-size:1.25rem;font-weight:900;color:#7C3AED;">₹{{ tt.price }}</div>
+                            <div style="font-size:.75rem;color:#9CA3AF;">{{ tt.available_seats }} seats left</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <p style="color:#9CA3AF;font-size:.8rem;margin:.75rem 0 0;">
+                    <i class="fas fa-arrow-right me-1" style="color:#7C3AED;"></i>
+                    Select your ticket type in the booking form →
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Map -->
+        <div class="card" style="padding:0;">
+            <div class="card-body" style="padding:1.75rem;">
+                <h4 style="font-weight:800;margin-bottom:.5rem;color:#111827;">
+                    <i class="fas fa-map me-2" style="color:#7C3AED;"></i>Location
+                </h4>
+                <p style="color:#6B7280;font-size:.85rem;margin-bottom:1rem;">{{ event.address }}</p>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Right: Booking sidebar ── -->
+    <div class="col-lg-4" style="z-index: 1;">
+        <div id="booking-sidebar" class="card sticky-top" style="top:88px;padding:0;">
+            <div class="card-body" style="padding:1.75rem;">
+
+                <!-- Price headline -->
+                <div class="text-center mb-3">
+                    {% if event.is_free %}
+                    <div style="font-size:2rem;font-weight:900;color:#059669;">FREE</div>
+                    {% elif ticket_types %}
+                    <div id="sidebar-price" style="font-size:1.9rem;font-weight:900;background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                        Select Type
+                    </div>
+                    {% else %}
+                    <div style="font-size:1.9rem;font-weight:900;background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                        ₹{{ event.price }}
+                    </div>
+                    {% endif %}
+                    <div style="color:#9CA3AF;font-size:.8rem;margin-top:.2rem;">per ticket</div>
+                </div>
+
+                {% if event.is_available %}
+                <form method="post" id="booking-form" onsubmit="return validateBookingForm()">
+                    {% csrf_token %}
+
+                    <!-- ── Ticket Type Selector (only if types exist) ── -->
+                    {% if ticket_types %}
+                    <div class="mb-3">
+                        <label style="font-size:.85rem;font-weight:700;color:#374151;display:block;margin-bottom:.6rem;">
+                            Ticket Type <span style="color:#DC2626;">*</span>
+                        </label>
+                        <div id="ticket-type-options">
+                            {% for tt in ticket_types %}
+                            <div class="ticket-option"
+                                 data-id="{{ tt.id }}"
+                                 data-price="{{ tt.price }}"
+                                 data-seats="{{ tt.available_seats }}"
+                                 data-name="{{ tt.name }}"
+                                 onclick="selectTicketType(this)">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="tick-circle"></div>
+                                    <div style="flex:1;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span style="font-weight:700;font-size:.9rem;color:#111827;">{{ tt.name }}</span>
+                                            <span style="font-weight:900;color:#7C3AED;font-size:.95rem;">₹{{ tt.price }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center" style="margin-top:.15rem;">
+                                            <span class="badge" style="font-size:.68rem;
+                                                background:{% if tt.tier == 'vip' %}#FEF3C7;color:#92400E{% elif tt.tier == 'premium' %}#EDE9FE;color:#6D28D9{% else %}#F3F4F6;color:#374151{% endif %};">
+                                                {{ tt.get_tier_display }}
+                                            </span>
+                                            <span style="font-size:.72rem;color:#9CA3AF;">{{ tt.available_seats }} left</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="ticket_type_id" id="ticket_type_id" value="">
+                        <div id="ticket-type-error" style="color:#DC2626;font-size:.78rem;display:none;margin-top:.3rem;">
+                            <i class="fas fa-exclamation-circle me-1"></i>Please select a ticket type
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Form fields -->
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Full Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Phone (WhatsApp)</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.phone.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Number of Tickets</label>
+                        {{ form.number_of_tickets }}
+                        {% if form.number_of_tickets.errors %}
+                        <div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.number_of_tickets.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- ── Coupon Code ── -->
+                    {% if not event.is_free %}
+                    <div class="mb-3">
+                        <label style="font-size:.85rem;font-weight:700;color:#374151;display:block;margin-bottom:.5rem;">
+                            <i class="fas fa-tag me-1" style="color:#7C3AED;"></i>Coupon Code
+                            <span style="font-weight:400;color:#9CA3AF;font-size:.78rem;">&nbsp;(optional)</span>
+                        </label>
+                        <div style="display:flex;gap:.45rem;">
+                            <input type="text" id="coupon-input"
+                                   placeholder="e.g. WELCOME20"
+                                   style="flex:1;border:1.5px solid #E5E7EB;border-radius:10px;padding:.6rem .9rem;font-size:.88rem;outline:none;text-transform:uppercase;letter-spacing:.5px;min-width:0;transition:border-color .2s;"
+                                   onfocus="this.style.borderColor='#7C3AED'" onblur="this.style.borderColor='#E5E7EB'"
+                                   onkeydown="if(event.key==='Enter'){event.preventDefault();applyCoupon();}">
+                            <button type="button" id="coupon-btn" onclick="applyCoupon()"
+                                    style="background:linear-gradient(135deg,#7C3AED,#4C1D95);color:#fff;border:none;border-radius:10px;padding:.6rem 1.15rem;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .2s;"
+                                    onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                                Apply
+                            </button>
+                        </div>
+                        <!-- Success feedback -->
+                        <div id="coupon-success" style="display:none;margin-top:.5rem;background:#D1FAE5;border:1.5px solid #A7F3D0;border-radius:10px;padding:.55rem .9rem;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <span style="color:#065F46;font-size:.82rem;font-weight:600;">
+                                    <i class="fas fa-check-circle me-1"></i><span id="coupon-success-msg"></span>
+                                </span>
+                                <button type="button" onclick="removeCoupon()" style="background:none;border:none;color:#6B7280;cursor:pointer;font-size:1.1rem;line-height:1;padding:0 .25rem;">×</button>
+                            </div>
+                        </div>
+                        <!-- Error feedback -->
+                        <div id="coupon-error" style="display:none;margin-top:.5rem;background:#FEE2E2;border:1.5px solid #FECACA;border-radius:10px;padding:.55rem .9rem;">
+                            <span style="color:#991B1B;font-size:.8rem;">
+                                <i class="fas fa-exclamation-circle me-1"></i><span id="coupon-error-msg"></span>
+                            </span>
+                        </div>
+                        <input type="hidden" name="coupon_code" id="coupon-code-hidden" value="">
+                    </div>
+                    {% endif %}
+
+                    <!-- Total amount box -->
+                    <div style="background:#F5F3FF;border-radius:12px;padding:1rem;margin-bottom:1rem;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span style="font-size:.85rem;color:#6B7280;">Subtotal</span>
+                            <span id="subtotal-display" style="font-size:.9rem;font-weight:700;color:#374151;">
+                                {% if event.is_free %}Free{% elif ticket_types %}—{% else %}₹{{ event.price }}{% endif %}
+                            </span>
+                        </div>
+                        <!-- Discount row (hidden until coupon applied) -->
+                        <div id="discount-row" style="display:none;justify-content:space-between;align-items:center;margin-top:.35rem;">
+                            <span style="font-size:.82rem;color:#059669;"><i class="fas fa-tag me-1"></i><span id="discount-label">Discount</span></span>
+                            <span id="discount-amount-display" style="font-size:.85rem;font-weight:700;color:#059669;"></span>
+                        </div>
+                        <hr style="border-color:#DDD6FE;margin:.6rem 0;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span style="font-size:.9rem;font-weight:700;color:#111827;">Total</span>
+                            <span id="total-amount" style="font-size:1.3rem;font-weight:900;color:#7C3AED;">
+                                {% if event.is_free %}Free{% elif ticket_types %}—{% else %}₹{{ event.price }}{% endif %}
+                            </span>
+                        </div>
+                        <div id="selected-type-label" style="font-size:.75rem;color:#9CA3AF;margin-top:.2rem;display:none;"></div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn btn-primary w-100"
+                            style="padding:.85rem;font-size:.95rem;font-weight:700;border-radius:14px;">
+                        <i class="fas fa-bolt me-2"></i>
+                        {% if event.is_free %}Register Free{% else %}Purchase Tickets{% endif %}
+                    </button>
+
+                    <p style="text-align:center;color:#9CA3AF;font-size:.75rem;margin-top:.75rem;">
+                        <i class="fas fa-shield-alt me-1" style="color:#059669;"></i>
+                        Secure payment · Instant confirmation
+                    </p>
+                </form>
+
+                {% else %}
+                <div style="text-align:center;padding:1.5rem 0;">
+                    <div style="font-size:3rem;margin-bottom:.75rem;">😔</div>
+                    <h5 style="font-weight:700;color:#111827;">Not Available</h5>
+                    <p style="color:#6B7280;font-size:.9rem;">This event is sold out or has ended.</p>
+                    <a href="{% url 'event_list' %}" class="btn btn-outline-primary w-100 mt-2">Browse Other Events</a>
+                </div>
+                {% endif %}
+
+                {% if event.is_available %}
+                <div style="margin-top:1rem;padding:.75rem;background:#F9FAFB;border-radius:10px;font-size:.8rem;color:#6B7280;text-align:center;">
+                    <i class="fas fa-users me-1" style="color:#7C3AED;"></i>
+                    <strong style="color:#374151;">{{ event.available_seats }}</strong> of {{ event.total_seats }} seats remaining
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sticky bottom bar (mobile) -->
+{% if event.is_available %}
+<div class="sticky-purchase-bar">
+    <div style="flex:1;">
+        <div id="mob-price" style="font-weight:800;font-size:1.05rem;color:#111827;">
+            {% if event.is_free %}Free{% elif ticket_types %}Select Type{% else %}₹{{ event.price }}{% endif %}
+        </div>
+        <div style="font-size:.75rem;color:#9CA3AF;">{{ event.available_seats }} seats left</div>
+    </div>
+    <a href="#booking-form" class="btn btn-primary"
+       style="padding:.65rem 1.5rem;font-size:.9rem;border-radius:50px;"
+       onclick="document.getElementById('booking-form').scrollIntoView({behavior:'smooth'});return false;">
+        <i class="fas fa-bolt me-1"></i> Book Now →
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+// ── Ticket type selection ────────────────────────────────────────────────
+const isFree     = {% if event.is_free %}true{% else %}false{% endif %};
+const basePrice  = {{ event.price }};
+const hasTypes   = {% if ticket_types %}true{% else %}false{% endif %};
+const eventId    = '{{ event.id }}';
+const csrfToken  = '{{ csrf_token }}';
+
+let selectedPrice = hasTypes ? 0 : basePrice;
+
+// ── Coupon state ─────────────────────────────────────────────────────────
+let appliedDiscount      = 0;
+let appliedDiscountType  = '';   // 'percentage' | 'flat'
+let appliedDiscountValue = 0;
+let appliedCouponCode    = '';
+
+function selectTicketType(card) {
+    document.querySelectorAll('.ticket-option').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.getElementById('ticket_type_id').value = card.dataset.id;
+    document.getElementById('ticket-type-error').style.display = 'none';
+
+    selectedPrice = parseFloat(card.dataset.price);
+
+    const sidebarPrice = document.getElementById('sidebar-price');
+    if (sidebarPrice) {
+        sidebarPrice.textContent = '₹' + parseFloat(card.dataset.price).toLocaleString('en-IN');
+    }
+    const label = document.getElementById('selected-type-label');
+    if (label) {
+        label.textContent = card.dataset.name;
+        label.style.display = 'block';
+    }
+    const mobPrice = document.getElementById('mob-price');
+    if (mobPrice) mobPrice.textContent = '₹' + parseFloat(card.dataset.price).toLocaleString('en-IN');
+
+    updateTotal();
+}
+
+function updateTotal() {
+    const qty       = parseInt(document.querySelector('input[name="number_of_tickets"]')?.value) || 1;
+    const totalSpan = document.getElementById('total-amount');
+    const subSpan   = document.getElementById('subtotal-display');
+    if (!totalSpan) return;
+
+    if (isFree) {
+        if (subSpan)  subSpan.textContent  = 'Free';
+        totalSpan.textContent = 'Free';
+        hideDiscountRow();
+        return;
+    }
+
+    if (hasTypes && selectedPrice === 0) {
+        if (subSpan)  subSpan.textContent  = '—';
+        totalSpan.textContent = '—';
+        hideDiscountRow();
+        return;
+    }
+
+    const subtotal = selectedPrice * qty;
+
+    // Recalculate discount for percentage coupons (depends on qty)
+    if (appliedDiscountType === 'percentage') {
+        appliedDiscount = Math.round(subtotal * appliedDiscountValue / 100);
+    }
+    // Flat discount stays as-is but cannot exceed subtotal
+    if (appliedDiscountType === 'flat') {
+        appliedDiscount = Math.min(appliedDiscountValue, subtotal);
+    }
+
+    const finalTotal = Math.max(0, subtotal - appliedDiscount);
+
+    if (subSpan) subSpan.textContent = '₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits: 0});
+    totalSpan.textContent = '₹' + finalTotal.toLocaleString('en-IN', {minimumFractionDigits: 0});
+
+    if (appliedDiscount > 0) {
+        showDiscountRow(appliedDiscount, appliedDiscountType, appliedDiscountValue);
+    } else {
+        hideDiscountRow();
+    }
+}
+
+function showDiscountRow(discountAmt, type, value) {
+    const row   = document.getElementById('discount-row');
+    const label = document.getElementById('discount-label');
+    const amtEl = document.getElementById('discount-amount-display');
+    if (!row) return;
+    label.textContent = type === 'percentage' ? `Discount (${value}%)` : 'Discount';
+    amtEl.textContent = '−₹' + discountAmt.toLocaleString('en-IN', {minimumFractionDigits: 0});
+    row.style.display = 'flex';
+}
+
+function hideDiscountRow() {
+    const row = document.getElementById('discount-row');
+    if (row) row.style.display = 'none';
+}
+
+// ── Coupon functions ─────────────────────────────────────────────────────
+async function applyCoupon() {
+    const input  = document.getElementById('coupon-input');
+    const code   = input.value.trim().toUpperCase();
+    const btn    = document.getElementById('coupon-btn');
+    const errDiv = document.getElementById('coupon-error');
+    const okDiv  = document.getElementById('coupon-success');
+    const errMsg = document.getElementById('coupon-error-msg');
+    const okMsg  = document.getElementById('coupon-success-msg');
+
+    if (!code) {
+        errMsg.textContent = 'Please enter a coupon code.';
+        errDiv.style.display = 'block';
+        okDiv.style.display  = 'none';
+        return;
+    }
+
+    const qty      = parseInt(document.querySelector('input[name="number_of_tickets"]')?.value) || 1;
+    const subtotal = selectedPrice * qty;
+
+    btn.textContent = '…';
+    btn.disabled    = true;
+    errDiv.style.display = 'none';
+    okDiv.style.display  = 'none';
+
+    try {
+        const fd = new FormData();
+        fd.append('code',     code);
+        fd.append('amount',   subtotal);
+        fd.append('event_id', eventId);
+
+        const res  = await fetch('/validate-coupon/', {
+            method:  'POST',
+            headers: { 'X-CSRFToken': csrfToken },
+            body:    fd,
+        });
+        const data = await res.json();
+
+        if (data.valid) {
+            appliedCouponCode    = code;
+            appliedDiscountType  = data.discount_type;
+            appliedDiscountValue = parseFloat(data.discount_value);
+            appliedDiscount      = parseFloat(data.discount_amount);
+
+            document.getElementById('coupon-code-hidden').value = code;
+            input.disabled  = true;
+            btn.textContent = 'Applied';
+            btn.style.background = 'linear-gradient(135deg,#059669,#047857)';
+
+            const savingText = data.discount_type === 'percentage'
+                ? `${data.discount_value}% off applied!`
+                : `₹${parseFloat(data.discount_amount).toLocaleString('en-IN')} off applied!`;
+            okMsg.textContent = savingText;
+            okDiv.style.display = 'block';
+
+            updateTotal();
+        } else {
+            errMsg.textContent = data.message || 'Invalid coupon code.';
+            errDiv.style.display = 'block';
+            btn.textContent = 'Apply';
+            btn.disabled    = false;
+        }
+    } catch (e) {
+        errMsg.textContent = 'Could not validate coupon. Please try again.';
+        errDiv.style.display = 'block';
+        btn.textContent = 'Apply';
+        btn.disabled    = false;
+    }
+}
+
+function removeCoupon() {
+    appliedDiscount      = 0;
+    appliedDiscountType  = '';
+    appliedDiscountValue = 0;
+    appliedCouponCode    = '';
+
+    document.getElementById('coupon-code-hidden').value = '';
+    const input = document.getElementById('coupon-input');
+    input.value    = '';
+    input.disabled = false;
+
+    const btn = document.getElementById('coupon-btn');
+    btn.textContent       = 'Apply';
+    btn.disabled          = false;
+    btn.style.background  = 'linear-gradient(135deg,#7C3AED,#4C1D95)';
+
+    document.getElementById('coupon-success').style.display = 'none';
+    document.getElementById('coupon-error').style.display   = 'none';
+
+    updateTotal();
+}
+
+function validateBookingForm() {
+    if (hasTypes && !document.getElementById('ticket_type_id').value) {
+        document.getElementById('ticket-type-error').style.display = 'block';
+        document.getElementById('ticket-type-options').scrollIntoView({behavior:'smooth', block:'center'});
+        return false;
+    }
+    return true;
+}
+
+// Ticket qty change → recalculate total
+const qtyInput = document.querySelector('input[name="number_of_tickets"]');
+if (qtyInput) qtyInput.addEventListener('input', updateTotal);
+
+// Initial total render
+updateTotal();
+</script>
+
+<!-- Leaflet map -->
+<script>
+    const map = L.map('map').setView([{{ event.latitude }}, {{ event.longitude }}], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+    }).addTo(map);
+    const icon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25,41], iconAnchor: [12,41], popupAnchor: [1,-34], shadowSize: [41,41]
+    });
+    L.marker([{{ event.latitude }}, {{ event.longitude }}], {icon})
+        .addTo(map)
+        .bindPopup('<strong>{{ event.venue }}</strong><br><small>{{ event.address }}</small>')
+        .openPopup();
+</script>
+
+{% if event.meta_pixel_id %}
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','{{ event.meta_pixel_id }}'); fbq('track','PageView'); fbq('track','ViewContent',{content_name:'{{ event.title }}'});
+</script>
+{% endif %}
+{% if event.google_analytics_id %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ event.google_analytics_id }}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ event.google_analytics_id }}');</script>
+{% endif %}
+{% if event.custom_footer_code %}{{ event.custom_footer_code|safe }}{% endif %}
+{% endblock %}

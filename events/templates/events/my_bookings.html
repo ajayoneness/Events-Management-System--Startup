@@ -1,0 +1,131 @@
+{% extends 'events/base.html' %}
+
+{% block title %}My Bookings — EventHub{% endblock %}
+
+{% block content %}
+
+<!-- Page header -->
+<div style="margin-bottom:2rem;">
+    <h1 style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:900;letter-spacing:-1px;color:#111827;">
+        My <span style="background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Bookings</span>
+    </h1>
+    <p style="color:#6B7280;margin-top:.25rem;">View and manage your event tickets</p>
+</div>
+
+{% if search_email %}
+<div class="alert alert-info mb-4">
+    <i class="fas fa-search me-1"></i> Showing bookings for <strong>{{ search_email }}</strong>
+</div>
+{% endif %}
+
+<div class="row g-3">
+    {% for booking in bookings %}
+    <div class="col-lg-6">
+        <div class="card" style="padding:0;">
+            <div class="card-body" style="padding:1.5rem;">
+
+                <!-- Status + date -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    {% if booking.status == 'confirmed' %}
+                    <span style="background:#D1FAE5;color:#065F46;padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:700;">
+                        <i class="fas fa-check-circle me-1"></i>Confirmed
+                    </span>
+                    {% elif booking.status == 'pending' %}
+                    <span style="background:#FEF3C7;color:#92400E;padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:700;">
+                        <i class="fas fa-clock me-1"></i>Pending
+                    </span>
+                    {% elif booking.status == 'refunded' %}
+                    <span style="background:#DBEAFE;color:#1E40AF;padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:700;">
+                        <i class="fas fa-undo me-1"></i>Refunded
+                    </span>
+                    {% elif booking.status == 'cancelled' %}
+                    <span style="background:#F3F4F6;color:#374151;padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:700;">
+                        <i class="fas fa-ban me-1"></i>Cancelled
+                    </span>
+                    {% else %}
+                    <span style="background:#FEE2E2;color:#991B1B;padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:700;">
+                        <i class="fas fa-times-circle me-1"></i>{{ booking.get_status_display }}
+                    </span>
+                    {% endif %}
+                    <span style="color:#9CA3AF;font-size:.8rem;">{{ booking.booking_date|date:"M d, Y" }}</span>
+                </div>
+
+                <!-- Event title -->
+                <h5 style="font-weight:800;color:#111827;font-size:1rem;margin-bottom:.75rem;">{{ booking.event.title }}</h5>
+
+                <!-- Meta -->
+                <div class="event-meta"><i class="fas fa-calendar-alt"></i><span>{{ booking.event.date|date:"M d, Y" }} at {{ booking.event.date|date:"h:i A" }}</span></div>
+                <div class="event-meta"><i class="fas fa-map-marker-alt"></i><span>{{ booking.event.venue }}</span></div>
+                <div class="event-meta"><i class="fas fa-user"></i><span>{{ booking.name }}</span></div>
+
+                <hr style="border-color:#F3F4F6;margin:1rem 0;">
+
+                <!-- Amount + actions -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div style="font-size:.8rem;color:#9CA3AF;">{{ booking.number_of_tickets }} ticket{{ booking.number_of_tickets|pluralize }}</div>
+                        <div style="font-size:1.15rem;font-weight:900;color:#7C3AED;">₹{{ booking.total_amount }}</div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        {% if booking.status == 'confirmed' %}
+                        <a href="{% url 'download_ticket' booking.id %}" class="btn btn-primary" style="padding:.45rem 1rem;font-size:.82rem;border-radius:50px;" title="Download Ticket">
+                            <i class="fas fa-download me-1"></i>Ticket
+                        </a>
+                        <a href="{% url 'booking_success' booking.id %}" class="btn btn-outline-primary" style="padding:.45rem 1rem;font-size:.82rem;border-radius:50px;" title="View QR Code">
+                            <i class="fas fa-qrcode"></i>
+                        </a>
+                        <a href="{% url 'download_calendar' booking.id %}" class="btn btn-outline-primary" style="padding:.45rem 1rem;font-size:.82rem;border-radius:50px;" title="Add to Calendar">
+                            <i class="fas fa-calendar-plus"></i>
+                        </a>
+                        {% elif booking.status == 'pending' %}
+                        <a href="{% url 'payment_page' booking.id %}" style="background:#D97706;color:#fff;padding:.45rem 1rem;font-size:.82rem;border-radius:50px;text-decoration:none;font-weight:700;">
+                            <i class="fas fa-credit-card me-1"></i>Pay Now
+                        </a>
+                        {% elif booking.status == 'failed' %}
+                        <a href="{% url 'payment_page' booking.id %}" style="border:1.5px solid #DC2626;color:#DC2626;padding:.4rem .9rem;font-size:.82rem;border-radius:50px;text-decoration:none;font-weight:600;">
+                            <i class="fas fa-redo me-1"></i>Retry
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Notification chips -->
+                {% if booking.status == 'confirmed' %}
+                <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+                    {% if booking.email_sent %}
+                    <span style="font-size:.7rem;background:#D1FAE5;color:#065F46;padding:.2rem .6rem;border-radius:50px;font-weight:600;">
+                        <i class="fas fa-envelope me-1"></i>Email sent
+                    </span>
+                    {% endif %}
+                    {% if booking.whatsapp_sent %}
+                    <span style="font-size:.7rem;background:#D1FAE5;color:#065F46;padding:.2rem .6rem;border-radius:50px;font-weight:600;">
+                        <i class="fab fa-whatsapp me-1"></i>WhatsApp sent
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+    <div class="col-12">
+        <div style="text-align:center;padding:4rem 2rem;border:2px dashed #E5E7EB;border-radius:20px;background:#FAFAFA;">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">🎟️</div>
+            <h4 style="font-weight:700;color:#374151;">No bookings yet</h4>
+            {% if user.is_authenticated %}
+            <p style="color:#6B7280;margin:0.5rem 0 1.5rem;">You haven't made any bookings yet. Explore events and get your first ticket!</p>
+            {% else %}
+            <p style="color:#6B7280;margin:0.5rem 0 1rem;">Not finding your booking?</p>
+            <a href="{% url 'search_booking' %}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-search me-1"></i>Search by Email
+            </a>
+            {% endif %}
+            <a href="{% url 'event_list' %}" class="btn btn-primary">
+                <i class="fas fa-compass me-1"></i>Browse Events
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

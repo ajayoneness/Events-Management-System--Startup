@@ -1,0 +1,125 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Login — EventHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center" style="margin-top:2rem;">
+    <div class="col-md-5 col-lg-4">
+
+        <div style="text-align:center;margin-bottom:2rem;">
+            <div style="width:60px;height:60px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 4px 15px rgba(124,58,237,.3);">
+                <i class="fas fa-calendar-star" style="color:#fff;font-size:1.5rem;"></i>
+            </div>
+            <h2 style="font-size:1.75rem;font-weight:900;letter-spacing:-.5px;color:#111827;">Welcome back</h2>
+            <p style="color:#6B7280;font-size:.9rem;margin-top:.25rem;">Sign in to your EventHub account</p>
+        </div>
+
+        <div class="card" style="padding:0;">
+            <div class="card-body" style="padding:2rem;">
+
+                <!-- Tab switcher -->
+                <div style="display:flex;background:#F9FAFB;border-radius:10px;padding:4px;margin-bottom:1.5rem;gap:4px;">
+                    <button type="button" id="tab-email" onclick="switchTab('email')"
+                        style="flex:1;padding:.5rem;border:none;border-radius:8px;background:linear-gradient(135deg,#7C3AED,#4C1D95);color:#fff;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;">
+                        Email Login
+                    </button>
+                    <button type="button" id="tab-username" onclick="switchTab('username')"
+                        style="flex:1;padding:.5rem;border:none;border-radius:8px;background:transparent;color:#6B7280;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;">
+                        Username Login
+                    </button>
+                </div>
+
+                <form method="post" id="login-form" onsubmit="prepareSubmit()">
+                    {% csrf_token %}
+                    <!-- Hidden field tracks which tab is active -->
+                    <input type="hidden" name="login_tab" id="login_tab" value="email">
+
+                    <!-- Email login section -->
+                    <div id="section-email">
+                        <div class="mb-4">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Email or Username</label>
+                            <input type="text" name="email" id="input-email" class="form-control" placeholder="your@email.com or username" autocomplete="email">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Password</label>
+                            <input type="password" name="email_password" id="input-email-password" class="form-control" placeholder="Password" autocomplete="current-password">
+                        </div>
+                    </div>
+
+                    <!-- Username login section (admin / staff / team members) -->
+                    <div id="section-username" style="display:none;">
+                        <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#92400E;">
+                            <i class="fas fa-shield-alt me-1"></i> For admin, event organisers, and team members only
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Username</label>
+                            <input type="text" name="username" id="input-username" class="form-control" placeholder="Your assigned username" autocomplete="username">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Password</label>
+                            <input type="password" name="username_password" id="input-username-password" class="form-control" placeholder="Password" autocomplete="current-password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100" style="padding:.8rem;font-size:.95rem;font-weight:700;border-radius:12px;">
+                        Sign In →
+                    </button>
+                </form>
+
+                <div style="text-align:center;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #F3F4F6;">
+                    <p style="color:#6B7280;font-size:.875rem;margin:0;">
+                        Don't have an account?
+                        <a href="{% url 'accounts:register' %}" style="color:#7C3AED;font-weight:600;text-decoration:none;">Get started →</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let activeTab = 'email';
+
+function switchTab(tab) {
+    activeTab = tab;
+    document.getElementById('login_tab').value = tab;
+
+    const emailSection    = document.getElementById('section-email');
+    const usernameSection = document.getElementById('section-username');
+    const tabEmail        = document.getElementById('tab-email');
+    const tabUsername     = document.getElementById('tab-username');
+
+    const activeStyle   = 'flex:1;padding:.5rem;border:none;border-radius:8px;background:linear-gradient(135deg,#7C3AED,#4C1D95);color:#fff;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;';
+    const inactiveStyle = 'flex:1;padding:.5rem;border:none;border-radius:8px;background:transparent;color:#6B7280;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;';
+
+    if (tab === 'email') {
+        emailSection.style.display    = '';
+        usernameSection.style.display = 'none';
+        tabEmail.style.cssText    = activeStyle;
+        tabUsername.style.cssText = inactiveStyle;
+        // Clear username fields so they don't interfere
+        document.getElementById('input-username').value = '';
+        document.getElementById('input-username-password').value = '';
+    } else {
+        emailSection.style.display    = 'none';
+        usernameSection.style.display = '';
+        tabUsername.style.cssText = activeStyle;
+        tabEmail.style.cssText    = inactiveStyle;
+        // Clear email fields so they don't interfere
+        document.getElementById('input-email').value = '';
+        document.getElementById('input-email-password').value = '';
+    }
+}
+
+function prepareSubmit() {
+    // Ensure the hidden section's fields are cleared before submit
+    if (activeTab === 'email') {
+        document.getElementById('input-username').value = '';
+        document.getElementById('input-username-password').value = '';
+    } else {
+        document.getElementById('input-email').value = '';
+        document.getElementById('input-email-password').value = '';
+    }
+}
+</script>
+{% endblock %}

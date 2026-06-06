@@ -1,0 +1,163 @@
+{% extends 'events/base.html' %}
+{% block title %}Refund Management — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.status-badge { padding:.3rem .8rem;border-radius:50px;font-size:.72rem;font-weight:700; }
+.table th { font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#9CA3AF;font-weight:600; }
+.table td { font-size:.88rem;vertical-align:middle; }
+.filter-pill {
+    padding:.4rem 1rem;border-radius:50px;border:1.5px solid #E5E7EB;
+    font-size:.82rem;font-weight:600;text-decoration:none;color:#374151;
+    transition:all .2s;
+}
+.filter-pill.active, .filter-pill:hover {
+    background:#7C3AED;color:#fff;border-color:#7C3AED;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 style="font-size:1.75rem;font-weight:900;color:#111827;margin:0;">Refund Management</h1>
+        <p style="color:#6B7280;font-size:.88rem;margin:.25rem 0 0;">Cancel bookings or mark as refunded</p>
+    </div>
+    <a href="{% url 'sales_dashboard' %}" class="btn btn-outline-primary" style="font-size:.85rem;padding:.5rem 1.1rem;">
+        <i class="fas fa-arrow-left me-1"></i> Dashboard
+    </a>
+</div>
+
+<!-- Status filter -->
+<div class="d-flex gap-2 flex-wrap mb-4">
+    <a href="?status=confirmed" class="filter-pill {% if status_filter == 'confirmed' %}active{% endif %}">Confirmed</a>
+    <a href="?status=refunded"  class="filter-pill {% if status_filter == 'refunded' %}active{% endif %}">Refunded</a>
+    <a href="?status=cancelled" class="filter-pill {% if status_filter == 'cancelled' %}active{% endif %}">Cancelled</a>
+    <a href="?status=all"       class="filter-pill {% if status_filter == 'all' %}active{% endif %}">All</a>
+</div>
+
+<div class="card" style="padding:0;">
+    <div style="overflow-x:auto;">
+        <table class="table table-hover mb-0" style="min-width:700px;">
+            <thead style="background:#F9FAFB;">
+                <tr>
+                    <th style="padding:1rem;">Attendee</th>
+                    <th>Event</th>
+                    <th>Tickets</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td style="padding:1rem;">
+                        <div style="font-weight:700;color:#111827;">{{ b.name }}</div>
+                        <div style="font-size:.75rem;color:#9CA3AF;">{{ b.email }}</div>
+                        <div style="font-size:.75rem;color:#9CA3AF;"><i class="fas fa-phone me-1"></i>{{ b.phone }}</div>
+                    </td>
+                    <td style="color:#374151;font-weight:600;">{{ b.event.title|truncatechars:28 }}</td>
+                    <td style="color:#374151;">{{ b.number_of_tickets }}</td>
+                    <td style="font-weight:700;color:#7C3AED;">₹{{ b.total_amount|floatformat:0 }}</td>
+                    <td>
+                        <span class="status-badge" style="background:{% if b.status == 'confirmed' %}#D1FAE5;color:#065F46{% elif b.status == 'pending' %}#FEF3C7;color:#92400E{% elif b.status == 'refunded' %}#DBEAFE;color:#1E40AF{% elif b.status == 'cancelled' %}#F3F4F6;color:#374151{% else %}#FEE2E2;color:#991B1B{% endif %};">
+                            {{ b.get_status_display }}
+                        </span>
+                        {% if b.refunded_at %}
+                        <div style="font-size:.72rem;color:#9CA3AF;margin-top:.2rem;">{{ b.refunded_at|date:"d M Y" }}</div>
+                        {% endif %}
+                    </td>
+                    <td style="color:#6B7280;font-size:.82rem;">{{ b.booking_date|date:"d M Y" }}</td>
+                    <td>
+                        {% if b.status == 'confirmed' %}
+                        <!-- Refund modal trigger -->
+                        <button class="btn btn-outline-primary"
+                                style="font-size:.75rem;padding:.35rem .8rem;border-radius:8px;"
+                                data-bs-toggle="modal"
+                                data-bs-target="#refundModal"
+                                data-id="{{ b.id }}"
+                                data-name="{{ b.name }}"
+                                data-amount="{{ b.total_amount }}">
+                            <i class="fas fa-undo me-1"></i> Refund
+                        </button>
+                        <form method="post" style="display:inline;" onsubmit="return confirm('Cancel booking for {{ b.name }}?')">
+                            {% csrf_token %}
+                            <input type="hidden" name="booking_id" value="{{ b.id }}">
+                            <input type="hidden" name="action" value="cancel">
+                            <button type="submit" class="btn" style="font-size:.75rem;padding:.35rem .8rem;border-radius:8px;background:#FEE2E2;color:#991B1B;border:none;margin-left:.25rem;">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </form>
+                        {% elif b.status == 'refunded' %}
+                        <span style="color:#059669;font-size:.8rem;"><i class="fas fa-check-circle me-1"></i>Done</span>
+                        {% else %}
+                        <span style="color:#9CA3AF;font-size:.8rem;">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align:center;padding:3rem;color:#9CA3AF;">
+                        <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:.5rem;display:block;"></i>
+                        No bookings found for this filter.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Refund Modal -->
+<div class="modal fade" id="refundModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:20px;border:none;box-shadow:0 20px 60px rgba(0,0,0,.15);">
+            <div class="modal-body" style="padding:2rem;">
+                <h5 style="font-weight:800;color:#111827;margin-bottom:.5rem;">Process Refund</h5>
+                <p style="color:#6B7280;font-size:.9rem;margin-bottom:1.5rem;">
+                    Mark booking for <strong id="refund-name"></strong> (₹<span id="refund-amount"></span>) as refunded.
+                </p>
+                <form method="post" id="refund-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="booking_id" id="refund-booking-id">
+                    <input type="hidden" name="action" value="refund">
+                    <div class="mb-3">
+                        <label style="font-size:.85rem;font-weight:600;color:#374151;display:block;margin-bottom:.5rem;">Refund Reason</label>
+                        <textarea name="reason" rows="3" placeholder="e.g. Customer requested cancellation"
+                                  style="width:100%;border:1.5px solid #E5E7EB;border-radius:10px;padding:.6rem .9rem;font-size:.88rem;outline:none;resize:none;"></textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary" style="flex:1;">
+                            <i class="fas fa-undo me-1"></i> Confirm Refund
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" style="flex:1;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('refundModal').addEventListener('show.bs.modal', function(e) {
+    const btn = e.relatedTarget;
+    document.getElementById('refund-name').textContent    = btn.dataset.name;
+    document.getElementById('refund-amount').textContent  = btn.dataset.amount;
+    document.getElementById('refund-booking-id').value    = btn.dataset.id;
+});
+
+// Dismiss any open Bootstrap modal before page is unloaded/cached
+window.addEventListener('pagehide', function() {
+    const modal = document.getElementById('refundModal');
+    if (modal && modal.classList.contains('show')) {
+        bootstrap.Modal.getInstance(modal)?.hide();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'events/base.html' %}
+{% block title %}Send Reminder — {{ event.title }}{% endblock %}
+
+{% block content %}
+<div style="max-width:520px;margin:0 auto;">
+    <a href="{% url 'sales_dashboard' %}" style="display:inline-flex;align-items:center;gap:.4rem;color:#7C3AED;font-size:.85rem;font-weight:600;text-decoration:none;margin-bottom:1.5rem;">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+
+    <div class="card">
+        <div class="card-body" style="padding:2rem;">
+            <div style="width:56px;height:56px;background:#EDE9FE;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
+                <i class="fas fa-bell" style="color:#7C3AED;font-size:1.4rem;"></i>
+            </div>
+            <h2 style="font-size:1.4rem;font-weight:900;color:#111827;margin-bottom:.5rem;">Send Reminder</h2>
+            <p style="color:#6B7280;font-size:.9rem;margin-bottom:1.5rem;">
+                Send a reminder to all <strong style="color:#111827;">{{ attendee_count }} confirmed attendee{{ attendee_count|pluralize }}</strong> of:
+            </p>
+
+            <div style="background:#F5F3FF;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.5rem;border:1.5px solid #DDD6FE;">
+                <div style="font-weight:800;color:#111827;">{{ event.title }}</div>
+                <div style="font-size:.85rem;color:#6B7280;margin-top:.25rem;">
+                    <i class="fas fa-calendar me-1" style="color:#7C3AED;"></i>{{ event.date|date:"l, d F Y · h:i A" }}<br>
+                    <i class="fas fa-map-marker-alt me-1" style="color:#7C3AED;"></i>{{ event.venue }}
+                </div>
+            </div>
+
+            {% if attendee_count == 0 %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-1"></i> No confirmed attendees found for this event.
+            </div>
+            {% else %}
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Reminder type with cost -->
+                <div style="margin-bottom:1.25rem;">
+                    <label style="font-size:.85rem;font-weight:600;color:#374151;display:block;margin-bottom:.6rem;">Reminder Type</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+                        <label style="cursor:pointer;">
+                            <input type="radio" name="reminder_type" value="normal" checked style="display:none;">
+                            <div class="reminder-option" style="padding:1rem;border:2px solid #7C3AED;border-radius:14px;background:#F5F3FF;text-align:center;">
+                                <i class="fas fa-envelope" style="font-size:1.4rem;color:#7C3AED;display:block;margin-bottom:.4rem;"></i>
+                                <div style="font-size:.85rem;font-weight:700;color:#111827;">Normal</div>
+                                <div style="font-size:.78rem;color:#6B7280;">Email only</div>
+                                <div style="font-size:.9rem;font-weight:800;color:#7C3AED;margin-top:.3rem;">₹{{ normal_cost }}/person</div>
+                                <div style="font-size:.75rem;color:#9CA3AF;">Total: ₹{{ normal_total|floatformat:0 }}</div>
+                            </div>
+                        </label>
+                        <label style="cursor:pointer;">
+                            <input type="radio" name="reminder_type" value="advance" style="display:none;">
+                            <div class="reminder-option" style="padding:1rem;border:2px solid #E5E7EB;border-radius:14px;background:#fff;text-align:center;">
+                                <i class="fab fa-whatsapp" style="font-size:1.4rem;color:#25D366;display:block;margin-bottom:.4rem;"></i>
+                                <div style="font-size:.85rem;font-weight:700;color:#111827;">Advance</div>
+                                <div style="font-size:.78rem;color:#6B7280;">Email + WhatsApp</div>
+                                <div style="font-size:.9rem;font-weight:800;color:#7C3AED;margin-top:.3rem;">₹{{ advance_cost }}/person</div>
+                                <div style="font-size:.75rem;color:#9CA3AF;">Total: ₹{{ advance_total|floatformat:0 }}</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="background:#FFFBEB;border:1.5px solid #FDE68A;border-radius:12px;padding:.85rem 1rem;margin-bottom:1.25rem;font-size:.82rem;color:#92400E;">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Reminder costs are tracked. Ensure Gmail/SMTP settings are configured in Admin → Site Settings.
+                </div>
+                <button type="submit" class="btn btn-primary w-100" style="padding:.85rem;font-size:.95rem;font-weight:700;">
+                    <i class="fas fa-paper-plane me-2"></i> Send to {{ attendee_count }} Attendee{{ attendee_count|pluralize }}
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('input[name="reminder_type"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        document.querySelectorAll('.reminder-option').forEach(el => {
+            el.style.borderColor = '#E5E7EB';
+            el.style.background = '#fff';
+        });
+        if (radio.checked) {
+            const opt = radio.nextElementSibling;
+            opt.style.borderColor = '#7C3AED';
+            opt.style.background = '#F5F3FF';
+        }
+    });
+});
+</script>
+{% endblock %}

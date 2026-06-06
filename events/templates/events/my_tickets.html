@@ -1,0 +1,296 @@
+{% extends 'events/base.html' %}
+{% block title %}My Tickets — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.ticket-card {
+    background:#fff;
+    border-radius:20px;
+    border:1px solid #F0EBFF;
+    box-shadow:0 2px 16px rgba(124,58,237,.07);
+    overflow:hidden;
+    transition:transform .2s,box-shadow .2s;
+}
+.ticket-card:hover { transform:translateY(-4px);box-shadow:0 10px 32px rgba(124,58,237,.13); }
+.ticket-header {
+    background:linear-gradient(135deg,#7C3AED,#4C1D95);
+    padding:1.25rem 1.5rem;
+    color:#fff;
+}
+.ticket-body { padding:1.25rem 1.5rem; }
+.ticket-divider {
+    border:none;
+    border-top:2px dashed #E5E7EB;
+    margin:0;
+    position:relative;
+}
+.ticket-divider::before,
+.ticket-divider::after {
+    content:'';
+    position:absolute;
+    top:-10px;
+    width:20px;height:20px;
+    background:#F9FAFB;
+    border-radius:50%;
+    border:1px solid #E5E7EB;
+}
+.ticket-divider::before { left:-10px; }
+.ticket-divider::after  { right:-10px; }
+.ticket-footer { padding:1rem 1.5rem;background:#F9FAFB; }
+.ticket-meta { font-size:.78rem;color:#6B7280;margin-bottom:.3rem; }
+.ticket-meta strong { color:#374151; }
+.past-badge { opacity:.7;filter:grayscale(.4); }
+.tab-btn {
+    padding:.55rem 1.4rem;border-radius:50px;border:2px solid #E5E7EB;
+    background:#fff;color:#6B7280;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;
+}
+.tab-btn.active { background:#7C3AED;color:#fff;border-color:#7C3AED; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div style="margin-bottom:2rem;">
+    <h1 style="font-size:1.75rem;font-weight:900;color:#111827;margin-bottom:.3rem;">
+        <i class="fas fa-ticket-alt me-2" style="color:#7C3AED;"></i>My Tickets
+    </h1>
+    <p style="color:#6B7280;font-size:.9rem;">All your event tickets in one place</p>
+</div>
+
+<!-- Stats row -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div style="background:#F5F3FF;border-radius:16px;padding:1rem 1.25rem;text-align:center;">
+            <div style="font-size:1.6rem;font-weight:900;color:#7C3AED;">{{ total_confirmed }}</div>
+            <div style="font-size:.78rem;color:#6B7280;font-weight:600;">Total Tickets</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div style="background:#ECFDF5;border-radius:16px;padding:1rem 1.25rem;text-align:center;">
+            <div style="font-size:1.6rem;font-weight:900;color:#059669;">{{ upcoming_tickets.count }}</div>
+            <div style="font-size:.78rem;color:#6B7280;font-weight:600;">Upcoming</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div style="background:#F3F4F6;border-radius:16px;padding:1rem 1.25rem;text-align:center;">
+            <div style="font-size:1.6rem;font-weight:900;color:#374151;">{{ past_tickets.count }}</div>
+            <div style="font-size:.78rem;color:#6B7280;font-weight:600;">Past Events</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div style="background:#FEF3C7;border-radius:16px;padding:1rem 1.25rem;text-align:center;">
+            <div style="font-size:1.6rem;font-weight:900;color:#D97706;">{{ pending_bookings.count }}</div>
+            <div style="font-size:.78rem;color:#6B7280;font-weight:600;">Pending Payment</div>
+        </div>
+    </div>
+</div>
+
+<!-- Tab switcher -->
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.75rem;">
+    <button class="tab-btn active" onclick="showTab('upcoming',this)">
+        <i class="fas fa-calendar-check me-1"></i> Upcoming ({{ upcoming_tickets.count }})
+    </button>
+    <button class="tab-btn" onclick="showTab('past',this)">
+        <i class="fas fa-history me-1"></i> Past ({{ past_tickets.count }})
+    </button>
+    {% if pending_bookings.count %}
+    <button class="tab-btn" onclick="showTab('pending',this)">
+        <i class="fas fa-clock me-1"></i> Pending ({{ pending_bookings.count }})
+    </button>
+    {% endif %}
+</div>
+
+<!-- Upcoming tickets -->
+<div id="tab-upcoming">
+    {% if upcoming_tickets %}
+    <div class="row g-4">
+        {% for b in upcoming_tickets %}
+        <div class="col-md-6 col-lg-4">
+            <div class="ticket-card">
+                <div class="ticket-header">
+                    <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1px;opacity:.8;margin-bottom:.3rem;">
+                        <i class="fas fa-calendar-star me-1"></i> Upcoming Event
+                    </div>
+                    <div style="font-weight:800;font-size:1rem;line-height:1.3;">{{ b.event.title|truncatechars:45 }}</div>
+                    <div style="font-size:.78rem;opacity:.85;margin-top:.35rem;">
+                        <i class="fas fa-map-marker-alt me-1"></i>{{ b.event.venue|truncatechars:30 }}
+                    </div>
+                </div>
+                <div class="ticket-body">
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="ticket-meta"><i class="fas fa-calendar me-1" style="color:#7C3AED;"></i> Date</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">{{ b.event.date|date:"d M Y" }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ticket-meta"><i class="fas fa-clock me-1" style="color:#7C3AED;"></i> Time</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">{{ b.event.date|date:"g:i A" }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ticket-meta"><i class="fas fa-ticket-alt me-1" style="color:#7C3AED;"></i> Tickets</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">{{ b.number_of_tickets }}x {{ b.ticket_type.name|default:"Standard" }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ticket-meta"><i class="fas fa-rupee-sign me-1" style="color:#7C3AED;"></i> Paid</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">₹{{ b.total_amount|floatformat:0 }}</div>
+                        </div>
+                    </div>
+                    {% if b.qr_code %}
+                    <div style="text-align:center;padding:.75rem;background:#F5F3FF;border-radius:12px;margin-bottom:.75rem;">
+                        <img src="{{ b.qr_code.url }}" alt="QR Code" style="width:100px;height:100px;border-radius:8px;">
+                        <div style="font-size:.72rem;color:#7C3AED;font-weight:700;margin-top:.4rem;letter-spacing:.5px;">SCAN AT ENTRY</div>
+                    </div>
+                    {% endif %}
+                </div>
+                <hr class="ticket-divider">
+                <div class="ticket-footer">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
+                        <code style="font-size:.72rem;color:#7C3AED;background:#F5F3FF;padding:.2rem .5rem;border-radius:6px;">
+                            #{{ b.id|stringformat:"s"|slice:":8"|upper }}
+                        </code>
+                        <span style="background:#D1FAE5;color:#065F46;padding:.2rem .6rem;border-radius:50px;font-size:.7rem;font-weight:700;">
+                            <i class="fas fa-check-circle me-1"></i>CONFIRMED
+                        </span>
+                    </div>
+                    <div style="display:flex;gap:.5rem;">
+                        <a href="{% url 'download_ticket' b.id %}" class="btn btn-primary" style="flex:1;font-size:.78rem;padding:.5rem;text-align:center;text-decoration:none;border-radius:10px;">
+                            <i class="fas fa-download me-1"></i> Download
+                        </a>
+                        <a href="{% url 'download_calendar' b.id %}" style="flex:0;padding:.5rem .75rem;background:#F3F4F6;color:#374151;border-radius:10px;font-size:.78rem;font-weight:600;text-decoration:none;white-space:nowrap;" title="Add to Calendar">
+                            <i class="fas fa-calendar-plus"></i>
+                        </a>
+                        <a href="{% url 'event_detail' b.event.id %}" style="flex:0;padding:.5rem .75rem;background:#F3F4F6;color:#374151;border-radius:10px;font-size:.78rem;font-weight:600;text-decoration:none;white-space:nowrap;" title="View Event">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:4rem 2rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:20px;">
+        <i class="fas fa-calendar-star" style="font-size:2.5rem;color:#D1D5DB;margin-bottom:.75rem;display:block;"></i>
+        <h5 style="font-weight:700;color:#374151;">No upcoming events</h5>
+        <p style="color:#6B7280;font-size:.85rem;margin-bottom:1.25rem;">You don't have any upcoming events. Discover amazing events near you!</p>
+        <a href="{% url 'all_events' %}" class="btn btn-primary" style="font-size:.85rem;">Browse Events</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Past tickets -->
+<div id="tab-past" style="display:none;">
+    {% if past_tickets %}
+    <div class="row g-4">
+        {% for b in past_tickets %}
+        <div class="col-md-6 col-lg-4">
+            <div class="ticket-card past-badge">
+                <div class="ticket-header" style="background:linear-gradient(135deg,#374151,#111827);">
+                    <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1px;opacity:.8;margin-bottom:.3rem;">
+                        <i class="fas fa-history me-1"></i> Past Event
+                    </div>
+                    <div style="font-weight:800;font-size:1rem;line-height:1.3;">{{ b.event.title|truncatechars:45 }}</div>
+                    <div style="font-size:.78rem;opacity:.85;margin-top:.35rem;">
+                        <i class="fas fa-map-marker-alt me-1"></i>{{ b.event.venue|truncatechars:30 }}
+                    </div>
+                </div>
+                <div class="ticket-body">
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="ticket-meta">Date</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">{{ b.event.date|date:"d M Y" }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ticket-meta">Tickets</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">{{ b.number_of_tickets }}x {{ b.ticket_type.name|default:"Standard" }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ticket-meta">Amount Paid</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">₹{{ b.total_amount|floatformat:0 }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ticket-meta">Booking ID</div>
+                            <code style="font-size:.72rem;color:#374151;">#{{ b.id|stringformat:"s"|slice:":8"|upper }}</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="ticket-footer">
+                    <a href="{% url 'download_ticket' b.id %}" style="display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.55rem;background:#F3F4F6;color:#374151;border-radius:10px;font-size:.78rem;font-weight:600;text-decoration:none;">
+                        <i class="fas fa-download"></i> Download Ticket
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:4rem 2rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:20px;">
+        <i class="fas fa-history" style="font-size:2.5rem;color:#D1D5DB;margin-bottom:.75rem;display:block;"></i>
+        <h5 style="font-weight:700;color:#374151;">No past events</h5>
+        <p style="color:#6B7280;font-size:.85rem;">Your attended events will appear here.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Pending bookings -->
+<div id="tab-pending" style="display:none;">
+    {% if pending_bookings %}
+    <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.88rem;color:#92400E;">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        These bookings are awaiting payment confirmation. Complete payment to receive your tickets.
+    </div>
+    <div class="row g-4">
+        {% for b in pending_bookings %}
+        <div class="col-md-6 col-lg-4">
+            <div class="ticket-card" style="border:1.5px dashed #FDE68A;">
+                <div class="ticket-header" style="background:linear-gradient(135deg,#D97706,#92400E);">
+                    <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1px;opacity:.8;margin-bottom:.3rem;">
+                        <i class="fas fa-clock me-1"></i> Pending Payment
+                    </div>
+                    <div style="font-weight:800;font-size:1rem;line-height:1.3;">{{ b.event.title|truncatechars:45 }}</div>
+                </div>
+                <div class="ticket-body">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="ticket-meta">Date</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#111827;">{{ b.event.date|date:"d M Y" }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ticket-meta">Amount Due</div>
+                            <div style="font-size:.85rem;font-weight:700;color:#D97706;">₹{{ b.total_amount|floatformat:0 }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ticket-footer">
+                    <a href="{% url 'payment_page' b.id %}" class="btn btn-primary" style="width:100%;font-size:.82rem;text-align:center;text-decoration:none;display:block;padding:.55rem;">
+                        <i class="fas fa-credit-card me-1"></i> Complete Payment
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:4rem 2rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:20px;">
+        <i class="fas fa-check-circle" style="font-size:2.5rem;color:#D1D5DB;margin-bottom:.75rem;display:block;"></i>
+        <h5 style="font-weight:700;color:#374151;">No pending payments</h5>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showTab(name, btn) {
+    ['upcoming','past','pending'].forEach(function(t) {
+        var el = document.getElementById('tab-'+t);
+        if (el) el.style.display = 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    var target = document.getElementById('tab-'+name);
+    if (target) target.style.display = '';
+    btn.classList.add('active');
+}
+</script>
+{% endblock %}

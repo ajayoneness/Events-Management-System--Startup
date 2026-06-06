@@ -1,0 +1,194 @@
+{% extends 'events/base.html' %}
+{% block title %}About Us — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.stat-card { background:#fff;border:1px solid #F0EBFF;border-radius:20px;padding:1.5rem;text-align:center;box-shadow:0 2px 12px rgba(124,58,237,.06); }
+.stat-card .num { font-size:2rem;font-weight:900;background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.stat-card .lbl { font-size:.82rem;color:#6B7280;font-weight:600;margin-top:.25rem; }
+.team-card { background:#fff;border:1px solid #F0EBFF;border-radius:16px;padding:1.25rem;text-align:center;box-shadow:0 2px 12px rgba(124,58,237,.06); }
+.value-box { display:flex;align-items:flex-start;gap:1rem;padding:1.25rem;background:#F9FAFB;border-radius:14px; }
+.value-icon { width:40px;height:40px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem;flex-shrink:0; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:900px;margin:0 auto;">
+
+    <!-- Hero -->
+    <div style="text-align:center;margin-bottom:3.5rem;">
+        <div style="display:inline-flex;align-items:center;gap:.5rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;padding:.4rem 1rem;font-size:.8rem;font-weight:600;color:#7C3AED;margin-bottom:1rem;">
+            <i class="fas fa-heart"></i> Our Story
+        </div>
+        <h1 style="font-size:2.25rem;font-weight:900;color:#111827;line-height:1.15;margin-bottom:1rem;">
+            Making Events <span style="background:linear-gradient(135deg,#7C3AED,#4C1D95);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Unforgettable</span>
+        </h1>
+        <p style="color:#6B7280;font-size:.95rem;max-width:580px;margin:0 auto;line-height:1.8;">
+            EventHub is India's growing event discovery and ticketing platform, built to connect passionate event organisers with audiences who love live experiences.
+        </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="num">500+</div>
+                <div class="lbl">Events Hosted</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="num">25K+</div>
+                <div class="lbl">Tickets Sold</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="num">150+</div>
+                <div class="lbl">Organisers</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="num">20+</div>
+                <div class="lbl">Cities</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mission -->
+    <div class="card" style="padding:0;margin-bottom:2rem;">
+        <div class="card-body" style="padding:2.5rem;">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6">
+                    <div style="display:inline-flex;align-items:center;gap:.5rem;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:50px;padding:.3rem .9rem;font-size:.75rem;font-weight:600;color:#7C3AED;margin-bottom:1rem;">
+                        Our Mission
+                    </div>
+                    <h2 style="font-size:1.5rem;font-weight:900;color:#111827;margin-bottom:1rem;">Bringing People Together Through Shared Experiences</h2>
+                    <p style="color:#6B7280;font-size:.9rem;line-height:1.8;margin-bottom:1rem;">
+                        We believe that live events — concerts, workshops, conferences, cultural festivals — have the power to create memories that last a lifetime. EventHub exists to make discovering, booking, and attending these experiences effortless.
+                    </p>
+                    <p style="color:#6B7280;font-size:.9rem;line-height:1.8;">
+                        For organisers, we provide the tools to manage events, sell tickets, track sales, and communicate with attendees — all in one place, with zero technical complexity.
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <div style="background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:20px;padding:2.5rem;color:#fff;text-align:center;">
+                        <i class="fas fa-calendar-star" style="font-size:3rem;opacity:.8;margin-bottom:1rem;display:block;"></i>
+                        <div style="font-size:1.1rem;font-weight:800;margin-bottom:.5rem;">Founded in 2024</div>
+                        <div style="font-size:.88rem;opacity:.85;line-height:1.7;">Started by a team of event enthusiasts who wanted to make ticketing simple, transparent, and attendee-first.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Values -->
+    <div style="margin-bottom:2rem;">
+        <h2 style="font-size:1.3rem;font-weight:900;color:#111827;margin-bottom:1.25rem;">Our Values</h2>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="value-box">
+                    <div class="value-icon"><i class="fas fa-lock"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.92rem;margin-bottom:.25rem;">Trust &amp; Security</div>
+                        <div style="color:#6B7280;font-size:.85rem;line-height:1.6;">All payments are secured via Razorpay. We never store card data. Your personal information is protected.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="value-box">
+                    <div class="value-icon"><i class="fas fa-bolt"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.92rem;margin-bottom:.25rem;">Speed &amp; Simplicity</div>
+                        <div style="color:#6B7280;font-size:.85rem;line-height:1.6;">Book a ticket in under 2 minutes. Instant QR code delivery. No app download required.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="value-box">
+                    <div class="value-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.92rem;margin-bottom:.25rem;">Community First</div>
+                        <div style="color:#6B7280;font-size:.85rem;line-height:1.6;">We support local organisers and indie event creators by providing them with powerful tools at fair pricing.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="value-box">
+                    <div class="value-icon"><i class="fas fa-headset"></i></div>
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.92rem;margin-bottom:.25rem;">Real Human Support</div>
+                        <div style="color:#6B7280;font-size:.85rem;line-height:1.6;">Every support request is handled by a real person. We respond within 24 hours, always.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- What we offer -->
+    <div class="card" style="padding:0;margin-bottom:2rem;">
+        <div class="card-body" style="padding:2rem;">
+            <h2 style="font-size:1.2rem;font-weight:900;color:#111827;margin-bottom:1.25rem;">What EventHub Offers</h2>
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Digital QR Tickets
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Razorpay Payments
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Email &amp; WhatsApp Alerts
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> QR Code Scanner App
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Multiple Ticket Types
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Coupon &amp; Discounts
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Sales Dashboard
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Attendee Management
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.88rem;color:#374151;">
+                        <i class="fas fa-check-circle" style="color:#7C3AED;"></i> Organiser Payouts
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center;padding:3rem 2rem;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:24px;color:#fff;">
+        <h2 style="font-size:1.5rem;font-weight:900;margin-bottom:.75rem;">Ready to host or attend an event?</h2>
+        <p style="opacity:.85;font-size:.9rem;margin-bottom:1.5rem;">Join thousands of event-goers and organisers on EventHub.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <a href="{% url 'all_events' %}" style="background:#fff;color:#7C3AED;padding:.75rem 1.75rem;border-radius:50px;font-weight:700;text-decoration:none;font-size:.9rem;">Browse Events</a>
+            <a href="{% url 'contact' %}" style="background:rgba(255,255,255,.15);color:#fff;padding:.75rem 1.75rem;border-radius:50px;font-weight:700;text-decoration:none;font-size:.9rem;border:1.5px solid rgba(255,255,255,.3);">Become an Organiser</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

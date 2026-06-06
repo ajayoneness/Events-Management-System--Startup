@@ -1,0 +1,226 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Complete Payment — {{ booking.event.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-8">
+
+        <!-- Order summary card -->
+        <div class="card mb-3" style="padding:0;">
+            <div class="card-body" style="padding:1.5rem;">
+                <h5 style="font-weight:800;color:#111827;margin-bottom:1rem;">
+                    <i class="fas fa-receipt me-2" style="color:#7C3AED;"></i>Order Summary
+                </h5>
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+                    <img src="{{ booking.event.image }}" alt=""
+                         style="width:60px;height:60px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+                    <div>
+                        <div style="font-weight:700;color:#111827;font-size:.95rem;">{{ booking.event.title }}</div>
+                        <div style="color:#6B7280;font-size:.8rem;margin-top:.2rem;">
+                            <i class="fas fa-calendar-alt me-1" style="color:#7C3AED;"></i>{{ booking.event.date|date:"M d, Y · h:i A" }}
+                        </div>
+                        <div style="color:#6B7280;font-size:.8rem;">
+                            <i class="fas fa-map-marker-alt me-1" style="color:#7C3AED;"></i>{{ booking.event.venue }}
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border-color:#F3F4F6;margin:.75rem 0;">
+
+                <div style="font-size:.85rem;">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span style="color:#6B7280;">Ticket{{ booking.number_of_tickets|pluralize }} ({{ booking.number_of_tickets }}x)</span>
+                        <span style="color:#374151;font-weight:600;">
+                            {% if booking.ticket_type %}{{ booking.ticket_type.name }}{% else %}General{% endif %}
+                        </span>
+                    </div>
+                    {% if booking.discount_amount and booking.discount_amount > 0 %}
+                    <div class="d-flex justify-content-between mb-1">
+                        <span style="color:#6B7280;">Discount</span>
+                        <span style="color:#059669;font-weight:600;">-₹{{ booking.discount_amount }}</span>
+                    </div>
+                    {% endif %}
+                    <hr style="border-color:#F3F4F6;margin:.5rem 0;">
+                    <div class="d-flex justify-content-between">
+                        <span style="font-weight:700;color:#111827;">Total</span>
+                        <span style="font-weight:900;color:#7C3AED;font-size:1.2rem;">₹{{ booking.total_amount }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pay button card -->
+        <div class="card" style="padding:0;">
+            <div class="card-body" style="padding:1.5rem;text-align:center;">
+
+                <div style="width:64px;height:64px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 4px 15px rgba(124,58,237,.3);">
+                    <i class="fas fa-lock" style="color:#fff;font-size:1.4rem;"></i>
+                </div>
+
+                <h4 style="font-weight:800;color:#111827;margin-bottom:.25rem;">Secure Checkout</h4>
+                <p style="color:#6B7280;font-size:.85rem;margin-bottom:1.5rem;">
+                    Booked for <strong>{{ booking.name }}</strong>
+                </p>
+
+                <!-- Error banner (hidden by default, shown on failure) -->
+                <div id="payment-error-banner" style="display:none;background:#FEF2F2;border:1.5px solid #FECACA;border-radius:12px;padding:1rem;margin-bottom:1rem;text-align:left;">
+                    <div style="font-weight:700;color:#991B1B;font-size:.9rem;margin-bottom:.25rem;">
+                        <i class="fas fa-exclamation-circle me-1"></i>
+                        <span id="error-title">Payment Failed</span>
+                    </div>
+                    <div id="error-desc" style="color:#B91C1C;font-size:.82rem;"></div>
+                    <div style="margin-top:.75rem;padding:.75rem;background:#fff;border-radius:8px;font-size:.8rem;color:#374151;">
+                        <strong>Try these instead:</strong><br>
+                        <span style="color:#6B7280;">
+                            • <strong>Test Card:</strong> 4111 1111 1111 1111 · CVV: 123 · Expiry: 12/28 · OTP: 1234<br>
+                            • <strong>Test UPI:</strong> success@razorpay<br>
+                            • Net Banking works but requires completing the bank simulation page
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Test mode hint -->
+                {% if is_test_mode %}
+                <div style="background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:12px;padding:.9rem;margin-bottom:1rem;text-align:left;font-size:.8rem;">
+                    <div style="font-weight:700;color:#92400E;margin-bottom:.4rem;">
+                        <i class="fas fa-flask me-1"></i> Test Mode — Use these credentials
+                    </div>
+                    <div style="color:#78350F;line-height:1.7;">
+                        <strong>Card:</strong> 4111 1111 1111 1111 · CVV: 123 · Expiry: 12/28 · OTP: <strong>1234</strong><br>
+                        <strong>UPI:</strong> success@razorpay<br>
+                        <strong>Net Banking:</strong> Select any bank → click "Success" on the next page
+                    </div>
+                </div>
+                {% endif %}
+
+                <button id="rzp-button" class="btn btn-primary w-100"
+                        style="padding:1rem;font-size:1rem;font-weight:800;border-radius:14px;letter-spacing:.2px;">
+                    <i class="fas fa-bolt me-2"></i>Pay ₹{{ booking.total_amount }} Now
+                </button>
+
+                <div style="margin-top:.75rem;display:flex;align-items:center;justify-content:center;gap:.5rem;color:#9CA3AF;font-size:.75rem;">
+                    <i class="fas fa-shield-alt" style="color:#059669;"></i>
+                    256-bit SSL secured · Powered by Razorpay
+                </div>
+
+                <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid #F3F4F6;">
+                    <a href="{% url 'event_list' %}"
+                       style="color:#9CA3AF;font-size:.8rem;text-decoration:none;">
+                        <i class="fas fa-chevron-left me-1"></i>Cancel and go back
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Hidden form to submit payment result to server -->
+<form id="payment-form" action="{% url 'payment_handler' %}" method="POST" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+    <input type="hidden" name="razorpay_order_id"   id="razorpay_order_id">
+    <input type="hidden" name="razorpay_signature"  id="razorpay_signature">
+</form>
+
+<!-- Processing overlay -->
+<div id="payment-processing"
+     style="display:none;position:fixed;inset:0;background:rgba(17,24,39,.85);z-index:9999;flex-direction:column;align-items:center;justify-content:center;">
+    <div style="text-align:center;color:#fff;">
+        <div class="spinner-border mb-3" style="width:3rem;height:3rem;color:#A78BFA;" role="status">
+            <span class="visually-hidden">Processing…</span>
+        </div>
+        <h5 style="font-weight:700;margin-bottom:.25rem;">Processing Payment…</h5>
+        <p style="color:rgba(255,255,255,.6);font-size:.85rem;">Please wait — do not close or refresh</p>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        key:          "{{ razorpay_key_id }}",
+        amount:       "{{ amount }}",
+        currency:     "{{ currency }}",
+        name:         "EventHub",
+        description:  "{{ booking.event.title }}",
+        image:        "https://via.placeholder.com/80x80/7C3AED/ffffff?text=EH",
+        order_id:     "{{ razorpay_order_id }}",
+
+        // ── callback_url is REQUIRED for Net Banking ──────────────────────
+        // Net Banking uses a full-page redirect flow; without this the bank
+        // page opens as about:blank. Razorpay auto-selects redirect vs modal
+        // per payment method: Card/UPI → handler below; Net Banking → callback_url.
+        callback_url: "{{ callback_url }}",
+
+        // ── handler fires for Card / UPI / Wallet (modal flow) ────────────
+        handler: function (response) {
+            document.getElementById('payment-processing').style.display = 'flex';
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id || '';
+            document.getElementById('razorpay_order_id').value   = response.razorpay_order_id   || '';
+            document.getElementById('razorpay_signature').value  = response.razorpay_signature  || '';
+            document.getElementById('payment-form').submit();
+        },
+
+        prefill: {
+            name:    "{{ booking.name }}",
+            email:   "{{ booking.email }}",
+            contact: "{{ booking.phone }}"
+        },
+
+        notes: {
+            booking_id: "{{ booking.id }}",
+            event:      "{{ booking.event.title }}"
+        },
+
+        theme: { color: "#7C3AED" },
+
+        modal: {
+            escape:       true,
+            backdropclose: false,
+            ondismiss: function () {
+                // User closed modal — nothing to do, let them retry
+            }
+        }
+    };
+
+    var rzp = new Razorpay(options);
+
+    // ── Payment failure handler (fires for Card/UPI modal failures) ───────
+    rzp.on('payment.failed', function (response) {
+        var err = response.error || {};
+
+        var title  = err.description || err.reason || 'Payment could not be processed';
+        var detail = [
+            err.code   ? 'Code: '   + err.code   : '',
+            err.source ? 'Source: ' + err.source : '',
+            err.step   ? 'Step: '   + err.step   : '',
+        ].filter(Boolean).join(' · ');
+
+        document.getElementById('error-title').textContent = title;
+        document.getElementById('error-desc').textContent  = detail || 'Please try a different payment method.';
+        document.getElementById('payment-error-banner').style.display = 'block';
+        document.getElementById('payment-error-banner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // Open on button click
+    document.getElementById('rzp-button').onclick = function (e) {
+        e.preventDefault();
+        document.getElementById('payment-error-banner').style.display = 'none';
+        rzp.open();
+    };
+
+    // Auto-open on page load
+    window.addEventListener('load', function () {
+        rzp.open();
+    });
+
+    // Ensure overlay is hidden if user navigates back (bfcache restore)
+    window.addEventListener('pagehide', function() {
+        document.getElementById('payment-processing').style.display = 'none';
+    });
+</script>
+{% endblock %}

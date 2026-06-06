@@ -1,0 +1,144 @@
+{% extends 'events/base.html' %}
+{% block title %}Payout Wallet — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.status-badge { padding:.3rem .8rem;border-radius:50px;font-size:.72rem;font-weight:700; }
+.table th { font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#9CA3AF;font-weight:600; }
+.table td { font-size:.88rem;vertical-align:middle; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 style="font-size:1.75rem;font-weight:900;color:#111827;margin:0;">
+            <i class="fas fa-wallet me-2" style="color:#7C3AED;"></i>Payout Wallet
+        </h1>
+        <p style="color:#6B7280;font-size:.88rem;margin:.25rem 0 0;">
+            {{ organizer.organization_name|default:request.user.get_full_name }}
+        </p>
+    </div>
+    <a href="{% url 'event_list' %}" class="btn btn-outline-primary" style="font-size:.85rem;padding:.5rem 1.1rem;">
+        <i class="fas fa-home me-1"></i> Home
+    </a>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Balance card -->
+    <div class="col-md-4">
+        <div style="background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:20px;padding:2rem;color:#fff;position:relative;overflow:hidden;">
+            <div style="position:absolute;width:150px;height:150px;background:rgba(255,255,255,.07);border-radius:50%;top:-40px;right:-40px;"></div>
+            <div style="font-size:.78rem;text-transform:uppercase;letter-spacing:1px;opacity:.7;margin-bottom:.5rem;">Available Balance</div>
+            <div style="font-size:2.5rem;font-weight:900;margin-bottom:.25rem;">₹{{ organizer.wallet_balance|floatformat:0 }}</div>
+            <div style="font-size:.8rem;opacity:.7;">Total paid out: ₹{{ total_paid|floatformat:0 }}</div>
+
+            {% if organizer.status != 'verified' %}
+            <div style="margin-top:1.25rem;background:rgba(255,255,255,.15);border-radius:10px;padding:.6rem .85rem;font-size:.8rem;">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                KYC {{ organizer.get_status_display }} — complete verification to withdraw
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Request payout form -->
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-body" style="padding:1.75rem;">
+                <h5 style="font-weight:800;color:#111827;margin-bottom:1rem;">
+                    <i class="fas fa-paper-plane me-2" style="color:#7C3AED;"></i>Request Payout
+                </h5>
+
+                {% if organizer.status != 'verified' %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-lock me-1"></i>
+                    Your organizer account must be <strong>Verified</strong> before requesting a payout.
+                    Complete your KYC via Admin or contact support.
+                </div>
+                {% elif not organizer.bank_account_number %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-bank me-1"></i>
+                    Please add your bank account details before requesting a payout.
+                </div>
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label style="font-size:.85rem;font-weight:600;color:#374151;display:block;margin-bottom:.4rem;">Amount (₹)</label>
+                            <input type="number" name="amount" min="100" step="1"
+                                   max="{{ organizer.wallet_balance }}"
+                                   placeholder="Enter amount"
+                                   required
+                                   style="width:100%;border:1.5px solid #E5E7EB;border-radius:10px;padding:.65rem .9rem;font-size:.9rem;outline:none;">
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="font-size:.85rem;font-weight:600;color:#374151;display:block;margin-bottom:.4rem;">Bank Account</label>
+                            <div style="padding:.65rem .9rem;background:#F9FAFB;border-radius:10px;border:1.5px solid #E5E7EB;font-size:.88rem;color:#374151;">
+                                {{ organizer.bank_name }} · ****{{ organizer.bank_account_number|slice:"-4:" }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label style="font-size:.85rem;font-weight:600;color:#374151;display:block;margin-bottom:.4rem;">Note (optional)</label>
+                            <input type="text" name="note" placeholder="e.g. For event XYZ proceeds"
+                                   style="width:100%;border:1.5px solid #E5E7EB;border-radius:10px;padding:.65rem .9rem;font-size:.9rem;outline:none;">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary"
+                                    style="padding:.75rem 2rem;font-size:.9rem;font-weight:700;">
+                                <i class="fas fa-paper-plane me-1"></i> Submit Payout Request
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payout history -->
+<div class="card" style="padding:0;">
+    <div style="padding:1.5rem 1.75rem;border-bottom:1px solid #F3F4F6;">
+        <h5 style="font-weight:800;color:#111827;margin:0;">Payout History</h5>
+    </div>
+    <div style="overflow-x:auto;">
+        <table class="table table-hover mb-0" style="min-width:520px;">
+            <thead style="background:#F9FAFB;">
+                <tr>
+                    <th style="padding:1rem;">Date</th>
+                    <th>Amount</th>
+                    <th>Note</th>
+                    <th>Status</th>
+                    <th>Processed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pr in payout_requests %}
+                <tr>
+                    <td style="padding:1rem;color:#374151;">{{ pr.created_at|date:"d M Y" }}</td>
+                    <td style="font-weight:700;color:#7C3AED;">₹{{ pr.amount|floatformat:0 }}</td>
+                    <td style="color:#6B7280;font-size:.85rem;">{{ pr.note|default:"—" }}</td>
+                    <td>
+                        <span class="status-badge" style="background:{% if pr.status == 'paid' %}#D1FAE5;color:#065F46{% elif pr.status == 'approved' %}#DBEAFE;color:#1E40AF{% elif pr.status == 'rejected' %}#FEE2E2;color:#991B1B{% else %}#FEF3C7;color:#92400E{% endif %};">
+                            {{ pr.get_status_display }}
+                        </span>
+                    </td>
+                    <td style="color:#9CA3AF;font-size:.82rem;">{{ pr.processed_at|date:"d M Y"|default:"Pending" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align:center;padding:3rem;color:#9CA3AF;">
+                        <i class="fas fa-inbox" style="font-size:2rem;margin-bottom:.5rem;display:block;"></i>
+                        No payout requests yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

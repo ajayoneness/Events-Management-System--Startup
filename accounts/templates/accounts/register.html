@@ -1,0 +1,72 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Create Account — EventHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center" style="margin-top:2rem;">
+    <div class="col-md-7 col-lg-5">
+
+        <div style="text-align:center;margin-bottom:2rem;">
+            <div style="width:60px;height:60px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 4px 15px rgba(124,58,237,.3);">
+                <i class="fas fa-user-plus" style="color:#fff;font-size:1.4rem;"></i>
+            </div>
+            <h2 style="font-size:1.75rem;font-weight:900;letter-spacing:-.5px;color:#111827;">Create your account</h2>
+            <p style="color:#6B7280;font-size:.9rem;margin-top:.25rem;">Sign up with your email — no username needed</p>
+        </div>
+
+        <div class="card" style="padding:0;">
+            <div class="card-body" style="padding:2rem;">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">First Name</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}<div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.first_name.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Last Name <span style="color:#9CA3AF;font-weight:400;">(optional)</span></label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}<div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.last_name.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Email Address</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}<div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.email.errors.0 }}</div>{% endif %}
+                        <div style="font-size:.75rem;color:#9CA3AF;margin-top:.3rem;">Your email is your login — no username required</div>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Password</label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}<div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.password1.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Confirm Password</label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}<div style="color:#DC2626;font-size:.8rem;margin-top:.25rem;">{{ form.password2.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" style="padding:.8rem;font-size:.95rem;font-weight:700;border-radius:12px;">
+                        Create Account →
+                    </button>
+                </form>
+
+                <div style="text-align:center;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #F3F4F6;">
+                    <p style="color:#6B7280;font-size:.875rem;margin:0;">
+                        Already have an account?
+                        <a href="{% url 'accounts:login' %}" style="color:#7C3AED;font-weight:600;text-decoration:none;">Sign in →</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Note for organizers / admins -->
+        <div style="margin-top:1rem;padding:1rem 1.25rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;text-align:center;">
+            <i class="fas fa-info-circle" style="color:#7C3AED;margin-right:.4rem;"></i>
+            <span style="font-size:.8rem;color:#6B7280;">Event organisers & admin staff: use the <a href="{% url 'accounts:login' %}" style="color:#7C3AED;font-weight:600;">login page</a> with your assigned username.</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends 'events/base.html' %}
+
+{% block title %}QR Scanner — EventHub{% endblock %}
+
+{% block extra_css %}
+<style>
+    #scanner-container {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #000;
+        aspect-ratio: 1;
+    }
+    #video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    #scanner-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+    }
+    .scan-frame {
+        width: 65%;
+        aspect-ratio: 1;
+        border: 3px solid rgba(255,255,255,.8);
+        border-radius: 16px;
+        box-shadow: 0 0 0 9999px rgba(0,0,0,.45);
+        position: relative;
+    }
+    .scan-frame::before, .scan-frame::after,
+    .scan-frame > span::before, .scan-frame > span::after {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        border-color: #7C3AED;
+        border-style: solid;
+    }
+    .scan-frame::before  { top: -3px; left: -3px;  border-width: 4px 0 0 4px;  border-radius: 4px 0 0 0; }
+    .scan-frame::after   { top: -3px; right: -3px; border-width: 4px 4px 0 0;  border-radius: 0 4px 0 0; }
+    .scan-frame > span::before  { bottom: -3px; left: -3px;  border-width: 0 0 4px 4px; border-radius: 0 0 0 4px; }
+    .scan-frame > span::after   { bottom: -3px; right: -3px; border-width: 0 4px 4px 0; border-radius: 0 0 4px 0; }
+    .scan-line {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #7C3AED, transparent);
+        animation: scan 2s linear infinite;
+    }
+    @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+
+    #result-card {
+        display: none;
+        margin: 1.5rem auto 0;
+        max-width: 400px;
+        border-radius: 20px;
+        padding: 1.5rem;
+        text-align: center;
+        animation: popIn .3s ease;
+    }
+    @keyframes popIn { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #result-card.valid   { background: #D1FAE5; border: 2px solid #6EE7B7; }
+    #result-card.invalid { background: #FEE2E2; border: 2px solid #FCA5A5; }
+</style>
+{% endblock %}
+
+{% block fullcontent %}
+<div class="page-hero">
+    <div class="container">
+        <h1><i class="fas fa-qrcode me-2" style="color:#7C3AED;"></i>Ticket <span>Scanner</span></h1>
+        <p>Scan QR codes on attendee tickets to verify entry</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:500px;margin:0 auto;">
+
+    <!-- Camera Scanner -->
+    <div id="scanner-container">
+        <video id="video" playsinline autoplay muted></video>
+        <div id="scanner-overlay">
+            <div class="scan-frame">
+                <span></span>
+                <div class="scan-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1rem;">
+        <button id="btn-start" onclick="startScanner()" class="btn btn-primary" style="border-radius:50px;">
+            <i class="fas fa-camera me-1"></i> Start Camera
+        </button>
+        <button id="btn-stop" onclick="stopScanner()" class="btn btn-outline-primary" style="border-radius:50px;display:none;">
+            <i class="fas fa-stop me-1"></i> Stop
+        </button>
+        <button onclick="toggleTorch()" id="btn-torch" class="btn btn-outline-primary" style="border-radius:50px;display:none;">
+            <i class="fas fa-flashlight me-1"></i> Torch
+        </button>
+    </div>
+
+    <!-- Manual entry -->
+    <div style="margin-top:1.5rem;padding:1.25rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:16px;">
+        <p style="font-size:.85rem;font-weight:600;color:#374151;margin-bottom:.75rem;">Or enter Booking ID manually:</p>
+        <div style="display:flex;gap:.5rem;">
+            <input id="manual-id" type="text" class="form-control" placeholder="Booking UUID or first 8 chars" style="font-family:monospace;">
+            <button onclick="verifyManual()" class="btn btn-primary" style="white-space:nowrap;border-radius:10px;">Verify</button>
+        </div>
+    </div>
+
+    <!-- Result card -->
+    <div id="result-card">
+        <div id="result-icon" style="font-size:3rem;margin-bottom:.75rem;"></div>
+        <div id="result-message" style="font-size:1.1rem;font-weight:800;margin-bottom:.75rem;"></div>
+        <div id="result-details" style="font-size:.88rem;line-height:1.7;"></div>
+        <button onclick="resetResult()" style="margin-top:1rem;background:transparent;border:2px solid currentColor;border-radius:50px;padding:.4rem 1.2rem;font-weight:600;cursor:pointer;font-size:.85rem;">
+            Scan Next
+        </button>
+    </div>
+
+    <!-- Events assigned -->
+    {% if events %}
+    <div style="margin-top:2rem;">
+        <h6 style="font-size:.85rem;font-weight:700;color:#374151;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.5px;">Assigned Events</h6>
+        {% for event in events %}
+        <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;padding:.85rem 1rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+                <div style="font-size:.88rem;font-weight:700;color:#111827;">{{ event.title }}</div>
+                <div style="font-size:.78rem;color:#9CA3AF;">{{ event.date|date:"d M Y, h:i A" }} · {{ event.venue }}</div>
+            </div>
+            <span style="background:#EDE9FE;color:#7C3AED;font-size:.75rem;font-weight:700;padding:.2rem .7rem;border-radius:50px;">Active</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- jsQR library -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script>
+let videoEl = document.getElementById('video');
+let stream = null, torchTrack = null;
+let scanning = false, lastScan = '';
+const VERIFY_URL = "{% url 'verify_ticket' %}";
+const CSRF_TOKEN = "{{ csrf_token }}";
+
+async function startScanner() {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+        });
+        videoEl.srcObject = stream;
+        document.getElementById('btn-start').style.display = 'none';
+        document.getElementById('btn-stop').style.display = '';
+        document.getElementById('btn-torch').style.display = '';
+        torchTrack = stream.getVideoTracks()[0];
+        scanning = true;
+        requestAnimationFrame(tick);
+    } catch (err) {
+        alert('Camera access denied. Please allow camera permissions.');
+    }
+}
+
+function stopScanner() {
+    scanning = false;
+    if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+    document.getElementById('btn-start').style.display = '';
+    document.getElementById('btn-stop').style.display = 'none';
+    document.getElementById('btn-torch').style.display = 'none';
+}
+
+async function toggleTorch() {
+    if (!torchTrack) return;
+    try {
+        const current = torchTrack.getSettings().torch;
+        await torchTrack.applyConstraints({ advanced: [{ torch: !current }] });
+    } catch (e) { /* torch not supported */ }
+}
+
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+function tick() {
+    if (!scanning) return;
+    if (videoEl.readyState === videoEl.HAVE_ENOUGH_DATA) {
+        canvas.height = videoEl.videoHeight;
+        canvas.width  = videoEl.videoWidth;
+        ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: 'dontInvert' });
+        if (code && code.data && code.data !== lastScan) {
+            lastScan = code.data;
+            verifyBooking(code.data);
+            setTimeout(() => { lastScan = ''; }, 4000);
+        }
+    }
+    requestAnimationFrame(tick);
+}
+
+function verifyManual() {
+    const val = document.getElementById('manual-id').value.trim();
+    if (!val) return;
+    verifyBooking(val);
+}
+
+async function verifyBooking(bookingId) {
+    // Try to extract UUID from QR content (may be a URL)
+    const uuidMatch = bookingId.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+    const id = uuidMatch ? uuidMatch[0] : bookingId;
+
+    try {
+        const resp = await fetch(VERIFY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': CSRF_TOKEN },
+            body: `booking_id=${encodeURIComponent(id)}&csrfmiddlewaretoken=${CSRF_TOKEN}`
+        });
+        const data = await resp.json();
+        showResult(data);
+    } catch (e) {
+        showResult({ valid: false, message: 'Network error. Check connection.' });
+    }
+}
+
+function showResult(data) {
+    const card = document.getElementById('result-card');
+    const icon = document.getElementById('result-icon');
+    const msg  = document.getElementById('result-message');
+    const det  = document.getElementById('result-details');
+    card.style.display = 'block';
+    if (data.valid) {
+        card.className = 'valid';
+        card.style.background = '#D1FAE5';
+        card.style.border = '2px solid #6EE7B7';
+        icon.textContent = '✅';
+        msg.textContent = data.message || 'VALID TICKET';
+        msg.style.color = '#065F46';
+        det.innerHTML = `
+            <strong>${data.name}</strong><br>
+            Event: ${data.event}<br>
+            Ticket: ${data.ticket_type} × ${data.tickets}<br>
+            <span style="font-family:monospace;font-size:.8rem;color:#6B7280;">ID: ${data.booking_id}</span>
+        `;
+        // Vibrate on valid
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    } else {
+        card.className = 'invalid';
+        card.style.background = '#FEE2E2';
+        card.style.border = '2px solid #FCA5A5';
+        icon.textContent = '❌';
+        msg.textContent = data.message || 'INVALID TICKET';
+        msg.style.color = '#991B1B';
+        det.innerHTML = data.name ? `<strong>${data.name}</strong>` : '';
+        if (navigator.vibrate) navigator.vibrate(400);
+    }
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetResult() {
+    document.getElementById('result-card').style.display = 'none';
+    document.getElementById('manual-id').value = '';
+}
+</script>
+{% endblock %}

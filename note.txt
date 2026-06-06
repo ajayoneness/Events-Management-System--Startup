@@ -1,0 +1,53 @@
+Everything is perfect. Here's the complete summary:
+                                                                                
+  ---                                                                           
+  Dummy Data Seeded Successfully
+                                                                                
+  Run anytime to reset:                                                      
+    
+  python manage.py seed_data
+
+  ---
+  What's loaded:
+
+  10 Events across all categories:
+
+  ┌─────┬────────────────────────────┬──────────┬────────┬───────────┐
+  │  #  │           Event            │ Category │ Price  │   Seats   │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 1   │ Arijit Singh Live Concert  │ Music    │ ₹1,500 │ 3200 left │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 2   │ Google I/O Extended Mumbai │ Tech     │ ₹299   │ 120 left  │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 3   │ IPL After Party            │ Sports   │ ₹2,500 │ 450 left  │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 4   │ Mumbai Food Festival       │ Food     │ FREE   │ 7500 left │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 5   │ Contemporary Art Showcase  │ Art      │ ₹350   │ 210 left  │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 6   │ Startup India Summit 2025  │ Business │ ₹4,999 │ 1100 left │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 7   │ Yoga & Wellness Retreat    │ Other    │ ₹1,200 │ 35 left   │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 8   │ Coldplay Night 2           │ Music    │ ₹3,500 │ 8000 left │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 9   │ Python & Django Workshop   │ Tech     │ FREE   │ 15 left   │
+  ├─────┼────────────────────────────┼──────────┼────────┼───────────┤
+  │ 10  │ New Year's Eve Gala 2026   │ Other    │ ₹8,500 │ 180 left  │
+  └─────┴────────────────────────────┴──────────┴────────┴───────────┘
+
+  🔐 Admin: admin / admin123 → http://127.0.0.1:8000/admin/
+
+  👤 Test Users (password: test1234): rahul_sharma, priya_patel, arjun_mehta
+
+  🎫 Coupons: WELCOME20 (20% off) · FLAT500 (₹500 off) · TECH50 (50% off tech) ·
+   STUDENT15 (15% off)
+
+  📊 Bookings: 7 confirmed (with QR codes), 1 pending, 1 cancelled, 1 failed, 1
+  refunded
+
+  🔑 To set WhatsApp & Gmail API keys: Admin → Events → Site Settings
+
+✻ Cooked for 2m 38s                   
+
+───────────────────────────────────────────────────────────

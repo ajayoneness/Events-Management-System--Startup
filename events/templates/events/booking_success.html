@@ -1,0 +1,125 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Booking Confirmed — EventHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+
+        <!-- Success header -->
+        <div style="text-align:center;padding:2.5rem 1rem 2rem;">
+            <div style="width:80px;height:80px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;box-shadow:0 8px 25px rgba(124,58,237,.3);">
+                <i class="fas fa-check" style="color:#fff;font-size:2rem;"></i>
+            </div>
+            <h1 style="font-size:2.25rem;font-weight:900;letter-spacing:-1px;color:#111827;margin-bottom:.5rem;">
+                Booking Confirmed!
+            </h1>
+            <p style="color:#6B7280;font-size:1rem;">
+                Your tickets have been successfully booked.
+                {% if booking.email_sent %}A confirmation email has been sent.{% endif %}
+                {% if booking.whatsapp_sent %}A WhatsApp notification has been sent.{% endif %}
+            </p>
+        </div>
+
+        <!-- Booking + Event details -->
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+                <div style="background:#F5F3FF;border-radius:16px;padding:1.5rem;height:100%;">
+                    <h6 style="font-weight:700;color:#4C1D95;margin-bottom:1rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;">
+                        <i class="fas fa-receipt me-2"></i>Booking Details
+                    </h6>
+                    <div style="font-size:.85rem;line-height:2;">
+                        <div class="d-flex justify-content-between">
+                            <span style="color:#6B7280;">Booking ID</span>
+                            <strong style="color:#111827;font-size:.75rem;letter-spacing:1px;">{{ booking.id|stringformat:"s"|slice:":8"|upper }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span style="color:#6B7280;">Name</span>
+                            <strong style="color:#111827;">{{ booking.name }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span style="color:#6B7280;">Email</span>
+                            <strong style="color:#111827;font-size:.8rem;">{{ booking.email }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span style="color:#6B7280;">Phone</span>
+                            <strong style="color:#111827;">{{ booking.phone }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span style="color:#6B7280;">Tickets</span>
+                            <strong style="color:#111827;">{{ booking.number_of_tickets }}</strong>
+                        </div>
+                        <hr style="border-color:#DDD6FE;margin:.5rem 0;">
+                        <div class="d-flex justify-content-between">
+                            <span style="color:#6B7280;">Total Paid</span>
+                            <strong style="color:#7C3AED;font-size:1.1rem;font-weight:900;">₹{{ booking.total_amount }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div style="background:#F9FAFB;border-radius:16px;padding:1.5rem;height:100%;">
+                    <h6 style="font-weight:700;color:#374151;margin-bottom:1rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;">
+                        <i class="fas fa-calendar-star me-2" style="color:#7C3AED;"></i>Event Details
+                    </h6>
+                    <div style="font-size:.85rem;line-height:2.2;">
+                        <div><span style="color:#6B7280;">Event</span><br><strong style="color:#111827;">{{ booking.event.title }}</strong></div>
+                        <div><span style="color:#6B7280;">Date & Time</span><br><strong style="color:#111827;">{{ booking.event.date|date:"M d, Y" }} at {{ booking.event.date|date:"h:i A" }}</strong></div>
+                        <div><span style="color:#6B7280;">Venue</span><br><strong style="color:#111827;">{{ booking.event.venue }}</strong></div>
+                        <div><span style="color:#6B7280;">Address</span><br><small style="color:#6B7280;">{{ booking.event.address }}</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code -->
+        {% if booking.qr_code %}
+        <div class="qr-code-container mb-4">
+            <div style="font-size:.75rem;font-weight:700;color:#7C3AED;letter-spacing:.5px;text-transform:uppercase;margin-bottom:.75rem;">
+                <i class="fas fa-qrcode me-1"></i> Your E-Ticket QR Code
+            </div>
+            <img src="{{ booking.qr_code.url }}" alt="QR Code"
+                 style="max-width:220px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);">
+            <p style="color:#6B7280;font-size:.8rem;margin-top:.75rem;">
+                Show this QR code at the venue entrance
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Notification status -->
+        <div class="row g-2 mb-4">
+            <div class="col-6">
+                <div style="border-radius:12px;padding:.85rem;text-align:center;font-size:.8rem;font-weight:600;
+                            background:{% if booking.email_sent %}#D1FAE5;color:#065F46{% else %}#F3F4F6;color:#6B7280{% endif %};">
+                    <i class="fas fa-envelope me-1"></i>
+                    {% if booking.email_sent %}Email Sent{% else %}Email Pending{% endif %}
+                </div>
+            </div>
+            <div class="col-6">
+                <div style="border-radius:12px;padding:.85rem;text-align:center;font-size:.8rem;font-weight:600;
+                            background:{% if booking.whatsapp_sent %}#D1FAE5;color:#065F46{% else %}#F3F4F6;color:#6B7280{% endif %};">
+                    <i class="fab fa-whatsapp me-1"></i>
+                    {% if booking.whatsapp_sent %}WhatsApp Sent{% else %}WhatsApp Pending{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="d-flex flex-wrap gap-3 justify-content-center mb-2">
+            <a href="{% url 'download_ticket' booking.id %}" class="btn btn-primary">
+                <i class="fas fa-download me-1"></i> Download Ticket
+            </a>
+            <a href="{% url 'download_calendar' booking.id %}" class="btn btn-outline-primary">
+                <i class="fas fa-calendar-plus me-1"></i> Add to Calendar
+            </a>
+            <a href="{% url 'my_bookings' %}" class="btn btn-outline-primary">
+                <i class="fas fa-ticket-alt me-1"></i> My Bookings
+            </a>
+            <a href="{% url 'event_list' %}" class="btn btn-outline-primary">
+                <i class="fas fa-compass me-1"></i> Browse Events
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
