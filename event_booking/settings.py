@@ -118,8 +118,8 @@ SITE_URL = 'http://127.0.0.1:8000'
 
 # Authentication settings
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'event_list'
+LOGOUT_REDIRECT_URL = 'event_list'
 
 # Add at the end of settings.py
 

@@ -32,7 +32,7 @@ class SiteSettings(models.Model):
         default=False, verbose_name='Enable Email Notifications'
     )
     gmail_from_name = models.CharField(
-        max_length=100, default='EventHub', verbose_name='Sender Name'
+        max_length=100, default='Passly Hai', verbose_name='Sender Name'
     )
     gmail_from_email = models.EmailField(
         blank=True, null=True, verbose_name='From Email Address',
@@ -65,7 +65,7 @@ class SiteSettings(models.Model):
     )
 
     # ── Site Information ───────────────────────────────────────────────────
-    site_name = models.CharField(max_length=100, default='EventHub', verbose_name='Site Name')
+    site_name = models.CharField(max_length=100, default='Passly Hai', verbose_name='Site Name')
     site_url = models.URLField(default='http://127.0.0.1:8000', verbose_name='Site URL')
     support_email = models.EmailField(blank=True, null=True, verbose_name='Support Email')
     support_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='Support Phone')
@@ -437,6 +437,9 @@ class Booking(models.Model):
 
     # Manual booking (imported via CSV)
     is_manual = models.BooleanField(default=False, verbose_name='Manual / Imported Booking')
+
+    # QR scan tracking
+    scan_count = models.PositiveIntegerField(default=0, help_text='Number of times this ticket has been scanned at entry')
 
     class Meta:
         ordering = ['-booking_date']

@@ -16,7 +16,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Account created! Welcome to EventHub.")
+            messages.success(request, "Account created! Welcome to Passly Hai.")
             return redirect('event_list')
         else:
             messages.error(request, "Registration failed. Please check the form.")

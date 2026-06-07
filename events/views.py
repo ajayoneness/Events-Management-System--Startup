@@ -562,15 +562,21 @@ def verify_ticket(request):
             return JsonResponse({'valid': False, 'error': 'Booking not found', 'color': 'red'})
 
     if booking.status == 'confirmed':
+        # Increment scan count atomically
+        Booking.objects.filter(pk=booking.pk).update(scan_count=booking.scan_count + 1)
+        new_count = booking.scan_count + 1
+        already_scanned = new_count > 1
         return JsonResponse({
             'valid': True,
-            'color': 'green',
+            'already_scanned': already_scanned,
+            'scan_count': new_count,
+            'color': 'orange' if already_scanned else 'green',
             'name': booking.name,
             'event': booking.event.title,
             'ticket_type': booking.ticket_type.name if booking.ticket_type else 'Standard',
             'tickets': booking.number_of_tickets,
             'booking_id': str(booking.id)[:8].upper(),
-            'message': 'VALID TICKET ✓',
+            'message': f'⚠️ ALREADY SCANNED {new_count} TIME{"S" if new_count != 1 else ""}' if already_scanned else 'VALID TICKET ✓',
         })
     else:
         status_msg = {

@@ -9,9 +9,9 @@ from .models import (
     CouponCode, OrganizerProfile, TeamMember, PayoutRequest, EventDataExport,
 )
 
-admin.site.site_header = "EventHub Admin"
-admin.site.site_title = "EventHub Admin Portal"
-admin.site.index_title = "Welcome to EventHub Administration"
+admin.site.site_header = "Passly Hai Admin"
+admin.site.site_title = "Passly Hai Admin Portal"
+admin.site.index_title = "Welcome to Passly Hai Administration"
 
 
 @admin.register(SiteSettings)

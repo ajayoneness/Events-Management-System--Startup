@@ -2392,3 +2392,359 @@ INFO 2026-06-06 09:29:34,033 basehttp "GET /organizers/ HTTP/1.1" 200 32611
 INFO 2026-06-06 09:29:35,302 basehttp "GET /events/ HTTP/1.1" 200 58238
 INFO 2026-06-06 09:29:36,882 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
 INFO 2026-06-06 09:29:36,897 basehttp "GET / HTTP/1.1" 200 80024
+INFO 2026-06-07 14:01:24,400 autoreload Watching for file changes with StatReloader
+INFO 2026-06-07 14:01:35,011 autoreload Watching for file changes with StatReloader
+INFO 2026-06-07 14:01:43,180 basehttp "GET / HTTP/1.1" 200 79735
+WARNING 2026-06-07 14:01:43,862 log Not Found: /favicon.ico
+WARNING 2026-06-07 14:01:43,862 basehttp "GET /favicon.ico HTTP/1.1" 404 11203
+INFO 2026-06-07 14:01:50,219 basehttp "GET /events/ HTTP/1.1" 200 57959
+INFO 2026-06-07 14:01:55,955 basehttp "GET /events/?category=&search=&sort=newest HTTP/1.1" 200 57961
+INFO 2026-06-07 14:01:57,764 basehttp "GET /events/?category=&search=&sort=price_desc HTTP/1.1" 200 57965
+INFO 2026-06-07 14:01:59,469 basehttp "GET /events/?category=&search=&sort=price_asc HTTP/1.1" 200 57964
+INFO 2026-06-07 14:02:01,638 basehttp "GET /events/?category=&search=&sort=date HTTP/1.1" 200 57959
+INFO 2026-06-07 14:02:04,814 basehttp "GET /events/?search=codeaj&category=&sort=date HTTP/1.1" 200 39832
+INFO 2026-06-07 14:02:08,216 basehttp "GET /events/?search=&category=&sort=date HTTP/1.1" 200 57959
+INFO 2026-06-07 14:02:10,837 basehttp "GET /event/07f4aa72-840f-4b5a-9abc-8fcce63fdfed/ HTTP/1.1" 200 64721
+INFO 2026-06-07 14:02:20,130 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:02:21,508 basehttp "GET /accounts/login/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:05:11,776 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:05:17,230 basehttp "GET /search-booking/ HTTP/1.1" 200 31896
+INFO 2026-06-07 14:05:17,972 basehttp "GET /accounts/login/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:05:19,309 basehttp "GET /events/ HTTP/1.1" 200 57959
+INFO 2026-06-07 14:05:21,613 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:05:25,515 basehttp "GET /event/0f6de95f-f62a-4ef9-bb86-81f400373195/ HTTP/1.1" 200 64668
+INFO 2026-06-07 14:05:36,912 basehttp "POST /validate-coupon/ HTTP/1.1" 200 165
+INFO 2026-06-07 14:05:38,491 basehttp "POST /event/0f6de95f-f62a-4ef9-bb86-81f400373195/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:05:38,510 basehttp "GET /payment/20b52b5b-0711-4af7-917b-416dc04773bb/ HTTP/1.1" 200 41180
+INFO 2026-06-07 14:05:59,537 views Payment handler called for order: order_Syg3XUUYPvcU4i
+INFO 2026-06-07 14:06:03,620 notifications Confirmation email sent to ajayoneness123@gmail.com for booking 20b52b5b-0711-4af7-917b-416dc04773bb
+INFO 2026-06-07 14:06:03,624 basehttp "POST /payment-handler/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:06:03,634 basehttp "GET /booking/20b52b5b-0711-4af7-917b-416dc04773bb/success/ HTTP/1.1" 200 36971
+INFO 2026-06-07 14:06:03,685 basehttp "GET /media/qr_codes/booking_20b52b5b-0711-4af7-917b-416dc04773bb.png HTTP/1.1" 200 7206
+INFO 2026-06-07 14:06:23,904 basehttp "GET /accounts/login/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:06:25,860 basehttp "GET /tickets/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:06:25,868 basehttp "GET /accounts/login/?next=/tickets/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:06:27,755 basehttp "GET /tickets/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:06:27,764 basehttp "GET /accounts/login/?next=/tickets/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:06:29,387 basehttp "GET /organizers/ HTTP/1.1" 200 32332
+INFO 2026-06-07 14:06:30,004 basehttp "GET /tickets/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:06:30,009 basehttp "GET /accounts/login/?next=/tickets/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:06:30,522 basehttp "GET /organizers/ HTTP/1.1" 200 32332
+INFO 2026-06-07 14:06:30,980 basehttp "GET /events/ HTTP/1.1" 200 57959
+INFO 2026-06-07 14:06:31,827 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:06:32,904 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:06:33,938 basehttp "GET /tickets/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:06:33,944 basehttp "GET /accounts/login/?next=/tickets/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:06:34,972 basehttp "GET /search-booking/ HTTP/1.1" 200 31896
+INFO 2026-06-07 14:06:35,520 basehttp "GET /accounts/login/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:06:54,700 basehttp "GET /accounts/register/ HTTP/1.1" 200 34742
+INFO 2026-06-07 14:06:56,424 basehttp "GET /accounts/login/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:07:01,550 basehttp "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:07:01,573 basehttp "GET / HTTP/1.1" 200 79599
+INFO 2026-06-07 14:07:05,895 basehttp "GET /organizers/ HTTP/1.1" 200 32611
+INFO 2026-06-07 14:07:06,497 basehttp "GET /tickets/ HTTP/1.1" 200 35758
+INFO 2026-06-07 14:07:07,998 basehttp "GET /organizers/ HTTP/1.1" 200 32611
+INFO 2026-06-07 14:07:10,680 basehttp "GET /organizers/ HTTP/1.1" 200 32611
+INFO 2026-06-07 14:07:11,934 basehttp "GET /organizer/rahul_sharma/ HTTP/1.1" 200 41080
+INFO 2026-06-07 14:07:14,332 basehttp "GET /organizers/ HTTP/1.1" 200 32611
+INFO 2026-06-07 14:07:27,965 basehttp "GET /events/ HTTP/1.1" 200 58238
+INFO 2026-06-07 14:07:29,520 basehttp "GET /accounts/profile/ HTTP/1.1" 200 51248
+INFO 2026-06-07 14:07:33,723 basehttp "GET /events/ HTTP/1.1" 200 58238
+INFO 2026-06-07 14:07:35,518 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:07:35,534 basehttp "GET / HTTP/1.1" 200 80024
+INFO 2026-06-07 14:07:37,847 basehttp "GET /accounts/login/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:07:47,981 basehttp "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:07:48,001 basehttp "GET / HTTP/1.1" 200 79913
+INFO 2026-06-07 14:07:53,583 basehttp "GET /events/ HTTP/1.1" 200 58549
+INFO 2026-06-07 14:07:54,140 basehttp "GET /organizers/ HTTP/1.1" 200 32922
+INFO 2026-06-07 14:07:54,776 basehttp "GET /tickets/ HTTP/1.1" 200 39983
+INFO 2026-06-07 14:07:54,821 basehttp "GET /media/qr_codes/booking_ebb1106c-6a7c-4ee5-b33a-beb2307d89b6.png HTTP/1.1" 200 6575
+INFO 2026-06-07 14:07:55,694 basehttp "GET /search-booking/ HTTP/1.1" 200 32486
+INFO 2026-06-07 14:07:56,873 basehttp "GET /tickets/ HTTP/1.1" 200 39983
+INFO 2026-06-07 14:08:01,795 basehttp "GET /search-booking/ HTTP/1.1" 200 32486
+INFO 2026-06-07 14:08:03,988 basehttp "GET /dashboard/ HTTP/1.1" 200 86298
+INFO 2026-06-07 14:08:31,027 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:08:31,083 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2026-06-07 14:08:31,087 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,089 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,091 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,129 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,131 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,131 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,131 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,132 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,135 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,138 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,143 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,144 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,145 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,147 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:08:31,148 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2026-06-07 14:08:31,158 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,160 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-06-07 14:08:31,168 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:31,169 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-06-07 14:08:31,170 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2026-06-07 14:08:37,851 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:08:37,935 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:08:39,369 basehttp "GET /admin/events/organizerprofile/add/ HTTP/1.1" 200 28934
+INFO 2026-06-07 14:08:39,416 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:39,417 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2026-06-07 14:08:39,419 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-06-07 14:08:39,419 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:39,437 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:08:39,454 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:39,455 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-06-07 14:08:39,461 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-06-07 14:08:39,555 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-06-07 14:08:39,555 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-06-07 14:08:46,984 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:08:50,446 basehttp "GET /team/ HTTP/1.1" 200 50020
+INFO 2026-06-07 14:09:43,160 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:09:43,285 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:09:46,558 basehttp "GET /admin/events/organizerprofile/2/change/ HTTP/1.1" 200 29452
+INFO 2026-06-07 14:09:46,607 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:09:49,292 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:09:54,195 basehttp "GET /team/ HTTP/1.1" 200 50020
+INFO 2026-06-07 14:10:47,657 basehttp "GET /dashboard/ HTTP/1.1" 200 86298
+INFO 2026-06-07 14:11:02,699 basehttp "GET /team/ HTTP/1.1" 200 50020
+INFO 2026-06-07 14:11:31,749 basehttp "GET /team/ HTTP/1.1" 200 50020
+INFO 2026-06-07 14:12:12,379 basehttp "GET / HTTP/1.1" 200 79620
+INFO 2026-06-07 14:12:16,266 basehttp "GET /dashboard/ HTTP/1.1" 200 86298
+INFO 2026-06-07 14:12:18,318 basehttp "GET /accounts/profile/ HTTP/1.1" 200 52541
+INFO 2026-06-07 14:12:29,195 basehttp "GET /dashboard/ HTTP/1.1" 200 86298
+INFO 2026-06-07 14:13:41,956 basehttp "GET /team/ HTTP/1.1" 200 50020
+INFO 2026-06-07 14:14:18,730 basehttp "POST /team/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:14:18,745 basehttp "GET /team/ HTTP/1.1" 200 53909
+INFO 2026-06-07 14:14:33,341 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:14:35,979 basehttp "GET /accounts/login/ HTTP/1.1" 200 37053
+INFO 2026-06-07 14:14:58,306 basehttp "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:14:58,317 basehttp "GET /scanner/ HTTP/1.1" 200 40602
+INFO 2026-06-07 14:15:44,442 basehttp "POST /verify-ticket/ HTTP/1.1" 200 186
+INFO 2026-06-07 14:16:04,200 basehttp "POST /verify-ticket/ HTTP/1.1" 200 186
+INFO 2026-06-07 14:17:00,258 basehttp "GET /scanner/ HTTP/1.1" 200 40299
+INFO 2026-06-07 14:17:28,433 basehttp "GET /scanner/ HTTP/1.1" 200 40299
+INFO 2026-06-07 14:17:31,436 basehttp "GET /tickets/ HTTP/1.1" 200 36059
+INFO 2026-06-07 14:17:35,127 basehttp "GET /scanner/ HTTP/1.1" 200 40299
+INFO 2026-06-07 14:17:37,017 basehttp "GET /accounts/profile/ HTTP/1.1" 200 49954
+INFO 2026-06-07 14:17:38,144 basehttp "GET /scanner/ HTTP/1.1" 200 40299
+INFO 2026-06-07 14:17:39,177 basehttp "GET /search-booking/ HTTP/1.1" 200 32476
+INFO 2026-06-07 14:17:42,936 basehttp "GET /tickets/ HTTP/1.1" 200 36059
+INFO 2026-06-07 14:17:44,163 basehttp "GET /organizers/ HTTP/1.1" 200 32912
+INFO 2026-06-07 14:17:44,884 basehttp "GET /events/ HTTP/1.1" 200 58539
+INFO 2026-06-07 14:17:45,735 basehttp "GET / HTTP/1.1" 200 79610
+INFO 2026-06-07 14:17:50,945 basehttp "GET /scanner/ HTTP/1.1" 200 40299
+INFO 2026-06-07 14:19:17,887 basehttp "GET /scanner/ HTTP/1.1" 200 40299
+INFO 2026-06-07 14:19:19,675 basehttp "GET /search-booking/ HTTP/1.1" 200 32476
+INFO 2026-06-07 14:19:20,361 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:19:20,371 basehttp "GET / HTTP/1.1" 200 80024
+INFO 2026-06-07 14:19:40,624 basehttp "GET /dashboard/ HTTP/1.1" 200 86298
+INFO 2026-06-07 14:19:50,568 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:19:50,579 basehttp "GET / HTTP/1.1" 200 80024
+INFO 2026-06-07 14:20:03,778 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:20:03,790 basehttp "GET /admin/login/?next=/admin/events/organizerprofile/ HTTP/1.1" 200 4222
+INFO 2026-06-07 14:20:03,807 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2026-06-07 14:20:03,808 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2026-06-07 14:20:03,812 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2026-06-07 14:20:03,812 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2026-06-07 14:20:03,813 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2026-06-07 14:20:03,814 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2026-06-07 14:20:03,817 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-06-07 14:20:08,648 basehttp "POST /admin/login/?next=/admin/events/organizerprofile/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:20:08,667 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:20:08,686 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2026-06-07 14:20:08,688 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2026-06-07 14:20:08,689 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2026-06-07 14:20:08,689 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2026-06-07 14:20:08,693 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2026-06-07 14:20:08,695 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:08,695 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2026-06-07 14:20:08,695 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2026-06-07 14:20:08,696 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2026-06-07 14:20:08,698 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-06-07 14:20:08,699 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2026-06-07 14:20:08,700 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-06-07 14:20:08,711 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-06-07 14:20:08,711 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-06-07 14:20:08,711 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2026-06-07 14:20:12,545 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 20875
+INFO 2026-06-07 14:20:12,566 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2026-06-07 14:20:12,568 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:12,569 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2026-06-07 14:20:12,579 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2026-06-07 14:20:16,608 basehttp "GET /admin/events/booking/ HTTP/1.1" 200 39661
+INFO 2026-06-07 14:20:16,622 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:21,008 basehttp "GET /admin/events/couponcode/ HTTP/1.1" 200 17635
+INFO 2026-06-07 14:20:21,029 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:26,249 basehttp "GET /admin/events/eventdataexport/ HTTP/1.1" 200 12723
+INFO 2026-06-07 14:20:26,266 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:28,167 basehttp "GET /admin/events/eventdataexport/ HTTP/1.1" 200 12723
+INFO 2026-06-07 14:20:28,203 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:30,280 basehttp "GET /admin/events/event/ HTTP/1.1" 200 26244
+INFO 2026-06-07 14:20:30,303 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:38,472 basehttp "GET /admin/events/event/add/ HTTP/1.1" 200 40107
+INFO 2026-06-07 14:20:38,486 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2026-06-07 14:20:38,487 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2026-06-07 14:20:38,487 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2026-06-07 14:20:38,488 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-06-07 14:20:38,489 basehttp "GET /static/admin/js/inlines.js HTTP/1.1" 200 15628
+INFO 2026-06-07 14:20:38,491 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:20:38,492 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11973
+INFO 2026-06-07 14:20:38,493 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-06-07 14:20:38,494 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2026-06-07 14:20:38,503 basehttp "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+INFO 2026-06-07 14:20:38,503 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2026-06-07 14:20:38,522 basehttp "GET /static/admin/img/inline-delete.svg HTTP/1.1" 200 537
+INFO 2026-06-07 14:20:38,528 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-06-07 14:20:38,528 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-06-07 14:21:01,459 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:21:01,480 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:21:04,679 basehttp "GET /admin/events/organizerprofile/add/ HTTP/1.1" 200 28976
+INFO 2026-06-07 14:21:04,699 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:21:05,523 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16161
+INFO 2026-06-07 14:21:06,885 basehttp "GET /admin/events/payoutrequest/ HTTP/1.1" 200 12541
+INFO 2026-06-07 14:21:06,901 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:21:13,029 basehttp "GET /admin/events/payoutrequest/add/ HTTP/1.1" 200 17977
+INFO 2026-06-07 14:21:13,046 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:21:23,058 basehttp "GET /admin/events/sitesettings/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:21:23,084 basehttp "GET /admin/events/sitesettings/1/change/ HTTP/1.1" 200 31447
+INFO 2026-06-07 14:21:23,099 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:21:48,714 basehttp "GET /admin/events/teammember/ HTTP/1.1" 200 19999
+INFO 2026-06-07 14:21:48,738 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:21:57,904 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11678
+INFO 2026-06-07 14:21:57,923 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:21:59,474 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 20875
+INFO 2026-06-07 14:21:59,490 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:22:01,175 basehttp "GET /admin/auth/user/add/ HTTP/1.1" 200 15942
+INFO 2026-06-07 14:22:01,187 basehttp "GET /static/admin/css/unusable_password_field.css HTTP/1.1" 200 663
+INFO 2026-06-07 14:22:01,189 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:22:01,190 basehttp "GET /static/admin/js/unusable_password_field.js HTTP/1.1" 200 1480
+INFO 2026-06-07 14:22:03,011 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 20875
+INFO 2026-06-07 14:22:10,906 basehttp "GET /events/ HTTP/1.1" 200 57959
+INFO 2026-06-07 14:22:12,832 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:45:39,897 autoreload Watching for file changes with StatReloader
+INFO 2026-06-07 14:45:49,635 basehttp "GET / HTTP/1.1" 200 79735
+INFO 2026-06-07 14:46:28,980 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/admin.py changed, reloading.
+INFO 2026-06-07 14:46:29,879 autoreload Watching for file changes with StatReloader
+INFO 2026-06-07 14:46:32,882 basehttp "GET / HTTP/1.1" 200 79757
+INFO 2026-06-07 14:51:05,262 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/models.py changed, reloading.
+INFO 2026-06-07 14:51:05,659 autoreload Watching for file changes with StatReloader
+INFO 2026-06-07 14:51:24,143 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py changed, reloading.
+INFO 2026-06-07 14:51:24,494 autoreload Watching for file changes with StatReloader
+INFO 2026-06-07 14:52:35,017 basehttp "GET / HTTP/1.1" 200 79693
+INFO 2026-06-07 14:52:35,069 basehttp "GET /static/events/logo.webp HTTP/1.1" 200 77592
+INFO 2026-06-07 14:52:36,849 basehttp "GET /accounts/login/ HTTP/1.1" 200 37001
+INFO 2026-06-07 14:52:43,874 basehttp "POST /accounts/login/ HTTP/1.1" 200 37298
+INFO 2026-06-07 14:52:55,912 basehttp "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:52:55,925 basehttp "GET / HTTP/1.1" 200 79871
+INFO 2026-06-07 14:52:55,953 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:53:00,380 basehttp "GET /accounts/profile/ HTTP/1.1" 200 52485
+INFO 2026-06-07 14:53:04,086 basehttp "GET /search-booking/ HTTP/1.1" 200 32430
+INFO 2026-06-07 14:53:04,995 basehttp "GET /tickets/ HTTP/1.1" 200 39929
+INFO 2026-06-07 14:53:10,415 basehttp "GET /booking/ebb1106c-6a7c-4ee5-b33a-beb2307d89b6/calendar/ HTTP/1.1" 200 759
+INFO 2026-06-07 14:53:22,363 basehttp "GET /search-booking/ HTTP/1.1" 200 32430
+INFO 2026-06-07 14:53:22,408 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:53:23,143 basehttp "GET /dashboard/ HTTP/1.1" 200 86244
+INFO 2026-06-07 14:53:26,145 basehttp "GET /admin/events/sitesettings/1/change/ HTTP/1.1" 200 31451
+INFO 2026-06-07 14:53:26,198 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:53:33,341 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16165
+INFO 2026-06-07 14:53:33,396 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:53:38,255 basehttp "GET /refunds/ HTTP/1.1" 200 67833
+INFO 2026-06-07 14:53:38,286 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:53:40,866 basehttp "GET /refunds/?status=refunded HTTP/1.1" 200 39221
+INFO 2026-06-07 14:53:41,348 basehttp "GET /refunds/?status=cancelled HTTP/1.1" 200 36380
+INFO 2026-06-07 14:53:41,996 basehttp "GET /refunds/?status=all HTTP/1.1" 200 78799
+INFO 2026-06-07 14:53:42,885 basehttp "GET /refunds/?status=confirmed HTTP/1.1" 200 67833
+INFO 2026-06-07 14:53:45,737 basehttp "GET /dashboard/ HTTP/1.1" 200 86244
+INFO 2026-06-07 14:53:49,425 basehttp "GET /event/0f6de95f-f62a-4ef9-bb86-81f400373195/ HTTP/1.1" 200 65204
+INFO 2026-06-07 14:53:51,781 basehttp "GET /event/f074e369-8289-412e-adda-1a25f9a5152a/ HTTP/1.1" 200 47881
+INFO 2026-06-07 14:53:54,814 basehttp "GET /event/f0b0c663-f052-49f8-8048-37ce062da5dc/ HTTP/1.1" 200 62540
+INFO 2026-06-07 14:53:54,848 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:54:23,054 basehttp "GET /event/0f6de95f-f62a-4ef9-bb86-81f400373195/complete/ HTTP/1.1" 200 34272
+INFO 2026-06-07 14:54:23,109 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:54:30,368 basehttp "GET /event/79381f5d-d557-45e8-9aad-f290c7ecddfa/complete/ HTTP/1.1" 200 34290
+INFO 2026-06-07 14:55:14,925 basehttp "GET /accounts/profile/ HTTP/1.1" 200 52485
+INFO 2026-06-07 14:55:15,011 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:55:20,079 basehttp "GET /search-booking/ HTTP/1.1" 200 32430
+INFO 2026-06-07 14:55:20,605 basehttp "GET /tickets/ HTTP/1.1" 200 39929
+INFO 2026-06-07 14:55:21,130 basehttp "GET /organizers/ HTTP/1.1" 200 32868
+INFO 2026-06-07 14:55:21,955 basehttp "GET /events/ HTTP/1.1" 200 58495
+INFO 2026-06-07 14:55:23,368 basehttp "GET /dashboard/ HTTP/1.1" 200 86244
+INFO 2026-06-07 14:55:27,300 basehttp "GET /booking/ebb1106c-6a7c-4ee5-b33a-beb2307d89b6/ticket/ HTTP/1.1" 200 38018
+INFO 2026-06-07 14:55:37,949 basehttp "GET / HTTP/1.1" 200 79578
+INFO 2026-06-07 14:56:01,669 basehttp "GET /events/ HTTP/1.1" 200 58495
+INFO 2026-06-07 14:56:01,713 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:56:39,044 basehttp "GET /accounts/profile/ HTTP/1.1" 200 52485
+INFO 2026-06-07 14:56:39,125 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:56:41,623 basehttp "GET /dashboard/ HTTP/1.1" 200 86244
+INFO 2026-06-07 14:56:44,901 basehttp "GET /team/ HTTP/1.1" 200 53489
+INFO 2026-06-07 14:56:53,820 basehttp "POST /team/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:56:53,836 basehttp "GET /team/ HTTP/1.1" 200 53831
+ERROR 2026-06-07 14:57:02,327 log Internal Server Error: /admin/logout/
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 265, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 410, in logout
+    return LogoutView.as_view(**defaults)(request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/views.py", line 137, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/views.py", line 142, in post
+    redirect_to = self.get_success_url()
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/views.py", line 41, in get_success_url
+    return self.get_redirect_url() or self.get_default_redirect_url()
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/views.py", line 153, in get_default_redirect_url
+    return resolve_url(settings.LOGOUT_REDIRECT_URL)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/shortcuts.py", line 184, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'home' not found. 'home' is not a valid view function or pattern name.
+ERROR 2026-06-07 14:57:02,329 basehttp "POST /admin/logout/ HTTP/1.1" 500 165158
+INFO 2026-06-07 14:57:35,400 basehttp "GET / HTTP/1.1" 200 79693
+INFO 2026-06-07 14:57:35,441 basehttp "GET /static/events/logo.webp HTTP/1.1" 200 77592
+INFO 2026-06-07 14:57:37,641 basehttp "GET /accounts/login/ HTTP/1.1" 200 37001
+INFO 2026-06-07 14:57:43,133 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/event_booking/settings.py changed, reloading.
+INFO 2026-06-07 14:57:43,588 autoreload Watching for file changes with StatReloader
+INFO 2026-06-07 14:57:53,193 basehttp "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:57:53,210 basehttp "GET /scanner/ HTTP/1.1" 200 41679
+INFO 2026-06-07 14:58:23,387 basehttp "POST /verify-ticket/ HTTP/1.1" 200 229
+INFO 2026-06-07 14:58:31,183 basehttp "POST /verify-ticket/ HTTP/1.1" 200 246
+INFO 2026-06-07 14:59:30,100 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:59:30,135 basehttp "GET / HTTP/1.1" 200 79982
+INFO 2026-06-07 14:59:30,205 basehttp "GET /static/events/logo.webp HTTP/1.1" 304 0
+INFO 2026-06-07 14:59:31,928 basehttp "GET /accounts/login/ HTTP/1.1" 200 37001
+INFO 2026-06-07 14:59:37,587 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:59:37,607 basehttp "GET /admin/login/?next=/admin/events/organizerprofile/ HTTP/1.1" 200 4226
+INFO 2026-06-07 14:59:42,773 basehttp "POST /admin/login/?next=/admin/events/organizerprofile/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:59:42,812 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16165
+INFO 2026-06-07 14:59:42,842 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-07 14:59:45,598 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-06-07 14:59:45,611 basehttp "GET / HTTP/1.1" 200 79693

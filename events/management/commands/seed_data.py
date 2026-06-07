@@ -41,9 +41,9 @@ class Command(BaseCommand):
         self.stdout.write('   Creating site settings…')
         SiteSettings.objects.create(
             pk=1,
-            site_name='EventHub',
+            site_name='Passly Hai',
             site_url='http://127.0.0.1:8000',
-            support_email='support@eventhub.in',
+            support_email='support@Passly Hai.in',
             support_phone='+91 98765 43210',
             # Leave API keys blank — fill from Admin dashboard
             whatsapp_enabled=False,
@@ -57,10 +57,10 @@ class Command(BaseCommand):
         self.stdout.write('   Creating users…')
         admin = User.objects.create_superuser(
             username='admin',
-            email='admin@eventhub.in',
+            email='admin@Passly Hai.in',
             password='admin123',
             first_name='Admin',
-            last_name='EventHub',
+            last_name='Passly Hai',
         )
 
         u1 = User.objects.create_user(

@@ -1,6 +1,6 @@
 {% extends 'events/base.html' %}
 
-{% block title %}QR Scanner — EventHub{% endblock %}
+{% block title %}QR Scanner — Passly Hai{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -68,8 +68,9 @@
         animation: popIn .3s ease;
     }
     @keyframes popIn { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    #result-card.valid   { background: #D1FAE5; border: 2px solid #6EE7B7; }
-    #result-card.invalid { background: #FEE2E2; border: 2px solid #FCA5A5; }
+    #result-card.valid    { background: #D1FAE5; border: 2px solid #6EE7B7; }
+    #result-card.invalid  { background: #FEE2E2; border: 2px solid #FCA5A5; }
+    #result-card.duplicate { background: #FFF7ED; border: 2px solid #FDC47A; }
 </style>
 {% endblock %}
 
@@ -237,7 +238,27 @@ function showResult(data) {
     const msg  = document.getElementById('result-message');
     const det  = document.getElementById('result-details');
     card.style.display = 'block';
-    if (data.valid) {
+
+    if (data.valid && data.already_scanned) {
+        // Duplicate scan — orange warning
+        card.className = 'duplicate';
+        card.style.background = '#FFF7ED';
+        card.style.border = '2px solid #FDC47A';
+        icon.textContent = '⚠️';
+        msg.textContent = data.message || `ALREADY SCANNED`;
+        msg.style.color = '#C2410C';
+        det.innerHTML = `
+            <strong>${data.name}</strong><br>
+            Event: ${data.event}<br>
+            Ticket: ${data.ticket_type} × ${data.tickets}<br>
+            <span style="font-family:monospace;font-size:.8rem;color:#9A3412;">ID: ${data.booking_id}</span><br>
+            <span style="display:inline-block;margin-top:.5rem;background:#FED7AA;color:#9A3412;padding:.25rem .75rem;border-radius:50px;font-size:.78rem;font-weight:700;">
+                🔁 Scanned ${data.scan_count} time${data.scan_count !== 1 ? 's' : ''}
+            </span>
+        `;
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
+    } else if (data.valid) {
+        // First-time valid scan — green
         card.className = 'valid';
         card.style.background = '#D1FAE5';
         card.style.border = '2px solid #6EE7B7';
@@ -250,9 +271,9 @@ function showResult(data) {
             Ticket: ${data.ticket_type} × ${data.tickets}<br>
             <span style="font-family:monospace;font-size:.8rem;color:#6B7280;">ID: ${data.booking_id}</span>
         `;
-        // Vibrate on valid
         if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
     } else {
+        // Invalid — red
         card.className = 'invalid';
         card.style.background = '#FEE2E2';
         card.style.border = '2px solid #FCA5A5';
