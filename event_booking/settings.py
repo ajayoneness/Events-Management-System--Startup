@@ -114,7 +114,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Site URL for QR codes
-SITE_URL = 'http://127.0.0.1:8000'
+SITE_URL = 'http://passlyhai.com'
 
 # Authentication settings
 LOGIN_URL = 'accounts:login'

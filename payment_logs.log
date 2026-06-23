@@ -3302,3 +3302,9 @@ INFO 2026-06-23 19:37:20,358 basehttp "GET /org/dashboard/ HTTP/1.1" 200 42600
 INFO 2026-06-23 19:37:21,502 basehttp "GET /wallet/ HTTP/1.1" 200 33899
 INFO 2026-06-23 19:37:43,748 basehttp "GET /events/ HTTP/1.1" 200 50181
 INFO 2026-06-23 19:37:44,819 basehttp "GET / HTTP/1.1" 200 73010
+INFO 2026-06-23 19:42:32,053 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/event_booking/settings.py changed, reloading.
+INFO 2026-06-23 19:42:32,405 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:42:51,966 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/models.py changed, reloading.
+INFO 2026-06-23 19:42:52,235 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:43:07,696 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/migrations/0002_sitesettings_booking_discount_amount_and_more.py changed, reloading.
+INFO 2026-06-23 19:43:07,975 autoreload Watching for file changes with StatReloader

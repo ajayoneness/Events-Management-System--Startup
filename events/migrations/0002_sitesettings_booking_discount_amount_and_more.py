@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('razorpay_key_id', models.CharField(blank=True, max_length=200, null=True, verbose_name='Razorpay Key ID')),
                 ('razorpay_key_secret', models.CharField(blank=True, max_length=200, null=True, verbose_name='Razorpay Key Secret')),
                 ('site_name', models.CharField(default='Passly Hai', max_length=100, verbose_name='Site Name')),
-                ('site_url', models.URLField(default='http://127.0.0.1:8000', verbose_name='Site URL')),
+                ('site_url', models.URLField(default='http://passlyhai.com', verbose_name='Site URL')),
                 ('support_email', models.EmailField(blank=True, max_length=254, null=True, verbose_name='Support Email')),
                 ('support_phone', models.CharField(blank=True, max_length=20, null=True, verbose_name='Support Phone')),
             ],

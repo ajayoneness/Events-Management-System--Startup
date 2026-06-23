@@ -66,7 +66,7 @@ class SiteSettings(models.Model):
 
     # ── Site Information ───────────────────────────────────────────────────
     site_name = models.CharField(max_length=100, default='Passly Hai', verbose_name='Site Name')
-    site_url = models.URLField(default='http://127.0.0.1:8000', verbose_name='Site URL')
+    site_url = models.URLField(default='http://passlyhai.com', verbose_name='Site URL')
     support_email = models.EmailField(blank=True, null=True, verbose_name='Support Email')
     support_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='Support Phone')
 
