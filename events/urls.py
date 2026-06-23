@@ -47,6 +47,11 @@ urlpatterns = [
     # ── Dedicated Tickets Page ────────────────────────────────────────────────
     path('tickets/', views.my_tickets, name='my_tickets'),
 
+    # ── Organisation Dashboard & Event Management ─────────────────────────────
+    path('org/dashboard/', views.org_dashboard, name='org_dashboard'),
+    path('org/event/add/', views.org_add_event, name='org_add_event'),
+    path('org/event/<uuid:event_id>/edit/', views.org_edit_event, name='org_edit_event'),
+
     # ── Legal / Static pages (required for Razorpay verification) ────────────
     path('terms/', views.terms_view, name='terms'),
     path('privacy/', views.privacy_view, name='privacy'),

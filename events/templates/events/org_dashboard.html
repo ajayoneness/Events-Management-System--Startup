@@ -1,0 +1,273 @@
+{% extends 'events/base.html' %}
+{% block title %}Organisation Dashboard — Passly Hai{% endblock %}
+
+{% block extra_css %}
+<style>
+.stat-card {
+    background:#fff;border-radius:18px;padding:1.5rem;
+    border:1px solid #F0EBFF;box-shadow:0 2px 12px rgba(0,0,0,.05);
+}
+.stat-card .icon {
+    width:48px;height:48px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+}
+.section-head {
+    font-size:1.15rem;font-weight:800;color:#111827;margin-bottom:1rem;
+    display:flex;align-items:center;gap:.5rem;
+}
+.table th { font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#9CA3AF;font-weight:600; }
+.table td { font-size:.88rem;vertical-align:middle; }
+.status-badge { padding:.3rem .75rem;border-radius:50px;font-size:.72rem;font-weight:700; }
+.progress-bar-custom { height:8px;border-radius:50px;background:#EDE9FE; }
+.progress-fill { height:100%;border-radius:50px;background:linear-gradient(135deg,#7C3AED,#4C1D95); }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Page header -->
+<div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+    <div>
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+            <h1 style="font-size:1.75rem;font-weight:900;color:#111827;margin:0;">{{ profile.organization_name }}</h1>
+            <span style="background:#D1FAE5;color:#065F46;padding:.2rem .75rem;border-radius:50px;font-size:.72rem;font-weight:700;">Verified</span>
+        </div>
+        <p style="color:#6B7280;font-size:.88rem;margin:0;">Organisation Dashboard — manage events, sales &amp; team</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'org_add_event' %}" class="btn btn-primary" style="font-size:.85rem;padding:.5rem 1.1rem;">
+            <i class="fas fa-plus me-1"></i> Add Event
+        </a>
+        <a href="{% url 'manage_team' %}" class="btn btn-outline-primary" style="font-size:.85rem;padding:.5rem 1.1rem;">
+            <i class="fas fa-users-cog me-1"></i> Team
+        </a>
+        <a href="{% url 'payout_wallet' %}" class="btn btn-outline-primary" style="font-size:.85rem;padding:.5rem 1.1rem;">
+            <i class="fas fa-wallet me-1"></i> Wallet (₹{{ profile.wallet_balance|floatformat:0 }})
+        </a>
+    </div>
+</div>
+
+<!-- KPI cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="icon mb-2" style="background:#EDE9FE;"><i class="fas fa-rupee-sign" style="color:#7C3AED;"></i></div>
+            <div style="font-size:1.6rem;font-weight:900;color:#111827;">₹{{ total_revenue|floatformat:0 }}</div>
+            <div style="font-size:.8rem;color:#6B7280;">Total Revenue</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="icon mb-2" style="background:#D1FAE5;"><i class="fas fa-check-circle" style="color:#059669;"></i></div>
+            <div style="font-size:1.6rem;font-weight:900;color:#111827;">{{ confirmed_count }}</div>
+            <div style="font-size:.8rem;color:#6B7280;">Confirmed Bookings</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="icon mb-2" style="background:#DBEAFE;"><i class="fas fa-ticket-alt" style="color:#2563EB;"></i></div>
+            <div style="font-size:1.6rem;font-weight:900;color:#111827;">{{ total_tickets_sold }}</div>
+            <div style="font-size:.8rem;color:#6B7280;">Tickets Sold</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="icon mb-2" style="background:#EFF6FF;"><i class="fas fa-calendar-alt" style="color:#2563EB;"></i></div>
+            <div style="font-size:1.6rem;font-weight:900;color:#111827;">{{ total_events }}</div>
+            <div style="font-size:.8rem;color:#6B7280;">
+                Total Events
+                {% if pending_approval %}<span style="color:#D97706;font-weight:700;">({{ pending_approval }} pending)</span>{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Top Events -->
+    <div class="col-lg-5">
+        <div class="stat-card h-100">
+            <div class="section-head"><i class="fas fa-trophy" style="color:#D97706;"></i> Top Events by Revenue</div>
+            {% for e in top_events %}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <span style="font-size:.82rem;font-weight:600;color:#374151;">{{ e.event__title|truncatechars:32 }}</span>
+                    <span style="font-size:.82rem;font-weight:700;color:#7C3AED;">₹{{ e.revenue|floatformat:0 }}</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="progress-bar-custom" style="flex:1;">
+                        {% if total_revenue %}
+                        <div class="progress-fill" style="width:{% widthratio e.revenue total_revenue 100 %}%;"></div>
+                        {% endif %}
+                    </div>
+                    <span style="font-size:.75rem;color:#9CA3AF;">{{ e.bookings }} bookings</span>
+                </div>
+            </div>
+            {% empty %}
+            <p style="color:#9CA3AF;font-size:.85rem;">No confirmed bookings yet.</p>
+            {% endfor %}
+
+            <hr style="border-color:#F3F4F6;margin:1rem 0;">
+            <div class="section-head" style="margin-bottom:.75rem;"><i class="fas fa-chart-pie" style="color:#7C3AED;"></i> Booking Status</div>
+            {% for status, count in status_breakdown.items %}
+            {% if count %}
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span style="font-size:.82rem;color:#374151;text-transform:capitalize;">{{ status }}</span>
+                <span class="status-badge"
+                    style="background:{% if status == 'confirmed' %}#D1FAE5;color:#065F46{% elif status == 'pending' %}#FEF3C7;color:#92400E{% elif status == 'refunded' %}#DBEAFE;color:#1E40AF{% elif status == 'cancelled' %}#F3F4F6;color:#374151{% else %}#FEE2E2;color:#991B1B{% endif %};">
+                    {{ count }}
+                </span>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="col-lg-7">
+        <div class="stat-card h-100">
+            <div class="section-head"><i class="fas fa-ticket-alt" style="color:#7C3AED;"></i> Recent Bookings</div>
+            <div style="overflow-x:auto;">
+                <table class="table table-hover mb-0" style="min-width:480px;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Event</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in recent_bookings %}
+                        <tr>
+                            <td>
+                                <div style="font-weight:600;color:#111827;">{{ b.name }}</div>
+                                <div style="font-size:.75rem;color:#9CA3AF;">{{ b.booking_date|date:"d M, H:i" }}</div>
+                            </td>
+                            <td style="color:#6B7280;">{{ b.event.title|truncatechars:22 }}</td>
+                            <td style="font-weight:700;color:#7C3AED;">₹{{ b.total_amount|floatformat:0 }}</td>
+                            <td>
+                                <span class="status-badge" style="background:{% if b.status == 'confirmed' %}#D1FAE5;color:#065F46{% elif b.status == 'pending' %}#FEF3C7;color:#92400E{% elif b.status == 'refunded' %}#DBEAFE;color:#1E40AF{% elif b.status == 'cancelled' %}#F3F4F6;color:#374151{% else %}#FEE2E2;color:#991B1B{% endif %};">
+                                    {{ b.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if b.status == 'confirmed' %}
+                                <a href="{% url 'download_ticket' b.id %}" style="font-size:.78rem;color:#7C3AED;text-decoration:none;" title="View Ticket">
+                                    <i class="fas fa-ticket-alt"></i>
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" style="text-align:center;color:#9CA3AF;padding:2rem;">No bookings yet</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Event Management Table -->
+<div class="stat-card mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-head mb-0"><i class="fas fa-calendar-check" style="color:#7C3AED;"></i> My Events</div>
+        <a href="{% url 'org_add_event' %}" class="btn btn-primary" style="font-size:.78rem;padding:.4rem .9rem;border-radius:10px;">
+            <i class="fas fa-plus me-1"></i> Add Event
+        </a>
+    </div>
+    <div style="overflow-x:auto;">
+        <table class="table table-hover mb-0" style="min-width:600px;">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Seats</th>
+                    <th>Status</th>
+                    <th>Approved</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in my_events %}
+                <tr>
+                    <td>
+                        <div style="font-weight:600;color:#111827;">{{ event.title|truncatechars:35 }}</div>
+                        <div style="font-size:.75rem;color:#9CA3AF;">{{ event.get_category_display }}</div>
+                    </td>
+                    <td style="color:#6B7280;font-size:.85rem;">{{ event.date|date:"d M Y" }}</td>
+                    <td style="font-size:.85rem;">
+                        <span style="font-weight:700;color:{% if event.available_seats == 0 %}#DC2626{% elif event.available_seats <= 10 %}#D97706{% else %}#059669{% endif %};">
+                            {{ event.available_seats }}/{{ event.total_seats }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge" style="background:{% if event.status == 'published' %}#D1FAE5;color:#065F46{% elif event.status == 'draft' %}#F3F4F6;color:#374151{% elif event.status == 'cancelled' %}#FEE2E2;color:#991B1B{% else %}#DBEAFE;color:#1E40AF{% endif %};">
+                            {{ event.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if event.is_approved %}
+                        <span style="color:#059669;font-size:.82rem;font-weight:700;"><i class="fas fa-check-circle"></i> Yes</span>
+                        {% else %}
+                        <span style="background:#FEF3C7;color:#92400E;padding:.2rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700;">
+                            <i class="fas fa-clock me-1"></i>Pending
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{% url 'org_edit_event' event.id %}" class="btn btn-outline-primary" style="font-size:.72rem;padding:.3rem .7rem;border-radius:8px;" title="Edit">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </a>
+                            <a href="{% url 'export_attendees_csv' event.id %}" class="btn btn-outline-primary" style="font-size:.72rem;padding:.3rem .7rem;border-radius:8px;" title="Export CSV">
+                                <i class="fas fa-file-csv me-1"></i> Export
+                            </a>
+                            <a href="{% url 'send_reminder' event.id %}" class="btn btn-outline-primary" style="font-size:.72rem;padding:.3rem .7rem;border-radius:8px;" title="Send Reminder">
+                                <i class="fas fa-bell me-1"></i> Remind
+                            </a>
+                            <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-primary" style="font-size:.72rem;padding:.3rem .7rem;border-radius:8px;" title="View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" style="text-align:center;color:#9CA3AF;padding:2rem;">No events yet. <a href="{% url 'org_add_event' %}" style="color:#7C3AED;font-weight:600;">Create your first event →</a></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Team Members Quick View -->
+<div class="stat-card mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-head mb-0"><i class="fas fa-users" style="color:#7C3AED;"></i> Team Members ({{ team_members.count }})</div>
+        <a href="{% url 'manage_team' %}" class="btn btn-outline-primary" style="font-size:.78rem;padding:.4rem .9rem;border-radius:10px;">
+            Manage Team →
+        </a>
+    </div>
+    {% if team_members %}
+    <div class="row g-2">
+        {% for m in team_members %}
+        <div class="col-sm-6 col-md-4">
+            <div style="background:#F9FAFB;border-radius:12px;padding:.85rem 1rem;display:flex;align-items:center;gap:.75rem;">
+                <div style="width:36px;height:36px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.78rem;">
+                    {{ m.name|first|upper }}
+                </div>
+                <div>
+                    <div style="font-weight:600;color:#111827;font-size:.85rem;">{{ m.name }}</div>
+                    <div style="font-size:.72rem;color:#6B7280;">{{ m.get_role_display }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:#9CA3AF;font-size:.85rem;">No team members yet. <a href="{% url 'manage_team' %}" style="color:#7C3AED;">Add your first team member →</a></p>
+    {% endif %}
+</div>
+
+{% endblock %}

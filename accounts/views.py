@@ -4,8 +4,9 @@ from django.contrib import messages
 from .forms import SignUpForm, EmailLoginForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from events.models import Event, Booking
+from events.models import Event, Booking, OrganizerProfile
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,89 @@ def register_view(request):
     else:
         form = SignUpForm()
     return render(request, 'accounts/register.html', {'form': form})
+
+
+def register_organizer_view(request):
+    """Registration for event organisers — creates User + OrganizerProfile (pending verification)."""
+    if request.user.is_authenticated:
+        # Already logged in? Check if they already have an org profile
+        if hasattr(request.user, 'organizer_profile'):
+            return redirect('org_dashboard')
+        # Allow logged-in user to create an org profile
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email = request.POST.get('email', '').strip().lower()
+        phone = request.POST.get('phone', '').strip()
+        org_name = request.POST.get('organization_name', '').strip()
+        password1 = request.POST.get('password1', '')
+        password2 = request.POST.get('password2', '')
+        description = request.POST.get('description', '').strip()
+
+        errors = []
+        if not first_name:
+            errors.append('First name is required.')
+        if not email:
+            errors.append('Email is required.')
+        if not phone:
+            errors.append('Phone number is required.')
+        if not org_name:
+            errors.append('Organisation name is required.')
+
+        if request.user.is_authenticated:
+            # Existing user creating org profile
+            user = request.user
+            if hasattr(user, 'organizer_profile'):
+                messages.info(request, 'You already have an organiser profile.')
+                return redirect('org_dashboard')
+        else:
+            # New user registration
+            if not password1 or len(password1) < 8:
+                errors.append('Password must be at least 8 characters.')
+            if password1 != password2:
+                errors.append('Passwords do not match.')
+            if User.objects.filter(email__iexact=email).exists():
+                errors.append('An account with this email already exists. Please login instead.')
+            user = None
+
+        if errors:
+            for e in errors:
+                messages.error(request, e)
+            return render(request, 'accounts/register_organizer.html', {
+                'form_data': request.POST,
+            })
+
+        # Create user if new
+        if not request.user.is_authenticated:
+            base_username = re.sub(r'[^a-z0-9]', '', org_name.lower())[:20] or re.sub(r'[^a-z0-9]', '', email.split('@')[0])[:20] or 'org'
+            username = base_username
+            counter = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}{counter}"
+                counter += 1
+            user = User.objects.create_user(
+                username=username, email=email, password=password1,
+                first_name=first_name, last_name=last_name,
+            )
+            login(request, user)
+        else:
+            user.first_name = first_name or user.first_name
+            user.last_name = last_name or user.last_name
+            user.save()
+
+        # Create OrganizerProfile
+        OrganizerProfile.objects.create(
+            user=user,
+            organization_name=org_name,
+            mobile_number=phone,
+            email=email,
+            description=description,
+            status='pending',
+        )
+        messages.success(request, f"Organisation '{org_name}' registered! Your account is pending admin verification.")
+        return redirect('org_dashboard')
+
+    return render(request, 'accounts/register_organizer.html', {'form_data': {}})
 
 
 def login_view(request):
@@ -49,7 +133,7 @@ def login_view(request):
             if user is None:
                 user = authenticate(request, username=email, password=password)
 
-        # Username-based authentication (admin, staff, team members)
+        # Username-based authentication (admin, staff, team members, organisers)
         if login_tab == 'username' and username_input:
             user = authenticate(request, username=username_input, password=password)
 
@@ -63,6 +147,16 @@ def login_view(request):
                     return redirect('qr_scanner')
             except Exception:
                 pass
+            # Redirect organisers to org dashboard
+            if hasattr(user, 'organizer_profile'):
+                messages.success(request, f"Welcome back, {user.organizer_profile.organization_name or user.username}!")
+                next_url = request.GET.get('next')
+                return redirect(next_url if next_url else 'org_dashboard')
+            # Redirect staff to admin dashboard
+            if user.is_staff:
+                messages.success(request, f"Welcome back, {user.get_full_name() or user.username}!")
+                next_url = request.GET.get('next')
+                return redirect(next_url if next_url else 'sales_dashboard')
             messages.success(request, f"Welcome back, {user.get_full_name() or user.email or user.username}!")
             next_url = request.GET.get('next', 'event_list')
             return redirect(next_url)

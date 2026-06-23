@@ -759,10 +759,13 @@ def sales_dashboard(request):
 
 @login_required
 def export_attendees_csv(request, event_id):
-    if not request.user.is_staff:
+    if not request.user.is_staff and not _get_org_profile(request.user):
         messages.error(request, 'Access denied.')
         return redirect('event_list')
-    event    = get_object_or_404(Event, id=event_id)
+    if request.user.is_staff:
+        event = get_object_or_404(Event, id=event_id)
+    else:
+        event = get_object_or_404(Event, id=event_id, organizer_user=request.user)
     status   = request.GET.get('status', 'confirmed')
     bookings = Booking.objects.filter(event=event)
     if status != 'all':
@@ -895,10 +898,13 @@ def refund_management(request):
 
 @login_required
 def send_reminder(request, event_id):
-    if not request.user.is_staff:
+    if not request.user.is_staff and not _get_org_profile(request.user):
         messages.error(request, 'Access denied.')
         return redirect('event_list')
-    event = get_object_or_404(Event, id=event_id)
+    if request.user.is_staff:
+        event = get_object_or_404(Event, id=event_id)
+    else:
+        event = get_object_or_404(Event, id=event_id, organizer_user=request.user)
     if request.method == 'POST':
         reminder_type = request.POST.get('reminder_type', 'normal')
         bookings = Booking.objects.filter(event=event, status='confirmed')
@@ -1129,3 +1135,244 @@ def my_tickets(request):
         'total_confirmed': confirmed.count(),
     }
     return render(request, 'events/my_tickets.html', context)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ORGANISATION DASHBOARD  (for verified / unverified organisers)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _get_org_profile(user):
+    """Return OrganizerProfile for user or None."""
+    try:
+        return user.organizer_profile
+    except OrganizerProfile.DoesNotExist:
+        return None
+
+
+@login_required
+def org_dashboard(request):
+    """Organisation dashboard — shows own sales, events, team, etc."""
+    profile = _get_org_profile(request.user)
+    if not profile:
+        messages.error(request, 'You do not have an organiser account.')
+        return redirect('event_list')
+
+    # ── Unverified state ──────────────────────────────────────────────
+    if profile.status != 'verified':
+        return render(request, 'events/org_dashboard_unverified.html', {
+            'profile': profile,
+        })
+
+    # ── Verified: full dashboard ──────────────────────────────────────
+    user = request.user
+    my_events = Event.objects.filter(organizer_user=user).order_by('-created_at')
+    my_bookings = Booking.objects.filter(event__organizer_user=user).select_related('event', 'ticket_type')
+
+    total_revenue = my_bookings.filter(status='confirmed').aggregate(t=Sum('total_amount'))['t'] or 0
+    confirmed_count = my_bookings.filter(status='confirmed').count()
+    pending_count = my_bookings.filter(status='pending').count()
+    refund_count = my_bookings.filter(status='refunded').count()
+    total_tickets_sold = my_bookings.filter(status='confirmed').aggregate(t=Sum('number_of_tickets'))['t'] or 0
+
+    top_events = (
+        my_bookings.filter(status='confirmed')
+        .values('event__title', 'event__id')
+        .annotate(revenue=Sum('total_amount'), bookings=Count('id'))
+        .order_by('-revenue')[:5]
+    )
+    recent_bookings = my_bookings.order_by('-booking_date')[:15]
+
+    status_breakdown = {
+        'confirmed': confirmed_count, 'pending': pending_count,
+        'refunded': refund_count,
+        'cancelled': my_bookings.filter(status='cancelled').count(),
+        'failed': my_bookings.filter(status='failed').count(),
+    }
+
+    team_members = TeamMember.objects.filter(organizer=user)
+
+    return render(request, 'events/org_dashboard.html', {
+        'profile': profile,
+        'my_events': my_events,
+        'total_revenue': total_revenue,
+        'confirmed_count': confirmed_count,
+        'pending_count': pending_count,
+        'refund_count': refund_count,
+        'total_tickets_sold': total_tickets_sold,
+        'total_events': my_events.count(),
+        'published_events': my_events.filter(status='published', is_approved=True).count(),
+        'pending_approval': my_events.filter(is_approved=False).count(),
+        'top_events': top_events,
+        'recent_bookings': recent_bookings,
+        'status_breakdown': status_breakdown,
+        'team_members': team_members,
+    })
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ORG ADD / EDIT EVENT
+# ─────────────────────────────────────────────────────────────────────────────
+
+@login_required
+def org_add_event(request):
+    """Organiser creates a new event — starts with is_approved=False."""
+    profile = _get_org_profile(request.user)
+    if not profile or profile.status != 'verified':
+        messages.error(request, 'Your organisation must be verified to create events.')
+        return redirect('org_dashboard')
+
+    if request.method == 'POST':
+        try:
+            from decimal import Decimal
+            title = request.POST.get('title', '').strip()
+            description = request.POST.get('description', '').strip()
+            category = request.POST.get('category', 'other')
+            event_type = request.POST.get('event_type', 'one_time')
+            is_free = request.POST.get('is_free') == 'on'
+            date_str = request.POST.get('date', '')
+            end_date_str = request.POST.get('end_date', '')
+            venue = request.POST.get('venue', '').strip()
+            address = request.POST.get('address', '').strip()
+            latitude = float(request.POST.get('latitude', '20.5937') or '20.5937')
+            longitude = float(request.POST.get('longitude', '78.9629') or '78.9629')
+            price = Decimal(request.POST.get('price', '0') or '0')
+            total_seats = int(request.POST.get('total_seats', '100') or '100')
+            image = request.POST.get('image', '').strip()
+
+            if not title or not description or not date_str or not venue or not address:
+                messages.error(request, 'Please fill all required fields.')
+                return render(request, 'events/org_add_event.html', {
+                    'profile': profile, 'form_data': request.POST, 'editing': False,
+                })
+
+            from django.utils.dateparse import parse_datetime
+            event_date = parse_datetime(date_str)
+            if not event_date:
+                from datetime import datetime
+                event_date = datetime.strptime(date_str, '%Y-%m-%dT%H:%M')
+                from django.utils import timezone as tz
+                event_date = tz.make_aware(event_date)
+
+            end_date = None
+            if end_date_str:
+                end_date = parse_datetime(end_date_str)
+                if not end_date:
+                    from datetime import datetime
+                    end_date = datetime.strptime(end_date_str, '%Y-%m-%dT%H:%M')
+                    from django.utils import timezone as tz
+                    end_date = tz.make_aware(end_date)
+
+            event = Event.objects.create(
+                title=title,
+                description=description,
+                category=category,
+                event_type=event_type,
+                is_free=is_free,
+                status='published',
+                is_approved=False,  # Needs admin approval
+                date=event_date,
+                end_date=end_date,
+                venue=venue,
+                address=address,
+                latitude=latitude,
+                longitude=longitude,
+                price=price if not is_free else 0,
+                total_seats=total_seats,
+                available_seats=total_seats,
+                image=image or 'https://via.placeholder.com/800x400/7C3AED/ffffff?text=Event+Image',
+                organizer=profile.organization_name or request.user.get_full_name() or request.user.username,
+                organizer_user=request.user,
+            )
+
+            # Create ticket types if provided
+            ticket_names = request.POST.getlist('ticket_name')
+            ticket_prices = request.POST.getlist('ticket_price')
+            ticket_seats = request.POST.getlist('ticket_seats')
+            ticket_tiers = request.POST.getlist('ticket_tier')
+            for i in range(len(ticket_names)):
+                if ticket_names[i].strip():
+                    TicketType.objects.create(
+                        event=event,
+                        name=ticket_names[i].strip(),
+                        tier=ticket_tiers[i] if i < len(ticket_tiers) else 'normal',
+                        price=Decimal(ticket_prices[i]) if i < len(ticket_prices) and ticket_prices[i] else price,
+                        total_seats=int(ticket_seats[i]) if i < len(ticket_seats) and ticket_seats[i] else total_seats,
+                        available_seats=int(ticket_seats[i]) if i < len(ticket_seats) and ticket_seats[i] else total_seats,
+                    )
+
+            messages.success(request, f"Event '{title}' created! It will be visible on the website after admin approval.")
+            return redirect('org_dashboard')
+        except Exception as e:
+            logger.error(f"Error creating event: {e}")
+            messages.error(request, f'Error creating event: {e}')
+            return render(request, 'events/org_add_event.html', {
+                'profile': profile, 'form_data': request.POST, 'editing': False,
+            })
+
+    return render(request, 'events/org_add_event.html', {
+        'profile': profile, 'editing': False,
+    })
+
+
+@login_required
+def org_edit_event(request, event_id):
+    """Organiser edits their own event."""
+    profile = _get_org_profile(request.user)
+    if not profile or profile.status != 'verified':
+        messages.error(request, 'Access denied.')
+        return redirect('org_dashboard')
+
+    event = get_object_or_404(Event, id=event_id, organizer_user=request.user)
+
+    if request.method == 'POST':
+        try:
+            from decimal import Decimal
+            event.title = request.POST.get('title', event.title).strip()
+            event.description = request.POST.get('description', event.description).strip()
+            event.category = request.POST.get('category', event.category)
+            event.event_type = request.POST.get('event_type', event.event_type)
+            event.is_free = request.POST.get('is_free') == 'on'
+            event.venue = request.POST.get('venue', event.venue).strip()
+            event.address = request.POST.get('address', event.address).strip()
+            event.latitude = float(request.POST.get('latitude', event.latitude) or event.latitude)
+            event.longitude = float(request.POST.get('longitude', event.longitude) or event.longitude)
+            event.price = Decimal(request.POST.get('price', str(event.price)) or str(event.price))
+            event.total_seats = int(request.POST.get('total_seats', event.total_seats) or event.total_seats)
+            img = request.POST.get('image', '').strip()
+            if img:
+                event.image = img
+
+            date_str = request.POST.get('date', '')
+            if date_str:
+                from django.utils.dateparse import parse_datetime
+                event_date = parse_datetime(date_str)
+                if not event_date:
+                    from datetime import datetime
+                    event_date = datetime.strptime(date_str, '%Y-%m-%dT%H:%M')
+                    from django.utils import timezone as tz
+                    event_date = tz.make_aware(event_date)
+                event.date = event_date
+
+            end_date_str = request.POST.get('end_date', '')
+            if end_date_str:
+                from django.utils.dateparse import parse_datetime
+                end_date = parse_datetime(end_date_str)
+                if not end_date:
+                    from datetime import datetime
+                    end_date = datetime.strptime(end_date_str, '%Y-%m-%dT%H:%M')
+                    from django.utils import timezone as tz
+                    end_date = tz.make_aware(end_date)
+                event.end_date = end_date
+
+            if event.is_free:
+                event.price = 0
+            event.save()
+            messages.success(request, f"Event '{event.title}' updated!")
+            return redirect('org_dashboard')
+        except Exception as e:
+            logger.error(f"Error updating event: {e}")
+            messages.error(request, f'Error: {e}')
+
+    return render(request, 'events/org_add_event.html', {
+        'profile': profile, 'event': event, 'form_data': {}, 'editing': True,
+    })

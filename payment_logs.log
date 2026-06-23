@@ -2748,3 +2748,557 @@ INFO 2026-06-07 14:59:42,812 basehttp "GET /admin/events/organizerprofile/ HTTP/
 INFO 2026-06-07 14:59:42,842 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
 INFO 2026-06-07 14:59:45,598 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
 INFO 2026-06-07 14:59:45,611 basehttp "GET / HTTP/1.1" 200 79693
+INFO 2026-06-23 18:48:43,481 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 18:48:49,364 basehttp "GET / HTTP/1.1" 200 71027
+INFO 2026-06-23 18:48:49,415 basehttp "GET /static/events/logo.webp HTTP/1.1" 200 77592
+WARNING 2026-06-23 18:48:49,840 log Not Found: /favicon.ico
+WARNING 2026-06-23 18:48:49,841 basehttp "GET /favicon.ico HTTP/1.1" 404 11203
+INFO 2026-06-23 18:48:53,516 basehttp "GET /accounts/login/ HTTP/1.1" 200 37001
+INFO 2026-06-23 18:49:20,792 basehttp "GET /accounts/login/ HTTP/1.1" 200 37001
+INFO 2026-06-23 18:49:26,547 basehttp "POST /accounts/login/ HTTP/1.1" 200 37298
+INFO 2026-06-23 18:49:37,305 basehttp "POST /accounts/login/ HTTP/1.1" 200 37298
+INFO 2026-06-23 18:49:48,662 basehttp "POST /accounts/login/ HTTP/1.1" 200 37298
+INFO 2026-06-23 18:50:17,306 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 18:50:25,791 basehttp "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2026-06-23 18:50:25,816 basehttp "GET / HTTP/1.1" 200 71193
+INFO 2026-06-23 18:50:28,236 basehttp "GET /dashboard/ HTTP/1.1" 200 86238
+INFO 2026-06-23 18:56:26,906 basehttp "GET / HTTP/1.1" 200 70906
+INFO 2026-06-23 18:56:35,484 basehttp "GET /event/0f6de95f-f62a-4ef9-bb86-81f400373195/ HTTP/1.1" 200 65198
+INFO 2026-06-23 18:56:43,202 basehttp "POST /event/0f6de95f-f62a-4ef9-bb86-81f400373195/ HTTP/1.1" 302 0
+INFO 2026-06-23 18:56:43,218 basehttp "GET /payment/83543f1d-f0c8-4787-b775-db4b9008e394/ HTTP/1.1" 200 41436
+INFO 2026-06-23 19:01:30,751 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/accounts/views.py changed, reloading.
+INFO 2026-06-23 19:01:31,072 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:01:35,350 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/accounts/urls.py changed, reloading.
+INFO 2026-06-23 19:01:35,681 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:02:15,718 basehttp "GET / HTTP/1.1" 200 70906
+INFO 2026-06-23 19:02:42,289 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py changed, reloading.
+INFO 2026-06-23 19:02:42,587 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:02:59,091 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/urls.py changed, reloading.
+INFO 2026-06-23 19:02:59,358 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:06:48,989 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py changed, reloading.
+INFO 2026-06-23 19:06:49,272 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:06:59,525 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py changed, reloading.
+INFO 2026-06-23 19:06:59,758 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:18:09,099 basehttp "GET / HTTP/1.1" 200 70933
+WARNING 2026-06-23 19:18:09,392 log Not Found: /favicon.ico
+WARNING 2026-06-23 19:18:09,393 basehttp "GET /favicon.ico HTTP/1.1" 404 12034
+INFO 2026-06-23 19:18:34,842 basehttp "GET /dashboard/ HTTP/1.1" 200 86264
+INFO 2026-06-23 19:18:37,415 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:18:37,430 basehttp "GET / HTTP/1.1" 200 71316
+INFO 2026-06-23 19:18:38,760 basehttp "GET /accounts/login/ HTTP/1.1" 200 37303
+INFO 2026-06-23 19:18:42,046 basehttp "GET /accounts/register/organiser/ HTTP/1.1" 200 36604
+INFO 2026-06-23 19:19:43,913 basehttp "POST /accounts/register/organiser/ HTTP/1.1" 200 37001
+INFO 2026-06-23 19:20:05,448 basehttp "POST /accounts/register/organiser/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:20:05,455 basehttp "GET /org/dashboard/ HTTP/1.1" 200 36430
+INFO 2026-06-23 19:20:24,469 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-06-23 19:20:24,482 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:20:24,497 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4178
+INFO 2026-06-23 19:20:24,519 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2026-06-23 19:20:24,519 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2026-06-23 19:20:24,520 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2026-06-23 19:20:24,520 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2026-06-23 19:20:24,520 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2026-06-23 19:20:24,520 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2026-06-23 19:20:24,521 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-06-23 19:20:34,380 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:20:34,392 basehttp "GET /admin/ HTTP/1.1" 200 11533
+INFO 2026-06-23 19:20:34,414 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-06-23 19:20:34,417 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-06-23 19:20:34,417 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-06-23 19:20:37,829 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16885
+INFO 2026-06-23 19:20:37,842 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2026-06-23 19:20:37,843 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2026-06-23 19:20:37,843 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2026-06-23 19:20:37,844 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2026-06-23 19:20:37,846 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2026-06-23 19:20:37,846 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2026-06-23 19:20:37,847 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2026-06-23 19:20:37,848 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2026-06-23 19:20:37,848 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:20:37,852 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-06-23 19:20:37,853 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2026-06-23 19:20:37,853 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-06-23 19:20:37,864 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-06-23 19:20:37,866 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2026-06-23 19:20:39,904 basehttp "GET /admin/events/organizerprofile/3/change/ HTTP/1.1" 200 29514
+INFO 2026-06-23 19:20:39,918 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2026-06-23 19:20:39,918 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2026-06-23 19:20:39,919 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2026-06-23 19:20:39,920 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-06-23 19:20:39,921 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:20:39,921 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11973
+INFO 2026-06-23 19:20:39,922 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2026-06-23 19:20:39,940 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-06-23 19:20:39,941 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-06-23 19:20:50,089 basehttp "POST /admin/events/organizerprofile/3/change/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:20:50,102 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 17128
+INFO 2026-06-23 19:20:50,115 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:20:50,123 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2026-06-23 19:20:52,383 basehttp "GET /org/dashboard/ HTTP/1.1" 200 37771
+ERROR 2026-06-23 19:21:00,539 log Internal Server Error: /org/event/add/
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 893, in _resolve_lookup
+    current = current[bit]
+KeyError: 'title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 909, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py", line 1312, in org_add_event
+    return render(request, 'events/org_add_event.html', {
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 172, in render
+    return self._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1077, in render
+    output = self.filter_expression.resolve(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 744, in resolve
+    arg_vals.append(arg.resolve(context))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 856, in resolve
+    value = self._resolve_lookup(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 916, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [title] in {}
+ERROR 2026-06-23 19:21:00,541 basehttp "GET /org/event/add/ HTTP/1.1" 500 194317
+ERROR 2026-06-23 19:21:22,607 log Internal Server Error: /org/event/add/
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 893, in _resolve_lookup
+    current = current[bit]
+KeyError: 'title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'dict' object has no attribute 'title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 909, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'title'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py", line 1312, in org_add_event
+    return render(request, 'events/org_add_event.html', {
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 172, in render
+    return self._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1077, in render
+    output = self.filter_expression.resolve(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 744, in resolve
+    arg_vals.append(arg.resolve(context))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 856, in resolve
+    value = self._resolve_lookup(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 916, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [title] in {}
+ERROR 2026-06-23 19:21:22,608 basehttp "GET /org/event/add/ HTTP/1.1" 500 194152
+INFO 2026-06-23 19:21:25,885 basehttp "GET /team/ HTTP/1.1" 200 35206
+INFO 2026-06-23 19:21:29,671 basehttp "GET /team/ HTTP/1.1" 200 35206
+INFO 2026-06-23 19:21:29,898 autoreload /Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py changed, reloading.
+INFO 2026-06-23 19:21:30,213 autoreload Watching for file changes with StatReloader
+INFO 2026-06-23 19:21:31,682 basehttp "GET /wallet/ HTTP/1.1" 200 33899
+ERROR 2026-06-23 19:21:34,725 log Internal Server Error: /org/event/add/
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 893, in _resolve_lookup
+    current = current[bit]
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/context.py", line 88, in __getitem__
+    raise KeyError(key)
+KeyError: 'form_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 899, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+AttributeError: type object 'RequestContext' has no attribute 'form_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 909, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'form_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py", line 1312, in org_add_event
+    return render(request, 'events/org_add_event.html', {
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 172, in render
+    return self._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1077, in render
+    output = self.filter_expression.resolve(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 744, in resolve
+    arg_vals.append(arg.resolve(context))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 856, in resolve
+    value = self._resolve_lookup(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 916, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [form_data] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'profile': <OrganizerProfile: codeajmarketplace — codeAj Marketplace>, 'editing': False}]
+ERROR 2026-06-23 19:21:34,728 basehttp "GET /org/event/add/ HTTP/1.1" 500 199355
+INFO 2026-06-23 19:22:49,228 basehttp "GET /org/dashboard/ HTTP/1.1" 200 37771
+ERROR 2026-06-23 19:22:50,386 log Internal Server Error: /org/event/add/
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 893, in _resolve_lookup
+    current = current[bit]
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/context.py", line 88, in __getitem__
+    raise KeyError(key)
+KeyError: 'form_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 899, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+AttributeError: type object 'RequestContext' has no attribute 'form_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 909, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'form_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Volumes/codeAjSSD/running projects/events/Event-Booking-System/events/views.py", line 1312, in org_add_event
+    return render(request, 'events/org_add_event.html', {
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 172, in render
+    return self._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 164, in _render
+    return self.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1018, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 979, in render_annotated
+    return self.render(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 1077, in render
+    output = self.filter_expression.resolve(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 744, in resolve
+    arg_vals.append(arg.resolve(context))
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 856, in resolve
+    value = self._resolve_lookup(context)
+  File "/Users/codeaj/.pyenv/versions/3.10.11/lib/python3.10/site-packages/django/template/base.py", line 916, in _resolve_lookup
+    raise VariableDoesNotExist(
+django.template.base.VariableDoesNotExist: Failed lookup for key [form_data] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'profile': <OrganizerProfile: codeajmarketplace — codeAj Marketplace>, 'editing': False}]
+ERROR 2026-06-23 19:22:50,387 basehttp "GET /org/event/add/ HTTP/1.1" 500 199355
+INFO 2026-06-23 19:24:14,510 basehttp "GET /org/dashboard/ HTTP/1.1" 200 37771
+INFO 2026-06-23 19:24:15,574 basehttp "GET /org/event/add/ HTTP/1.1" 200 41688
+INFO 2026-06-23 19:25:03,743 basehttp "POST /org/event/add/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:25:03,762 basehttp "GET /org/dashboard/ HTTP/1.1" 200 40473
+INFO 2026-06-23 19:25:17,254 basehttp "GET /admin/events/eventdataexport/ HTTP/1.1" 200 12730
+INFO 2026-06-23 19:25:17,274 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:19,316 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27156
+INFO 2026-06-23 19:25:19,331 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2026-06-23 19:25:19,332 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:19,341 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2026-06-23 19:25:24,229 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27156
+INFO 2026-06-23 19:25:24,242 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:25,737 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16873
+INFO 2026-06-23 19:25:25,751 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:27,321 basehttp "GET /admin/events/organizerprofile/3/change/ HTTP/1.1" 200 29514
+INFO 2026-06-23 19:25:27,335 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:31,563 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16873
+INFO 2026-06-23 19:25:32,777 basehttp "GET /admin/events/payoutrequest/ HTTP/1.1" 200 12548
+INFO 2026-06-23 19:25:32,798 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:33,796 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16873
+INFO 2026-06-23 19:25:33,816 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:34,572 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27156
+INFO 2026-06-23 19:25:34,595 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:35,385 basehttp "GET /admin/events/eventdataexport/ HTTP/1.1" 200 12730
+INFO 2026-06-23 19:25:35,402 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:36,120 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27156
+INFO 2026-06-23 19:25:36,138 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:41,713 basehttp "GET /admin/events/event/0f6de95f-f62a-4ef9-bb86-81f400373195/change/ HTTP/1.1" 200 49728
+INFO 2026-06-23 19:25:41,724 basehttp "GET /static/admin/js/inlines.js HTTP/1.1" 200 15628
+INFO 2026-06-23 19:25:41,725 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:41,726 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2026-06-23 19:25:41,726 basehttp "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+INFO 2026-06-23 19:25:41,742 basehttp "GET /static/admin/img/inline-delete.svg HTTP/1.1" 200 537
+INFO 2026-06-23 19:25:55,508 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27156
+INFO 2026-06-23 19:25:55,526 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:56,493 basehttp "GET /admin/events/eventdataexport/ HTTP/1.1" 200 12730
+INFO 2026-06-23 19:25:56,515 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:58,547 basehttp "GET /admin/events/couponcode/ HTTP/1.1" 200 17642
+INFO 2026-06-23 19:25:58,563 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:25:59,342 basehttp "GET /admin/events/eventdataexport/ HTTP/1.1" 200 12730
+INFO 2026-06-23 19:25:59,365 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:00,485 basehttp "GET /admin/events/couponcode/ HTTP/1.1" 200 17642
+INFO 2026-06-23 19:26:00,503 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:02,334 basehttp "GET /admin/events/booking/ HTTP/1.1" 200 40693
+INFO 2026-06-23 19:26:02,346 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:02,978 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16873
+INFO 2026-06-23 19:26:03,003 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:03,875 basehttp "GET /admin/events/payoutrequest/ HTTP/1.1" 200 12548
+INFO 2026-06-23 19:26:03,901 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:04,443 basehttp "GET /admin/events/sitesettings/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:26:04,481 basehttp "GET /admin/events/sitesettings/1/change/ HTTP/1.1" 200 31454
+INFO 2026-06-23 19:26:04,505 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:07,293 basehttp "GET /admin/events/teammember/ HTTP/1.1" 200 20006
+INFO 2026-06-23 19:26:07,313 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:09,977 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 21822
+INFO 2026-06-23 19:26:09,992 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:26:10,991 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11685
+INFO 2026-06-23 19:26:11,015 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:30:50,014 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11685
+INFO 2026-06-23 19:30:50,027 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:30:52,199 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11685
+INFO 2026-06-23 19:30:52,219 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:30:54,157 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16873
+INFO 2026-06-23 19:30:54,173 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:30:55,705 basehttp "GET /admin/events/organizerprofile/3/change/ HTTP/1.1" 200 29514
+INFO 2026-06-23 19:30:55,725 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:03,099 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27156
+INFO 2026-06-23 19:31:03,114 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:08,536 basehttp "GET /admin/events/eventdataexport/ HTTP/1.1" 200 12730
+INFO 2026-06-23 19:31:08,557 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:10,656 basehttp "GET /admin/events/couponcode/ HTTP/1.1" 200 17642
+INFO 2026-06-23 19:31:10,678 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:11,387 basehttp "GET /admin/events/booking/ HTTP/1.1" 200 40693
+INFO 2026-06-23 19:31:11,407 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:16,738 basehttp "GET /admin/events/sitesettings/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:31:16,777 basehttp "GET /admin/events/sitesettings/1/change/ HTTP/1.1" 200 31454
+INFO 2026-06-23 19:31:16,792 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:17,396 basehttp "GET /admin/events/teammember/ HTTP/1.1" 200 20006
+INFO 2026-06-23 19:31:17,419 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:20,204 basehttp "GET /admin/events/sitesettings/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:31:20,246 basehttp "GET /admin/events/sitesettings/1/change/ HTTP/1.1" 200 31454
+INFO 2026-06-23 19:31:20,261 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:31:22,833 basehttp "GET /org/dashboard/ HTTP/1.1" 200 40113
+INFO 2026-06-23 19:31:33,412 basehttp "GET / HTTP/1.1" 200 70939
+INFO 2026-06-23 19:31:35,804 basehttp "GET /organizers/ HTTP/1.1" 200 34660
+INFO 2026-06-23 19:31:37,226 basehttp "GET /tickets/ HTTP/1.1" 200 36042
+INFO 2026-06-23 19:31:38,449 basehttp "GET /organizers/ HTTP/1.1" 200 34660
+INFO 2026-06-23 19:31:39,419 basehttp "GET /organizers/ HTTP/1.1" 200 34660
+INFO 2026-06-23 19:31:41,470 basehttp "GET /organizer/codeajmarketplace/ HTTP/1.1" 200 32981
+INFO 2026-06-23 19:31:43,547 basehttp "GET /events/ HTTP/1.1" 200 48295
+INFO 2026-06-23 19:31:44,509 basehttp "GET /org/dashboard/ HTTP/1.1" 200 40113
+INFO 2026-06-23 19:31:49,748 basehttp "GET /org/event/36f49326-9a29-478d-98b5-0a03f2f94ca3/edit/ HTTP/1.1" 200 40583
+INFO 2026-06-23 19:32:05,054 basehttp "GET /admin/events/payoutrequest/ HTTP/1.1" 200 12548
+INFO 2026-06-23 19:32:05,077 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:32:05,922 basehttp "GET /admin/events/organizerprofile/ HTTP/1.1" 200 16873
+INFO 2026-06-23 19:32:05,943 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:32:06,762 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27156
+INFO 2026-06-23 19:32:06,785 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:32:10,928 basehttp "GET /admin/events/event/36f49326-9a29-478d-98b5-0a03f2f94ca3/change/ HTTP/1.1" 200 41045
+INFO 2026-06-23 19:32:10,950 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:32:35,535 basehttp "POST /admin/events/event/36f49326-9a29-478d-98b5-0a03f2f94ca3/change/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:32:35,551 basehttp "GET /admin/events/event/ HTTP/1.1" 200 27396
+INFO 2026-06-23 19:32:35,560 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-06-23 19:32:39,008 basehttp "GET /org/dashboard/ HTTP/1.1" 200 39936
+INFO 2026-06-23 19:32:42,839 basehttp "GET /organizers/ HTTP/1.1" 200 34659
+INFO 2026-06-23 19:32:44,089 basehttp "GET /organizer/codeajmarketplace/ HTTP/1.1" 200 34618
+INFO 2026-06-23 19:32:47,906 basehttp "GET /event/36f49326-9a29-478d-98b5-0a03f2f94ca3/ HTTP/1.1" 200 55432
+INFO 2026-06-23 19:32:53,686 basehttp "GET /org/event/add/ HTTP/1.1" 200 41688
+INFO 2026-06-23 19:33:08,007 basehttp "GET /events/ HTTP/1.1" 200 50181
+INFO 2026-06-23 19:33:12,717 basehttp "GET /event/36f49326-9a29-478d-98b5-0a03f2f94ca3/ HTTP/1.1" 200 55432
+INFO 2026-06-23 19:33:21,832 basehttp "POST /validate-coupon/ HTTP/1.1" 200 65
+INFO 2026-06-23 19:33:25,853 basehttp "POST /event/36f49326-9a29-478d-98b5-0a03f2f94ca3/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:33:25,874 basehttp "GET /payment/3fed32e2-cfd7-4b87-92b4-6e687435a2a1/ HTTP/1.1" 200 41436
+INFO 2026-06-23 19:33:41,907 views Payment handler called for order: order_T56Bikkt0w822w
+INFO 2026-06-23 19:33:46,810 notifications Confirmation email sent to ajayoneness123@gmail.com for booking 3fed32e2-cfd7-4b87-92b4-6e687435a2a1
+INFO 2026-06-23 19:33:46,823 basehttp "POST /payment-handler/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:33:46,844 basehttp "GET /booking/3fed32e2-cfd7-4b87-92b4-6e687435a2a1/success/ HTTP/1.1" 200 37483
+INFO 2026-06-23 19:33:46,882 basehttp "GET /media/qr_codes/booking_3fed32e2-cfd7-4b87-92b4-6e687435a2a1.png HTTP/1.1" 200 6551
+INFO 2026-06-23 19:33:49,774 basehttp "GET /tickets/ HTTP/1.1" 200 39950
+INFO 2026-06-23 19:33:49,802 basehttp "GET /media/qr_codes/booking_3fed32e2-cfd7-4b87-92b4-6e687435a2a1.png HTTP/1.1" 304 0
+INFO 2026-06-23 19:33:53,124 basehttp "GET /org/dashboard/ HTTP/1.1" 200 41979
+INFO 2026-06-23 19:34:15,053 basehttp "GET /team/ HTTP/1.1" 200 35206
+INFO 2026-06-23 19:34:22,991 basehttp "POST /team/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:34:22,996 basehttp "GET /team/ HTTP/1.1" 200 40009
+INFO 2026-06-23 19:34:38,815 basehttp "GET / HTTP/1.1" 200 73004
+INFO 2026-06-23 19:34:38,829 basehttp "GET /static/events/logo.webp HTTP/1.1" 200 77592
+INFO 2026-06-23 19:34:43,010 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:34:43,023 basehttp "GET / HTTP/1.1" 200 73387
+INFO 2026-06-23 19:34:44,640 basehttp "GET /accounts/login/ HTTP/1.1" 200 37303
+INFO 2026-06-23 19:34:55,681 basehttp "POST /accounts/login/ HTTP/1.1" 302 0
+INFO 2026-06-23 19:34:55,687 basehttp "GET /scanner/ HTTP/1.1" 200 42532
+INFO 2026-06-23 19:35:19,375 basehttp "GET /organizers/ HTTP/1.1" 200 34659
+INFO 2026-06-23 19:35:21,342 basehttp "GET /tickets/ HTTP/1.1" 200 39950
+INFO 2026-06-23 19:35:21,384 basehttp "GET /media/qr_codes/booking_3fed32e2-cfd7-4b87-92b4-6e687435a2a1.png HTTP/1.1" 304 0
+INFO 2026-06-23 19:35:23,996 basehttp "GET /booking/3fed32e2-cfd7-4b87-92b4-6e687435a2a1/ticket/ HTTP/1.1" 200 37865
+INFO 2026-06-23 19:36:09,741 basehttp "POST /verify-ticket/ HTTP/1.1" 200 226
+INFO 2026-06-23 19:36:18,697 basehttp "POST /verify-ticket/ HTTP/1.1" 200 243
+INFO 2026-06-23 19:36:26,615 basehttp "GET /tickets/ HTTP/1.1" 200 36026
+INFO 2026-06-23 19:36:27,529 basehttp "GET /organizers/ HTTP/1.1" 200 34643
+INFO 2026-06-23 19:36:28,404 basehttp "GET /events/ HTTP/1.1" 200 50165
+INFO 2026-06-23 19:36:30,661 basehttp "GET / HTTP/1.1" 200 72994
+INFO 2026-06-23 19:36:31,963 basehttp "GET /scanner/ HTTP/1.1" 200 42229
+INFO 2026-06-23 19:36:32,428 basehttp "GET /search-booking/ HTTP/1.1" 200 32441
+INFO 2026-06-23 19:36:36,471 basehttp "GET /org/dashboard/ HTTP/1.1" 200 42600
+INFO 2026-06-23 19:36:41,066 basehttp "GET /booking/3fed32e2-cfd7-4b87-92b4-6e687435a2a1/ticket/ HTTP/1.1" 200 37865
+INFO 2026-06-23 19:36:41,097 basehttp "GET /media/qr_codes/booking_3fed32e2-cfd7-4b87-92b4-6e687435a2a1.png HTTP/1.1" 304 0
+INFO 2026-06-23 19:36:52,635 basehttp "GET /event/36f49326-9a29-478d-98b5-0a03f2f94ca3/export/ HTTP/1.1" 200 249
+INFO 2026-06-23 19:37:01,874 basehttp "GET /wallet/ HTTP/1.1" 200 33899
+INFO 2026-06-23 19:37:13,280 basehttp "GET / HTTP/1.1" 200 73010
+INFO 2026-06-23 19:37:14,958 basehttp "GET /org/dashboard/ HTTP/1.1" 200 42600
+INFO 2026-06-23 19:37:16,601 basehttp "GET /team/ HTTP/1.1" 200 39642
+INFO 2026-06-23 19:37:18,892 basehttp "GET /org/dashboard/ HTTP/1.1" 200 42600
+INFO 2026-06-23 19:37:19,514 basehttp "GET /search-booking/ HTTP/1.1" 200 32457
+INFO 2026-06-23 19:37:20,358 basehttp "GET /org/dashboard/ HTTP/1.1" 200 42600
+INFO 2026-06-23 19:37:21,502 basehttp "GET /wallet/ HTTP/1.1" 200 33899
+INFO 2026-06-23 19:37:43,748 basehttp "GET /events/ HTTP/1.1" 200 50181
+INFO 2026-06-23 19:37:44,819 basehttp "GET / HTTP/1.1" 200 73010

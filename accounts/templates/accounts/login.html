@@ -25,7 +25,7 @@
                     </button>
                     <button type="button" id="tab-username" onclick="switchTab('username')"
                         style="flex:1;padding:.5rem;border:none;border-radius:8px;background:transparent;color:#6B7280;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;">
-                        Username Login
+                        Organisation Login
                     </button>
                 </div>
 
@@ -49,7 +49,7 @@
                     <!-- Username login section (admin / staff / team members) -->
                     <div id="section-username" style="display:none;">
                         <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.8rem;color:#92400E;">
-                            <i class="fas fa-shield-alt me-1"></i> For admin, event organisers, and team members only
+                            <i class="fas fa-building me-1"></i> For event organisers, admin, and team members
                         </div>
                         <div class="mb-4">
                             <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Username</label>
@@ -70,6 +70,10 @@
                     <p style="color:#6B7280;font-size:.875rem;margin:0;">
                         Don't have an account?
                         <a href="{% url 'accounts:register' %}" style="color:#7C3AED;font-weight:600;text-decoration:none;">Get started →</a>
+                    </p>
+                    <p style="color:#6B7280;font-size:.82rem;margin:.5rem 0 0;">
+                        Want to host events?
+                        <a href="{% url 'accounts:register_organizer' %}" style="color:#7C3AED;font-weight:600;text-decoration:none;">Register as Organiser →</a>
                     </p>
                 </div>
             </div>

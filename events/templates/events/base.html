@@ -506,7 +506,14 @@
                     {% if user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'sales_dashboard' %}" style="color:#7C3AED !important;font-weight:700;">
-                            <i class="fas fa-chart-bar me-1"></i> Dashboard
+                            <i class="fas fa-chart-bar me-1"></i> Admin Dashboard
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user.organizer_profile %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'org_dashboard' %}" style="color:#7C3AED !important;font-weight:700;">
+                            <i class="fas fa-building me-1"></i> Org Dashboard
                         </a>
                     </li>
                     {% endif %}

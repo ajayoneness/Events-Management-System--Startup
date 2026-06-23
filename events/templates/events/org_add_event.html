@@ -1,0 +1,201 @@
+{% extends 'events/base.html' %}
+{% block title %}{% if editing %}Edit Event{% else %}Add New Event{% endif %} — Passly Hai{% endblock %}
+
+{% block content %}
+<div style="max-width:800px;margin:0 auto;">
+
+    <div style="margin-bottom:2rem;">
+        <a href="{% url 'org_dashboard' %}" style="color:#7C3AED;font-size:.85rem;text-decoration:none;font-weight:600;">
+            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+        <h1 style="font-size:1.75rem;font-weight:900;color:#111827;margin-top:.75rem;">
+            <i class="fas fa-{% if editing %}edit{% else %}plus-circle{% endif %} me-2" style="color:#7C3AED;"></i>
+            {% if editing %}Edit Event{% else %}Create New Event{% endif %}
+        </h1>
+        {% if not editing %}
+        <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:12px;padding:.85rem 1rem;margin-top:1rem;font-size:.85rem;color:#92400E;">
+            <i class="fas fa-info-circle me-2"></i>
+            Your event will be reviewed by our admin team before it appears on the website.
+        </div>
+        {% endif %}
+    </div>
+
+    <form method="post" id="event-form">
+        {% csrf_token %}
+
+        <div class="card" style="padding:0;margin-bottom:1.5rem;">
+            <div class="card-body" style="padding:2rem;">
+                <div style="font-size:.78rem;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1.25rem;">Basic Information</div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Event Title *</label>
+                    <input type="text" name="title" class="form-control" placeholder="e.g. Arijit Singh Live in Concert" value="{{ event.title|default:'' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Description *</label>
+                    <textarea name="description" class="form-control" rows="4" placeholder="Describe your event in detail..." required style="resize:vertical;">{{ event.description|default:'' }}</textarea>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-sm-4">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Category *</label>
+                        <select name="category" class="form-control" required>
+                            <option value="music" {% if event.category == 'music' %}selected{% endif %}>Music & Concerts</option>
+                            <option value="sports" {% if event.category == 'sports' %}selected{% endif %}>Sports</option>
+                            <option value="tech" {% if event.category == 'tech' %}selected{% endif %}>Technology</option>
+                            <option value="food" {% if event.category == 'food' %}selected{% endif %}>Food & Drink</option>
+                            <option value="art" {% if event.category == 'art' %}selected{% endif %}>Arts & Culture</option>
+                            <option value="business" {% if event.category == 'business' %}selected{% endif %}>Business</option>
+                            <option value="other" {% if event.category == 'other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Event Type</label>
+                        <select name="event_type" class="form-control">
+                            <option value="one_time" {% if event.event_type == 'one_time' %}selected{% endif %}>One Time</option>
+                            <option value="regular" {% if event.event_type == 'regular' %}selected{% endif %}>Regular / Recurring</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 d-flex align-items-end">
+                        <div class="form-check" style="padding:.5rem 0;">
+                            <input class="form-check-input" type="checkbox" name="is_free" id="is_free" {% if event.is_free %}checked{% endif %} onchange="toggleFreeEvent(this)">
+                            <label class="form-check-label" for="is_free" style="font-size:.88rem;font-weight:600;color:#374151;">Free Event</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Event Image URL</label>
+                    <input type="url" name="image" class="form-control" placeholder="https://example.com/event-banner.jpg" value="{{ event.image|default:'' }}">
+                    <div style="font-size:.75rem;color:#9CA3AF;margin-top:.3rem;">Paste a direct image URL (recommended: 800x400px)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="padding:0;margin-bottom:1.5rem;">
+            <div class="card-body" style="padding:2rem;">
+                <div style="font-size:.78rem;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1.25rem;">Date &amp; Location</div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-sm-6">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Start Date &amp; Time *</label>
+                        <input type="datetime-local" name="date" class="form-control" value="{% if event %}{{ event.date|date:'Y-m-d\TH:i' }}{% endif %}" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">End Date &amp; Time</label>
+                        <input type="datetime-local" name="end_date" class="form-control" value="{% if event.end_date %}{{ event.end_date|date:'Y-m-d\TH:i' }}{% endif %}">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Venue Name *</label>
+                    <input type="text" name="venue" class="form-control" placeholder="e.g. JN Stadium, Mumbai" value="{{ event.venue|default:'' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Full Address *</label>
+                    <textarea name="address" class="form-control" rows="2" placeholder="Complete address with city, state, pin code" required style="resize:none;">{{ event.address|default:'' }}</textarea>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Latitude</label>
+                        <input type="number" name="latitude" class="form-control" step="any" placeholder="20.5937" value="{{ event.latitude|default:'20.5937' }}">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Longitude</label>
+                        <input type="number" name="longitude" class="form-control" step="any" placeholder="78.9629" value="{{ event.longitude|default:'78.9629' }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="padding:0;margin-bottom:1.5rem;">
+            <div class="card-body" style="padding:2rem;">
+                <div style="font-size:.78rem;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1.25rem;">Tickets &amp; Pricing</div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-sm-6">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Base Ticket Price (₹) *</label>
+                        <input type="number" name="price" id="price-input" class="form-control" min="0" step="1" placeholder="0" value="{{ event.price|default:'0' }}">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Total Seats *</label>
+                        <input type="number" name="total_seats" class="form-control" min="1" placeholder="100" value="{{ event.total_seats|default:'100' }}" required>
+                    </div>
+                </div>
+
+                {% if not editing %}
+                <!-- Ticket types (only for new events) -->
+                <hr style="border-color:#F3F4F6;margin:1.25rem 0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                    <div style="font-size:.82rem;font-weight:700;color:#374151;">Ticket Types <span style="color:#9CA3AF;font-weight:400;">(optional)</span></div>
+                    <button type="button" onclick="addTicketType()" style="background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE;padding:.35rem .75rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;">
+                        <i class="fas fa-plus me-1"></i> Add Tier
+                    </button>
+                </div>
+                <div id="ticket-types"></div>
+                <div style="font-size:.75rem;color:#9CA3AF;">Add different tiers like Normal, Premium, VIP with different pricing. Leave empty to use a single base ticket price.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-end">
+            <a href="{% url 'org_dashboard' %}" class="btn btn-outline-primary" style="border-radius:12px;padding:.7rem 1.5rem;">Cancel</a>
+            <button type="submit" class="btn btn-primary" style="border-radius:12px;padding:.7rem 2rem;font-size:.95rem;font-weight:700;">
+                <i class="fas fa-{% if editing %}save{% else %}paper-plane{% endif %} me-2"></i>
+                {% if editing %}Save Changes{% else %}Create Event{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let ticketIndex = 0;
+function addTicketType() {
+    ticketIndex++;
+    const html = `
+    <div class="row g-2 mb-2 align-items-end" id="tt-${ticketIndex}">
+        <div class="col-3">
+            <select name="ticket_tier" class="form-control" style="font-size:.82rem;">
+                <option value="normal">Normal</option>
+                <option value="premium">Premium</option>
+                <option value="vip">VIP</option>
+            </select>
+        </div>
+        <div class="col-3">
+            <input type="text" name="ticket_name" class="form-control" placeholder="Tier name" style="font-size:.82rem;">
+        </div>
+        <div class="col-2">
+            <input type="number" name="ticket_price" class="form-control" placeholder="Price" min="0" style="font-size:.82rem;">
+        </div>
+        <div class="col-2">
+            <input type="number" name="ticket_seats" class="form-control" placeholder="Seats" min="1" style="font-size:.82rem;">
+        </div>
+        <div class="col-2">
+            <button type="button" onclick="document.getElementById('tt-${ticketIndex}').remove()" style="background:#FEE2E2;color:#DC2626;border:none;padding:.45rem .75rem;border-radius:8px;font-size:.78rem;cursor:pointer;">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>`;
+    document.getElementById('ticket-types').insertAdjacentHTML('beforeend', html);
+}
+
+function toggleFreeEvent(cb) {
+    const priceInput = document.getElementById('price-input');
+    if (cb.checked) {
+        priceInput.value = '0';
+        priceInput.disabled = true;
+    } else {
+        priceInput.disabled = false;
+    }
+}
+// Init
+if (document.getElementById('is_free') && document.getElementById('is_free').checked) {
+    document.getElementById('price-input').disabled = true;
+}
+</script>
+{% endblock %}

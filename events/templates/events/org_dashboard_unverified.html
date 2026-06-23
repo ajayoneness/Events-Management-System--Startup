@@ -1,0 +1,103 @@
+{% extends 'events/base.html' %}
+{% block title %}Account Pending — Passly Hai{% endblock %}
+
+{% block content %}
+<div style="max-width:600px;margin:3rem auto;text-align:center;">
+
+    <!-- Status icon -->
+    {% if profile.status == 'rejected' %}
+    <div style="width:80px;height:80px;background:#FEE2E2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+        <i class="fas fa-times-circle" style="font-size:2rem;color:#DC2626;"></i>
+    </div>
+    <h1 style="font-size:1.75rem;font-weight:900;color:#DC2626;margin-bottom:.5rem;">Account Rejected</h1>
+    <p style="color:#6B7280;font-size:.95rem;line-height:1.7;margin-bottom:1.5rem;">
+        Your organisation account has been rejected by our admin team.
+    </p>
+    {% if profile.rejection_reason %}
+    <div style="background:#FEE2E2;border:1px solid #FCA5A5;border-radius:14px;padding:1.25rem;text-align:left;margin-bottom:1.5rem;">
+        <div style="font-size:.78rem;font-weight:700;color:#991B1B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem;">Reason for Rejection</div>
+        <p style="color:#991B1B;font-size:.9rem;margin:0;line-height:1.7;">{{ profile.rejection_reason }}</p>
+    </div>
+    {% endif %}
+    <p style="color:#6B7280;font-size:.88rem;">Please contact <strong>support@passlyhai.in</strong> for more information or to resolve this issue.</p>
+
+    {% else %}
+    <div style="width:80px;height:80px;background:#FEF3C7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+        <i class="fas fa-clock" style="font-size:2rem;color:#D97706;"></i>
+    </div>
+    <h1 style="font-size:1.75rem;font-weight:900;color:#111827;margin-bottom:.5rem;">Account Under Review</h1>
+    <p style="color:#6B7280;font-size:.95rem;line-height:1.7;margin-bottom:2rem;">
+        Your organisation <strong style="color:#7C3AED;">{{ profile.organization_name }}</strong> is pending verification by our admin team. Once approved, you'll have full access to your dashboard.
+    </p>
+    {% endif %}
+
+    <!-- Info card -->
+    <div class="card" style="padding:0;text-align:left;">
+        <div class="card-body" style="padding:1.5rem;">
+            <div style="font-size:.78rem;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;">Your Account Details</div>
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:#6B7280;font-size:.88rem;">Organisation</span>
+                    <strong style="color:#111827;font-size:.88rem;">{{ profile.organization_name }}</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:#6B7280;font-size:.88rem;">Contact Name</span>
+                    <strong style="color:#111827;font-size:.88rem;">{{ request.user.get_full_name|default:request.user.username }}</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:#6B7280;font-size:.88rem;">Email</span>
+                    <strong style="color:#111827;font-size:.88rem;">{{ profile.email }}</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:#6B7280;font-size:.88rem;">Phone</span>
+                    <strong style="color:#111827;font-size:.88rem;">{{ profile.mobile_number }}</strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:#6B7280;font-size:.88rem;">Username</span>
+                    <code style="font-size:.85rem;color:#7C3AED;background:#F5F3FF;padding:.15rem .5rem;border-radius:6px;">{{ request.user.username }}</code>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:#6B7280;font-size:.88rem;">Status</span>
+                    <span style="background:{% if profile.status == 'rejected' %}#FEE2E2;color:#991B1B{% else %}#FEF3C7;color:#92400E{% endif %};padding:.2rem .75rem;border-radius:50px;font-size:.78rem;font-weight:700;">
+                        {{ profile.get_status_display }}
+                    </span>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <span style="color:#6B7280;font-size:.88rem;">Registered</span>
+                    <strong style="color:#111827;font-size:.88rem;">{{ profile.created_at|date:"d M Y, g:i A" }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if profile.status == 'pending' %}
+    <!-- What happens next -->
+    <div style="margin-top:1.5rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:16px;padding:1.5rem;text-align:left;">
+        <div style="font-weight:700;color:#111827;font-size:.92rem;margin-bottom:1rem;">What happens next?</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+            <div style="display:flex;gap:.75rem;align-items:flex-start;">
+                <div style="min-width:28px;height:28px;background:#D1FAE5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#059669;">1</div>
+                <div style="font-size:.85rem;color:#374151;">Our admin team reviews your organisation details (usually within 24 hours).</div>
+            </div>
+            <div style="display:flex;gap:.75rem;align-items:flex-start;">
+                <div style="min-width:28px;height:28px;background:#EDE9FE;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#7C3AED;">2</div>
+                <div style="font-size:.85rem;color:#374151;">Once verified, you'll get full access to your dashboard, event creation, and team management.</div>
+            </div>
+            <div style="display:flex;gap:.75rem;align-items:flex-start;">
+                <div style="min-width:28px;height:28px;background:#DBEAFE;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#2563EB;">3</div>
+                <div style="font-size:.85rem;color:#374151;">Events you create will also need admin approval before they appear on the website.</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="{% url 'event_list' %}" class="btn btn-outline-primary" style="border-radius:50px;font-size:.88rem;">
+            <i class="fas fa-home me-1"></i> Browse Events
+        </a>
+        <a href="{% url 'contact' %}" class="btn btn-outline-primary" style="border-radius:50px;font-size:.88rem;">
+            <i class="fas fa-envelope me-1"></i> Contact Support
+        </a>
+    </div>
+</div>
+{% endblock %}

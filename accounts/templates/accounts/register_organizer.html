@@ -1,0 +1,102 @@
+{% extends 'events/base.html' %}
+{% block title %}Register as Organiser — Passly Hai{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center" style="margin-top:2rem;">
+    <div class="col-md-7 col-lg-6">
+
+        <div style="text-align:center;margin-bottom:2rem;">
+            <div style="width:60px;height:60px;background:linear-gradient(135deg,#7C3AED,#4C1D95);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 4px 15px rgba(124,58,237,.3);">
+                <i class="fas fa-building" style="color:#fff;font-size:1.4rem;"></i>
+            </div>
+            <h2 style="font-size:1.75rem;font-weight:900;letter-spacing:-.5px;color:#111827;">Register as Organiser</h2>
+            <p style="color:#6B7280;font-size:.9rem;margin-top:.25rem;">Create your organisation account to start hosting events</p>
+        </div>
+
+        <!-- Verification notice -->
+        <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.85rem;color:#92400E;display:flex;align-items:flex-start;gap:.75rem;">
+            <i class="fas fa-info-circle" style="margin-top:2px;"></i>
+            <div>
+                <strong>Admin verification required:</strong> After registration, your account will be reviewed by our team. You'll be able to access the full dashboard and create events once verified.
+            </div>
+        </div>
+
+        <div class="card" style="padding:0;">
+            <div class="card-body" style="padding:2rem;">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div style="font-size:.78rem;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;">Organisation Details</div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Organisation Name *</label>
+                        <input type="text" name="organization_name" class="form-control" placeholder="Your company / organisation name" value="{{ form_data.organization_name|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">About Your Organisation <span style="color:#9CA3AF;font-weight:400;">(optional)</span></label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Briefly describe your organisation and the types of events you host..." style="resize:none;">{{ form_data.description|default:'' }}</textarea>
+                    </div>
+
+                    <hr style="border-color:#F3F4F6;margin:1.5rem 0;">
+                    <div style="font-size:.78rem;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;">Contact Person</div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">First Name *</label>
+                            <input type="text" name="first_name" class="form-control" placeholder="First Name" value="{{ form_data.first_name|default:'' }}" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" placeholder="Last Name" value="{{ form_data.last_name|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Email Address *</label>
+                            <input type="email" name="email" class="form-control" placeholder="org@example.com" value="{{ form_data.email|default:'' }}" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Phone Number *</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="+91 98765 43210" value="{{ form_data.phone|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    {% if not user.is_authenticated %}
+                    <hr style="border-color:#F3F4F6;margin:1.5rem 0;">
+                    <div style="font-size:.78rem;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;">Login Credentials</div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Password *</label>
+                            <input type="password" name="password1" class="form-control" placeholder="Min 8 characters" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" style="font-size:.85rem;font-weight:600;color:#374151;">Confirm Password *</label>
+                            <input type="password" name="password2" class="form-control" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-primary w-100" style="padding:.8rem;font-size:.95rem;font-weight:700;border-radius:12px;">
+                        <i class="fas fa-building me-2"></i> Register Organisation
+                    </button>
+                </form>
+
+                <div style="text-align:center;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #F3F4F6;">
+                    <p style="color:#6B7280;font-size:.875rem;margin:0;">
+                        Already have an account?
+                        <a href="{% url 'accounts:login' %}" style="color:#7C3AED;font-weight:600;text-decoration:none;">Sign in →</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:1rem;padding:1rem 1.25rem;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;text-align:center;">
+            <i class="fas fa-user" style="color:#7C3AED;margin-right:.4rem;"></i>
+            <span style="font-size:.8rem;color:#6B7280;">Just want to buy tickets? <a href="{% url 'accounts:register' %}" style="color:#7C3AED;font-weight:600;">Create a regular account</a> instead.</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
