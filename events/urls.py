@@ -59,4 +59,5 @@ urlpatterns = [
     path('shipping-policy/', views.shipping_policy_view, name='shipping_policy'),
     path('contact/', views.contact_view, name='contact'),
     path('about/', views.about_view, name='about'),
+    path('organizer-agreement/', views.organizer_agreement_view, name='organizer_agreement'),
 ]

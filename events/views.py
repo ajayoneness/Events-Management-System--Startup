@@ -1116,6 +1116,10 @@ def about_view(request):
     return render(request, 'events/about.html')
 
 
+def organizer_agreement_view(request):
+    return render(request, 'events/organizer_agreement.html')
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # DEDICATED TICKETS PAGE  (ticket wallet for logged-in users)
 # ─────────────────────────────────────────────────────────────────────────────
