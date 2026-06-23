@@ -3467,3 +3467,7 @@ django.urls.exceptions.NoReverseMatch: Reverse for 'register_organizer' not foun
 ERROR 2026-06-24 00:13:58,233 basehttp "GET /contact/ HTTP/1.1" 500 161614
 INFO 2026-06-24 00:15:41,308 basehttp "GET /contact/ HTTP/1.1" 200 45632
 INFO 2026-06-24 00:15:52,380 basehttp "GET /events/ HTTP/1.1" 200 50532
+INFO 2026-06-24 00:24:33,524 basehttp "GET / HTTP/1.1" 200 73517
+INFO 2026-06-24 00:24:33,559 basehttp "GET /static/events/logo.webp HTTP/1.1" 200 77592
+WARNING 2026-06-24 00:24:34,278 log Not Found: /favicon.ico
+WARNING 2026-06-24 00:24:34,279 basehttp "GET /favicon.ico HTTP/1.1" 404 12315
